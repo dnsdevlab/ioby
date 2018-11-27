@@ -1,0 +1,10 @@
+{% if cities %}
+<section class="featured-cities">
+  <h2>{% include "atoms-featured-cities-icon" %} Browse Featured Cities</h2>
+  <ul>
+    {% for city in cities %}
+    <li class="city"><a href="{{ city.href }}">{{ city.name }}</a></li>
+    {% endfor %}
+  </ul>  
+</section>
+{% endif %}

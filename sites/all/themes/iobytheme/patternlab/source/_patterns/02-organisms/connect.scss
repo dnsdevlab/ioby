@@ -1,0 +1,92 @@
+@import "../../scss/refresh-global";
+
+.connect{
+  background-image: linear-gradient(-134deg, #6765A7 0%, #4185B1 100%);
+
+  &__inner-wrap{
+    @extend .inner-wrap;
+    width: 960px;
+    @include clearfix;
+    
+    > h3{
+      color: $theWhite;
+      text-align: center;
+      margin: 0;
+      padding: 80px 0 16px;
+      line-height: 42px;
+      @extend .fe;
+      span{
+        display: block;
+        @extend .ff;
+      }
+    }    
+  }
+
+  //moving out of there for bem's sake
+  &__block{
+    color: $theWhite;    
+    width: 60%;
+    float: left;
+    padding-bottom: 92px;
+
+    &:nth-of-type(2){
+      width: 40%;
+      padding-left: 104px;
+    }
+
+    input[type='email']{
+      background: $theWhite;
+      color: $theBlue;
+      border: none;
+      -webkit-appearance: none;
+      appearance: none;
+      @extend .barlow;
+      font-weight: 600;
+      @extend .fd;
+      width: 320px;
+      padding: 16px;
+    }
+
+    input[type='submit']{
+      color: $theWhite;
+      background-color: $theBlue;
+      border: none;
+      -webkit-appearance: none;
+      appearance: none;
+      @extend .barlow;
+      font-weight: 600;
+      @extend .uc;
+      letter-spacing: 0.125em;
+      @extend .fb;
+      padding: 22px 32px;
+      width: 136px;
+      @include bgFade($theBlue);
+    }
+
+    h4{
+      @extend .fc;
+      letter-spacing: 0.125em;
+      margin-top: 60px;
+      color: $theWhite;
+      text-transform: uppercase;
+    }
+    
+    a{
+      color: $theWhite;
+    }
+  }
+
+  &__social{
+    ul{
+      li{
+        padding-top: 9px;
+        padding-right: 26px;
+        display: inline-block;
+        a{
+          @include fade;
+        }
+      }
+    }
+  }
+
+}

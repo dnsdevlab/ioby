@@ -1,0 +1,87 @@
+@import "../../scss/refresh-global";
+
+.transformation{
+  background-color: $theEggshell;
+  background-image: url("../svg/neighborhood-bg.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  h2{
+    color: $theBlue;
+    text-align: center;
+    padding: 96px 20px 20px;
+    @extend .barlow;    
+    @extend .ff;
+    border-bottom: none;
+    span{
+      display: block;
+      @extend .fh;
+    }
+  }
+
+  &__callouts{
+    max-width: 1040px;
+    margin: 0 auto;
+
+    .transformation__callout{
+      position: relative;
+
+      &-image{
+        max-width: 278px;
+      }
+
+      &-text{
+        position: absolute;
+        bottom: 72px;
+        left: 252px;
+        background: white;
+        max-width: 588px;
+        padding: 45px 60px 60px;
+
+        h3{
+          margin-top: 0px;
+          margin-bottom: 12px;
+          color: $theBlue;
+          @extend .fe;
+        }
+
+        p{
+          @extend .lato;
+          @extend .fd;
+          line-height: 28px;
+        }
+      }
+
+      &:nth-of-type(2){
+        @include clearfix;
+
+        .transformation__callout-image{ //bem?
+          float: right;
+        }
+        .transformation__callout-text{
+          left: auto;
+          right: 250px;
+        }
+      }
+
+      &:nth-of-type(3){
+        @include clearfix;
+
+        .transformation__callout-text{
+          left: 332px;
+          bottom: auto;
+          top: 72px; //@TODO can we depend on always three?
+        }
+      }
+    }
+  }
+  & > a{
+    color: $theBlack;
+    font-weight: bold;
+    @extend .fd;
+    line-height: 28px;
+    display: block;
+    text-align: center; 
+    padding: 112px 0 112px;
+  }
+}

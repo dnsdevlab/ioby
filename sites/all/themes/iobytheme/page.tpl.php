@@ -75,7 +75,16 @@
       <?php
         print render($page['cart']);
       ?>
-
+      <ul class="hidden">
+        <li id="search">
+          <?php print render($page['search']); ?>
+        </li>
+      </ul>
+      <button class="hamburger hamburger--squeeze" type="button">
+    <divs class="hamburger-box">
+      <div class="hamburger-inner">
+    </div> <span id="menu-lettering"> menu </span>
+    </button>
       <div class="tools">
         <ul>
           <li>
@@ -110,14 +119,28 @@
           <?php endif; ?>
         </ul>
       </div>
-
     <?php if ($main_menu): ?>
       <nav id="navigation" role="navigation">
         <?php $block = module_invoke('nice_menus', 'block_view', '1');
         print render($block['content']); ?>
       </nav> <!-- /.section, /#navigation -->
     <?php endif; //main menu ?>
-
+    <?php if ($main_menu): ?>
+        <div id="off-canvas" class="hidden">
+              <ul class="menu">
+                <li class="first expanded"><span title="" class="nolink">cities</span>
+                  <ul class="menu hidden-2"><li class="first leaf"><a href="/node/31742/" title="">Cleveland</a></li>
+                  <li class="leaf"><a href="/campaign/detroit" title="">Detroit</a></li>
+                  <li class="leaf"><a href="/campaign/memphis" title="">Memphis</a></li>
+                  <li class="last leaf"><a href="/Pittsburgh" title="">Pittsburgh</a></li>
+                </ul></li>
+                <li class="leaf"><a href="/about" title="Who we are and why we do what we do">about</a></li>
+                <li class="leaf"><a href="/blog" title="The latest">blog</a></li>
+                <li class="leaf"><a href="/resources/learnfromaleader" title="">resources</a></li>
+                <li class="last leaf"><a href="http://support.ioby.org" title="ioby's Support Center">support</a></li>
+                </ul>
+              </div>
+    <?php endif; //main menu ?>
     </div>
   </div><!-- /#top -->
 
@@ -155,7 +178,6 @@
     <?php endif; ?>
   </header>
 
-
   <header id="pageheader">
     <div class="full">
       <?php if ($breadcrumb && $is_admin): ?>
@@ -178,9 +200,20 @@
         }
       }
       endif; ?>
+      <?php if(drupal_is_front_page()):
+      ?>
+      <div class="mobileheader">
+        <div class="full">
+          <img src="/files/ioby%20EOY%20carousel%20banner-01%202.png">
+          <img src="/files/LFAL_slide.jpg">
+          <img src="/files/big_idea2.png">
+          <img src="/files/pfp%20match%20tile.png">
+        </div>
+      </div>
+      <?php endif;
+    ?>
     </div>
   </header>
-
 
 <div id="main-wrapper">
 
@@ -278,8 +311,8 @@
     copyright &copy; <?php print date("Y"); ?> ioby, a 501(c)(3) nonprofit<br/>
     site by <a href="http://www.newsignature.com" target="_blank">New Signature</a>
   </section>
-</div></footer>
+</div>
+</footer>
  <!-- /.section, /#footer -->
 
 </div></div> <!-- /#page, /#page-wrapper -->
-

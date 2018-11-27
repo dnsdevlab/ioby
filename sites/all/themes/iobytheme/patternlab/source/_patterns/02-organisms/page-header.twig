@@ -1,0 +1,54 @@
+<header class="page-header refresh-header">
+  <div class="page-header__logo">
+    {% include "atoms-header-logo" %}
+  </div>
+  <div class="page-header__wrap">
+    <nav class="page-header__project-nav">
+      <ul>
+        <li><a href=".">Find a Project</a></li>
+        <li><a href=".">Create a Project</a></li>
+      </ul>
+    </nav>
+    <nav class="page-header__main-nav">
+      <ul>
+        <li><a href=".">Cities</a>
+          <ul>
+            <li><a href=".">One Link is Here</a></li>
+            <li><a href=".">Two is a Very Long Link</a></li>
+            <li><a href=".">Three is okay</a></li>
+          </ul>
+        </li>
+        <li><a href=".">About</a></li>
+        <li><a href=".">Blog</a></li>
+        <li><a href=".">Resources</a></li>
+        <li><a href=".">Help</a></li>
+        <li class="search form-hidden">
+          <a href="#">{% include "atoms-search-icon" %}</a>
+          <form class="search-form">
+            <label for="header-search-query" class="visually-hidden">Search</label>
+            <input placeholder="Communities" type="text" id="header-search-query"/>           
+            <input class="button" type="submit" value="Search"/>
+          </form>
+        </li>
+        <li class="cart" data-cart="3"><a href=".">{% include "atoms-cart-icon" %}</a></li>
+      </ul>
+    </nav>
+    <nav class="page-header__auth-nav">
+      <ul>
+        <li><a href=".">Sign Up</a></li>
+        <li class="login form-hidden"><a href="#">Log In</a>
+          <form class="login-form">
+            <!-- <h3>Log In</h3> -->
+            <label for="header-login-email" class="visually-hidden">Email</label>
+            <input placeholder="Email Address" type="email" id="header-login-email"/>
+            <label for="header-login-password" class="visually-hidden">Password</label>
+            <input placeholder="Password" type="password" id="header-login-password"/>
+            <input class="button" type="submit" value="Log In"/>
+            <a href=".">Or request a new pasword</a>
+          </form>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="refresh-hamburger">Menu</div>
+</header>

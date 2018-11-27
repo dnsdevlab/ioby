@@ -1,0 +1,18 @@
+<section class="updates">
+  <div class="updates__inner-wrap">
+    {% if articlePreviews %}
+    <div class="updates__article-previews">
+      {% for article in articlePreviews %}
+        {% include "molecules-article-preview" with { article: article } %}
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if featuredLinks %}
+    <ul class="updates__featured-links">
+      {% for link in featuredLinks %}
+        <li class="featured-link">{% include "molecules-featured-link" with { link: link } %}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+</section>

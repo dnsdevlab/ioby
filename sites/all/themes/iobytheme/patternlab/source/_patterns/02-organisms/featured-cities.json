@@ -1,0 +1,28 @@
+{
+  "post" : {
+  },
+  "cities" : [{
+    "name": "Austin",
+    "href": "http://nytimes.com"
+  },
+  {
+    "name": "Cleveland",
+    "href": "http://nytimes.com"
+  },
+  {
+    "name": "Detroit",
+    "href": "http://nytimes.com"
+  },
+  {
+    "name": "Memphis",
+    "href": "http://nytimes.com"
+  },
+  {
+    "name": "New York City",
+    "href": "http://nytimes.com"
+  },
+  {
+    "name": "Pittsburgh",
+    "href": "http://nytimes.com"
+  }]
+}

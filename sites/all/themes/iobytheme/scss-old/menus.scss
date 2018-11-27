@@ -1,0 +1,62 @@
+@charset "utf-8";
+
+.page-projects-browse{
+  @media screen and (max-width: 960px){
+    #main{
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+
+      & > *{
+        order: 4;
+      }
+
+      #sidr-facets{
+        order: 2;
+      }
+
+      #current-search{
+        order: 1;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+
+        & > div{
+          display: flex;
+          flex-direction: column;
+        }
+
+        #block-current-search-standard{
+          order: 3;
+        }
+
+        #block-ioby-solr-project-browse-search{
+          order: 2;
+        }
+
+        #block-block-11{
+          order: 1;
+        }
+
+      }
+
+      #content{
+        order: 3;
+      }
+    }
+  }
+}
+
+.node-type-about-ioby-section{
+  @media screen and (max-width: 960px){
+    .ioby-step-indicator{
+      overflow: hidden;
+      display: block;
+
+      li{
+        float: none;
+        text-align: center;
+      }
+    }
+  }
+}

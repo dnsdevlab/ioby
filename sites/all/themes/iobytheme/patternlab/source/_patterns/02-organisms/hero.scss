@@ -1,0 +1,91 @@
+@import "../../scss/refresh-global";
+
+.hero{
+  position: relative;
+
+  &__static{
+    width: 100vw;
+    height: (100vw * .5625);
+  }
+
+  &__overlay{
+    width: 100vw;
+    height: (100vw * .5625);
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.8;
+    background-image: linear-gradient(-172deg, #8DCC45 0%, rgba(120,177,56,0.90) 13%, rgba(73,132,75,0.60) 38%, rgba(38,100,89,0.60) 60%, #044465 100%);
+  }
+
+  &__text{
+    @extend .barlow;
+    @extend .fi;
+    color: $theWhite;
+    text-align: center;
+    max-width: 650px;
+    position: absolute;
+    left: calc(50% - 325px);
+    top: 32vw;
+    line-height: 58px;
+    z-index: 5;    
+
+    @include small{
+      top: 20vw;
+      font-size: $tsG;
+      line-height: $tsH;
+      left: 15%;
+      width: 70%;
+      margin: 0 auto;
+    }
+
+    @include tiny{
+      top: 12vw;
+      font-size: $tsE;
+      line-height: $tsF;
+      left: 10%;
+      width: 80%;
+    }
+
+    .cursor,.typed-cursor{
+      @extend .lato;
+      @extend .fi;
+      font-weight: 400 !important;
+      padding-left: 8px;
+      color: $theGreen !important;
+      opacity: 1;
+
+      @include small{
+        padding-left: 4px;
+        font-size: $tsD;
+        line-height: $tsE;
+      }
+      animation: blink .7s infinite;    
+
+      @keyframes blink {
+        0% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+      }
+    }
+
+    .active-text{
+      color: $theGreen;
+      display: inline-block;
+
+      .cursor,.typed-cursor{
+        @extend .lato;
+        @extend .fi;
+        font-weight: 400 !important;
+        padding-left: 8px;
+        color: $theGreen !important;
+      }
+    }
+  }
+}

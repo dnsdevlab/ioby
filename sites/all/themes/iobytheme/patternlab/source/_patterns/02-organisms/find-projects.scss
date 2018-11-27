@@ -1,0 +1,45 @@
+@import "../../scss/refresh-global";
+
+.find-projects{
+  text-align: center;
+
+  h2{
+    @extend .ff;
+    line-height: 36px;
+    text-align: center;
+    color: $theBlue;
+    margin: 22px 0 42px;
+    border-bottom: 0;
+  }
+
+  ul{
+    text-align: center;
+    display: inline-block;
+    width: 1040px;
+    margin-bottom: 70px;
+
+    .project{
+      text-align: left;
+      width: 328px;
+      height: 66px;
+      display: inline-block;
+      background: $theWhite;
+      margin-right: 16px;
+      margin-bottom: 24px;
+      border: 2px solid $theBlue;
+      @include fade;
+
+      a{
+        color: $theOrange;
+        @extend .fd;
+        display: block;
+        padding: 18px 22px 24px;
+      }
+    }
+  }
+
+  .button{
+    margin-bottom: 116px;
+  }
+
+}

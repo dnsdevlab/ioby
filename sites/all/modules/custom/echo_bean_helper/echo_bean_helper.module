@@ -1,0 +1,57 @@
+<?php
+
+/**
+ * Implements hook_form_FORM_ID_alter() for bean_form().
+ *
+ * @author Paul Venuti
+ */
+function echo_bean_helper_form_bean_form_alter(&$form, &$form_state) {
+  // Disables the title element that ships with Bean, and which is useless.
+  echo_bean_helper_disable_bean_title($form);
+
+  // Disable the view mode select.
+  echo_bean_helper_disable_view_mode_select($form);
+
+  // Unset and disable revisions.
+  $form['revision']['is_new_revision']['#default_value'] = 0;
+  $form['revision']['default_revision']['#default_value'] = FALSE;
+  $form['revision']['#access'] = FALSE;
+}
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ *
+ * @author Paul Venuti
+ */
+function echo_bean_helper_inline_entity_form_entity_form_alter(&$entity_form, &$form_state) {
+  // Disable the stock Bean title field when viewed via IEF.
+  if ($entity_form['#entity_type'] == 'bean') {
+    // Disable the title property and the view mode select.
+    echo_bean_helper_disable_bean_title($entity_form);
+    echo_bean_helper_disable_view_mode_select($entity_form);
+  }
+}
+
+/**
+ * Disable the title property on Beans.
+ *
+ * @param array $form
+ *    The form object that contains the Bean form.
+ *
+ * @author Paul Venuti
+ */
+function echo_bean_helper_disable_bean_title(&$form) {
+  $form['title']['#access'] = FALSE;
+}
+
+/**
+ * Disable the view mode on Beans which we never use.
+ *
+ * @param array $form
+ *    The form object that contains the Bean form.
+ *
+ * @author Paul Venuti
+ */
+function echo_bean_helper_disable_view_mode_select(&$form) {
+  $form['view_mode']['#access'] = FALSE;
+}

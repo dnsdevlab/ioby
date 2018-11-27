@@ -1,0 +1,38 @@
+{
+  "post" : {
+  },
+  "articlePreviews" : [{
+    "title": "Healthy Neighborhoods Challenge",
+    "image":  "../../images/neighborhoods-1.png",
+    "date": "December 4, 2017",
+    "description": "Have an idea to make your community a healthier place to live? Need some cash to make it happen? The Healthy Neighborhoods Challenge supports residents taking an active role in creating a culture of health in their neighborhoods.",
+    "href": "http://nytimes.com",
+    "linkText": "Join the Challenge"
+  },
+  {
+    "title": "ioby 2017 Giving Report",
+    "image": "../../images/neighborhoods-2.png",
+    "date": "December 5, 2017",
+    "description": "2017 showed us the power of people working together to solve urgent problems, and demonstrating incredible creativity, compassion, and dedication to making their block, city, and region a better place to live.", 
+    "href": "http://nytimes.com",
+    "linkText": "Explore the report"
+  }],
+  "featuredLinks" : [{
+    "image": "../../images/neighborhoods-3.png",
+    "color": "orange",
+    "description": "Visit our <span>Blog</span> to see ioby projects in action",
+    "href": "http://nytimes.com"
+  },
+  {
+    "image": "../../images/neighborhoods-4.png",
+    "color": "blue",
+    "description": "Check out our <span>Resources</span> to boost your project’s success", 
+    "href": "http://nytimes.com"
+  },
+  {
+    "image": "../../images/neighborhoods-5.png",
+    "color": "purple",
+    "description": "Find out why we’re <span>more than a crowdfunding platform</span>", 
+    "href": "http://nytimes.com"
+  }]
+}

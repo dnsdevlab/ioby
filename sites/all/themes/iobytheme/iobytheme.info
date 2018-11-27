@@ -19,18 +19,19 @@ base theme = boron
 ; We use [screen] instead of [all] to avoid browser styles affecting
 ; other media types. IE stylesheets are loaded through template.php
 ; ------------------------------
-stylesheets[all][] = css/fonts.css
-stylesheets[screen][] = css/main.less
-stylesheets[screen][] = css/panels.less
-stylesheets[screen][] = css/prose.less
-stylesheets[screen][] = css/jquery-ui-custom.less
-stylesheets[screen][] = css/idea-form.less
-
+;stylesheets[all][] = css/fonts.css
+;stylesheets[screen][] = css/main.less
+;stylesheets[screen][] = css/panels.less
+;stylesheets[screen][] = css/prose.less
+;stylesheets[screen][] = css/jquery-ui-custom.less
+;stylesheets[screen][] = css/idea-form.less
+;this doesn't appear to do anything:
+stylesheets[all] = patternlab/public/css/app.min.css
 
 ; html5.js is required for IE to understand the new elements like article
 ; http://remysharp.com/2009/01/07/html5-enabling-script/
 ; ------------------------------
-scripts[] = js/jquery.ioby.js
+scripts[] = patternlab/public/js/app.min.js
 ; scripts[] = js/curvycorners.js
 
 ; simplified regions

@@ -1,0 +1,221 @@
+.idea-tabs {
+  max-width: 600px;
+  margin: 0 auto;
+
+  .tabs-bar {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    margin-bottom: -100px;
+    .tabs {
+
+      .tab {font-size: inherit;}
+
+      margin: 10px 0;
+      height: 70px;
+
+      ul {
+        height: 70px;
+        margin-left: 0 !important;
+        box-sizing: border-box;
+
+        li {
+          height: 100%;
+          display: flex;
+          margin-right: 70px !important;
+          align-items: center;
+          text-transform: uppercase;
+          list-style: none;
+          width: auto;
+          float: left;
+          text-align: center;
+          color: gray;
+          position: relative;
+          &:not(:last-child) {
+            &:after {
+              content: ' ';
+              display: block;
+              position: absolute;
+              height: 2px;
+              width: 24px;
+              // top: calc(~'50% - 2px');
+              top: 50%;
+              right: 0;
+              margin-right: -48px;
+              background-color: #ece6dc;
+
+              & + a {
+                background-color: red;
+              }
+            }
+          }
+
+          &.hidden {
+            display:none;
+          }
+          &:first-child {
+            margin-left: 70px !important;
+          }
+          span {
+            color: #999999;
+          }
+          a {
+            color: #2a8ab9;
+          }
+          a.active {
+            color: #000;
+            font-weight: 700;
+          }
+        }
+
+        li.current:not(:last-child) {
+          &:after {
+            background-color: #000;
+          }
+        }
+      }
+      ul.primary {
+        white-space: normal;
+      }
+    }
+  } // /.tabs-bar
+
+  .wFormContainer { // panels
+
+    .idea-panel { // panel
+      display:none;
+
+      &.active {
+        display:block;
+      }
+    }
+    overflow:visible;
+    margin: 0 auto;
+    width:100%;
+  }
+
+  .idea-panel {
+    padding-top: 100px;
+  }
+
+  .inputWrapper {
+    width: 100% !important;
+    margin-top: 10px;
+    margin-bottom: 2px;
+  }
+
+  .field-full {
+    width: 100%;
+    .preField {
+      width: 100% !important;
+    }
+  }
+  .field-half {
+    max-width: 49.5%;
+  }
+  .field-quarter {
+    max-width: 24.25%;
+  }
+
+  #step2 .oneChoice {
+    display:inline-block !important;
+    margin: 0 0 4px 6px !important;
+  }
+
+  input[type="text"],
+  textarea,
+  .wForm .oneField input {
+    -moz-border-radius: 2px !important;
+    -webkit-border-radius: 2px !important;
+    border-radius: 2px !important;
+    line-height: 1.4;
+    padding: 5px 10px;
+    box-shadow: none;
+    background: none;
+    border: 1px solid #c7c8b7;
+  }
+  #step2 input[type="text"] {
+    width: 100% !important;
+  }
+  textarea {
+    width: 100% !important;
+    padding: 10px 10px;
+  }
+
+  input[type="button"],
+  input[type="submit"] {
+    -moz-border-radius: 20px !important;
+    -webkit-border-radius: 20px !important;
+    border-radius: 20px !important;
+    line-height: 1;
+  }
+
+  fieldset {
+    border: none !important;
+    legend {
+      font-weight: bold !important;
+    }
+  }
+
+  select {
+    height: 100%;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    line-height: 1.4;
+    -webkit-appearance: none;
+    appearance: none;
+    font-weight: 700;
+    background: none;
+    border: 1px solid;
+  }
+
+  #tfa_10-L,
+  #tfa_11-L,
+  #tfa_14-L {
+    width: 100%;
+  }
+  .next-button {
+    float: right;
+  }
+}
+
+.idea-button {
+  margin: 15px auto 45px auto;
+  display: block;
+  text-align: center;
+}
+
+.idea-button-thanks {
+  text-align: left;
+}
+input.button.panel-button {
+  padding: 10px 20px !important;
+  margin: 5px;
+
+  &[type="submit"] {
+    float: right;
+  }
+}
+#node-39146 {
+  h4 {
+    font-size: 18.59px;
+  }
+}
+
+#node-39148 {
+  .one-third {
+    text-align: right;
+
+    .button {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+}
+
+.button.idea-start { display: none; }
+.logged-in {
+  .button.idea-start { display: inline-block; }
+  .button.idea-start-modal { display: none; }
+}

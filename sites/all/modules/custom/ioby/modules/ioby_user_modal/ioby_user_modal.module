@@ -59,6 +59,7 @@ function ioby_user_modal_unified_login_page() {
     ctools_include('ajax');
     ctools_add_js('ajax-responder');
 
+
     $form_state_1 = $form_state_2 = array(
       'ajax' => $ajax,
       // 'build_info' => array('args' => array()),
@@ -72,6 +73,18 @@ function ioby_user_modal_unified_login_page() {
     if (empty($form_state_1['executed'])) {
       $register_form = drupal_build_form('user_register_form', $form_state_2);
     }
+
+    // Adds the recaptcha script.
+    $register_form['form']['recaptcha_widget']['#attached'] = array(
+      'js' => array(
+        'https://www.google.com/recaptcha/api.js' => array('external' => TRUE),
+        drupal_get_path('module', 'recaptcha') . '/js/recaptcha.js' => array(),
+        array(
+          'data' => array('recaptcha' => array('class' => 'g-recaptcha')),
+          'type' => 'setting',
+        )
+      ),
+    );
 
     // If there are messages for the form, render them.
     if ($messages = theme('status_messages')) {

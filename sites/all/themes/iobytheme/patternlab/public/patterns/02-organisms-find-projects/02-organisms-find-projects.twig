@@ -1,0 +1,13 @@
+{% if projects %}
+<section class="find-projects">
+  <h2>Find more great projects to support</h2>
+  <ul>
+    {% for project in projects %}
+    <li class="project"><a href="{{ project.href }}">{{ project.name }}</a></li>
+    {% endfor %}
+  </ul>
+  <footer class="find-projects__footer">
+    <a href="." class="button orange uc">Or, Browse All Projects</a>
+  </footer>
+</section><!-- /.find-projects -->
+{% endif %}

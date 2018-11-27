@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function home_page_install() {
+  // When I tried to create a new image field called 'Image', I discovered that
+  // this table already existed, but was empty, and field_image isn't used
+  // anywhere. If it's empty on prod, delete it, so that we can create our
+  // Home Page content type.
+  if (db_table_exists('field_data_field_image')) {
+    $result = db_select('field_data_field_image', 'i')
+      ->fields('i')
+      ->execute();
+
+    if ($result->rowCount() == 0) {
+      // Delete it and the revision table.
+      db_drop_table('field_data_field_image');
+      db_drop_table('field_revision_field_image');
+
+      drupal_set_message('Deleted the field_data_field_image tables', 'info');
+    }
+    else {
+      drupal_set_message('The field_data_field_image table was not empty', 'error');
+    }
+  }
+}

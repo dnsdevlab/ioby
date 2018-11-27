@@ -286,6 +286,38 @@ function iobytheme_field__field_project_boroughs($vars) {
   return $prefix . $content . $suffix;
 }
 
+/**
+ * Implements hook_preprocess_entity().
+ *
+ * @author Paul Venuti
+ */
+function iobytheme_preprocess_entity(&$vars) {
+  if ($vars['elements']['#entity_type'] == 'bean') {
+    // Define per-bundle functions for Bean types.
+    $view_mode = $vars['elements']['#view_mode'];
+    $bundle = $vars['elements']['#bundle'];
+    $function = 'iobytheme_preprocess_' . $bundle . '_bundle';
+    if (function_exists($function)) {
+      $function($vars, $bundle, $view_mode);
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_node().
+ *
+ * @author Paul Venuti
+ */
+function iobytheme_preprocess_node(&$vars) {
+  // Define per-bundle functions.
+  $view_mode = $vars['view_mode'];
+  $bundle = $vars['type'];
+  $node = $vars['node'];
+  $function = 'iobytheme_preprocess_' . $bundle . '_bundle';
+  if (function_exists($function)) {
+    $function($vars, $node, $bundle, $view_mode);
+  }
+}
 
 /*
  * delivery of pages without page.tpl, for ajax
@@ -304,16 +336,19 @@ function iobytheme_preprocess_page(&$vars) {
       'preprocess' => FALSE,
       'group' => CSS_DEFAULT, //Add the default galleryview CSS before iobytheme-specific CSS files
       );
-    drupal_add_css(path_to_theme() . '/js/galleryview/css/jquery.galleryview.css', $options);
+    //drupal_add_css(path_to_theme() . '/js/galleryview/css/jquery.galleryview.css', $options);
+    drupal_add_css(path_to_theme() . '/patternlab/public/css/plugins.min.css', $options);
     $vars['styles'] = drupal_get_css();
 
     $options['group'] = JS_THEME;
-    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.easing.js', $options);
-    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.timers.js', $options);
-    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.galleryview-ioby.js', $options);
-    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.ioby-rotator.js', $options);
+    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.easing.js', $options);
+    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.timers.js', $options);
+    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.galleryview-ioby.js', $options);
+    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.ioby-rotator.js', $options);
     $vars['script'] = drupal_get_js();
   }
+
+  drupal_add_js(path_to_theme() . '/patternlab/public/js/plugins.min.js', $options);
 
   // Footer Brand Image stuff, adds ~6 logos to footer based on 'Footer Brand Logo' content type
   // Looks like nodequeue neglected some of their internal API methods so part of it is dup'd here.
@@ -338,10 +373,11 @@ function iobytheme_preprocess_page(&$vars) {
   }
 }
 
-
 function iobytheme_preprocess_html(&$vars) {
   $logo_colors = array("blue","orange","active","plum","grey");
   $vars['classes_array'][] = 'logo-'. $logo_colors[ array_rand($logo_colors) ];
+
+  drupal_add_css(drupal_get_path('theme','iobytheme').'/patternlab/public/css/app.min.css');
 
   $contexts = context_active_contexts();
   if (array_key_exists('idea_css', $contexts)){
@@ -375,7 +411,14 @@ function iobytheme_preprocess_html(&$vars) {
    //              <noscript><iframe src='https://www.googletagmanager.com/ns.html?id=GTM-KTTPQD'
    //              height='0' width='0' style='display:none;visibility:hidden'></iframe></noscript>
    //              <!-- End Google Tag Manager (noscript) -->";
-
+  $viewport = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+    'name' => 'viewport',
+    'content' => 'width=device-width, initial-scale=1, maximum-scale=1',
+  ),
+ );
+  drupal_add_html_head($viewport, 'viewport');
 }
 
 function iobytheme_preprocess(&$vars) {
@@ -383,6 +426,78 @@ function iobytheme_preprocess(&$vars) {
   drupal_add_library('system', 'ui.dialog');
 }
 
+/**
+ * Preprocess the home page node.
+ */
+function iobytheme_preprocess_home_page_bundle(&$vars, $node, $bundle, $view_mode) {
+  // Brand hero.
+  if ($hero_image = field_get_items('node', $node, 'field_hero_image')) {
+    // @todo: Use real image style.
+    $vars['hero_image'] = iobytheme_get_image_style($hero_image[0], 'gallery_feature');
+  }
+
+  if ($field_static_text = field_get_items('node', $node, 'field_static_text')) {
+    $vars['static_text'] = $field_static_text[0]['safe_value'];
+  }
+
+  if ($animated_text = field_get_items('node', $node, 'field_animated_text')) {
+    foreach ($animated_text as $text) {
+      $vars['animated_text'][] = $text['safe_value'];
+    }
+  }
+
+  // Load the Impact beans.
+  if ($impact_blocks = field_get_items('node', $node, 'field_impact_blocks')) {
+    foreach ($impact_blocks as $impact_block) {
+      if ($delta = $impact_block['entity']->identifier()) {
+        $vars['impact_blocks'][] = iobytheme_get_block('bean', $delta);
+      }
+    }
+  }
+
+  // Browse Cities
+  if ($field_browse_cities_title = field_get_items('node', $node, 'field_browse_cities_title')) {
+    $vars['browse_cities_title'] = $field_browse_cities_title[0]['safe_value'];
+  }
+
+  if ($field_city_link = field_get_items('node', $node, 'field_city_link')) {
+    foreach ($field_city_link as $city_link) {
+      $vars['city_links'][] = array(
+        'url' => $city_link['display_url'],
+        'title' => $city_link['title'],
+      );
+    }
+  }
+
+
+}
+
+/**
+ * Preprocess Impact beans.
+ *
+ * @author Paul Venuti
+ */
+function iobytheme_preprocess_impact_bundle(&$vars, $bundle, $view_mode) {
+  $bean = $vars['bean'];
+
+  // Subtitle.
+  $field_subtitle = field_get_items('bean', $bean, 'field_subtitle');
+  if (!empty($field_subtitle)) {
+    $vars['subtitle'] = $field_subtitle[0]['safe_value'];
+  }
+
+  // Summary.
+  $field_summary = field_get_items('bean', $bean, 'field_summary');
+  if (!empty($field_summary)) {
+    $vars['summary'] = $field_summary[0]['safe_value'];
+  }
+
+  // Image.
+  if ($image = field_get_items('bean', $bean, 'field_image')) {
+    // @todo: Use real image style.
+    $vars['image'] = iobytheme_get_image_style($image[0], 'gallery_feature');
+  }
+}
 
 /*
  * Ouput the homepage rotator fields without wrappers
@@ -619,4 +734,85 @@ function iobytheme_preprocess_search_result(&$vars) {
       $vars['title'] = $user->name;
     }
   }
+}
+
+/**
+ * Gets the render array for a block.
+ *
+ * @param string $module
+ *    The module responsible for the block.
+ * @param string $delta
+ *    The block's delta.
+ *
+ * @return mixed $block
+ *    The render array for the block, or FALSE if the block doesn't exist.
+ *
+ * @author Paul Venuti
+ */
+function iobytheme_get_block($module, $delta) {
+  $block = block_load($module, $delta);
+  if (isset($block->bid)) {
+    return _block_get_renderable_array(_block_render_blocks(array($block)));
+  }
+  return FALSE;
+}
+
+/**
+ * Runs an image through theme_image_style().
+ *
+ * @param array $image
+ *    The loaded image, as an array.
+ * @param string $style_name
+ *    The image style to use.
+ *
+ * @author Paul Venuti
+ */
+function iobytheme_get_image_style($image, $style_name, $attributes = FALSE) {
+  $image = is_array($image) ? $image : (array) $image;
+  $data = iobytheme_get_width_height_from_style($style_name);
+
+  $image_vars = array(
+    'style_name' => $style_name,
+    'path' => $image['uri'],
+    'width' => $data['width'],
+    'height' => $data['height'],
+    'alt' => $image['alt'],
+  );
+
+  if ($attributes) {
+    $image_vars['attributes'] = $attributes;
+  }
+
+  return theme_image_style($image_vars);
+}
+
+/**
+ * Gets the width and height of the given image style, so long as that image
+ * style uses a "Scale and crop" effect.
+ *
+ * @param string $style_name
+ *    The machine name of the image style.
+ * @return array $data
+ *    An array with two elements, width and height. Empty if the style was not
+ *    found, or if the style doesn't have a "Scale and crop" effect.
+ *
+ * @author Paul Venuti
+ */
+function iobytheme_get_width_height_from_style($style_name) {
+  $styles = image_styles();
+  $style_data = $styles[$style_name];
+  $effects = $style_data['effects'];
+  foreach ($effects as $key => $effect) {
+    if ($effect['effect callback'] == 'image_scale_and_crop_effect' ||
+      $effect['effect callback'] == 'image_scale_effect') {
+      return array(
+        'width' => $effect['data']['width'],
+        'height' => $effect['data']['height'],
+      );
+    }
+  }
+  return array(
+    'width' => '',
+    'height' => '',
+  );
 }

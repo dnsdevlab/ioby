@@ -1,0 +1,250 @@
+@import "../../scss/refresh-global";
+
+.page-footer{
+  &__inner-wrap{
+    @extend .inner-wrap;
+  }
+
+  &__top{
+    @include clearfix;
+    margin-top: 68px;
+  } //@TODO BEM best practice, bill?
+
+  &__quote{
+    position: relative;
+    &:before{
+      content: "";
+      position: absolute;
+      top: -88px;
+      left: 0;
+      height: 60px;
+      width: 90px;
+      background-image: url(../svg/quote-icon.svg);
+      background-size: cover; 
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
+
+    width: 690px;
+    float: left;
+    padding: 0;
+    margin: 0;
+
+    p{
+      @extend .lato;
+      @extend .fd;
+      line-height: 30px;
+      font-style: normal;
+      color: $theBlack;
+    }
+  }
+  &__caption{
+    width: 300px;
+    float: right;
+    color: $theOrange;
+    @extend .lato;
+    font-weight: 400;
+    @extend .fa;
+    line-height: 26px;
+  }
+
+  &__featured{
+    margin-top: 90px;
+    padding-bottom: 20px;
+    li{
+      &:first-of-type{
+        width: 104px;
+        //@TODO: Why is this one weird?
+        position: relative;
+        top: -18px;
+      }
+      list-style: none;
+      display: inline-block;
+      color: $theOrange;
+      @extend .uc;
+      letter-spacing: .125em;
+      width: 92px;
+      height: 50px;
+      margin-right: 32px;      
+    }
+  }
+
+  &__bottom{
+    border-top: 2px solid orange;
+    padding-top: 44px;
+    @include clearfix;
+  }
+
+  &__left{
+    width: 520px;
+    float: left;
+  }
+  &__right{
+    width: 378px;
+    float: right;
+    strong{
+      letter-spacing: 0.1em;
+      @extend .fa;
+    }
+  }
+
+  &__get-in-touch{
+    span{
+      @extend .fa;
+      @extend .lato;
+      font-weight: 400; 
+
+      a{
+        @extend .lato;
+        color: $theBlack;
+        @include fade;
+      }
+      a:not([href*='tel']){
+        color: $theBlue;
+        font-weight: bold;
+        @include fade;
+      }
+    }
+  }
+
+  &__signup{    
+    margin-top: 32px;
+    margin-bottom: 32px;
+    
+    strong{
+      padding-bottom: 8px;
+      display: inline-block;
+    }
+
+    input[type='email']{
+      background: $theEggshell;
+      color: $theBlue;
+      border: none;
+      -webkit-appearance: none;
+      appearance: none;
+      @extend .barlow;
+      font-weight: 600;
+      @extend .fb;
+      width: 252px;
+      height: 44px;
+      padding: 12px 8px;
+    }
+
+    input[type='submit']{
+      color: $theWhite;
+      background-color: $theBlue;
+      border: none;
+      -webkit-appearance: none;
+      appearance: none;
+      @extend .barlow;
+      font-weight: 600;
+      @extend .uc;
+      letter-spacing: 0.125em;
+      @extend .fb;
+      padding: 15px 22px;
+      width: 120px;
+      height: 50px;
+      @include fade;
+    }
+  }
+
+  &__nav{
+    ul{
+      text-align: center;
+      li{
+        width: 24%;
+        text-align: left;
+        display: inline-block;
+        padding: 10px 20px 14px 0px;
+        &:first-of-type{
+          a{
+            color: $theBlue;
+            @include fade;
+          }
+        }
+        a{
+          color: $theBlack;
+          @extend .lato;
+          @extend .fa;
+          font-weight: bold;
+          padding: 6px 0;
+          @include fade;
+        }
+      }
+    }
+  }
+
+  &__left-bottom{
+    margin-top: 88px;
+    margin-bottom: 88px;
+    @include clearfix;
+
+    .page-footer__logo{
+      float: left;
+      width: 80px;
+      svg{
+        position: relative;
+        top: -7px;
+      }
+    }
+
+    .page-footer__fine-print{
+      float: right;
+      width: calc(100% - 80px);
+      padding-left: 30px;
+
+      small{
+        @extend .fa;
+        @extend .lato;
+        line-height: 18px;
+      }
+
+      nav{
+        padding-top: 20px;
+        li{
+          display: inline-block;
+          padding-right: 24px;
+          a{
+            color: black;
+            @include fade;
+          }
+        }
+      }
+    }
+  }
+
+  &__follow{ 
+    padding-top: 8px;
+    strong{
+      display: inline-block;
+      padding-right: 16px;
+      position: relative;
+      top: -7px;
+    }  
+    nav{
+      display: inline-block;
+      ul{        
+        li{
+          &:not(:first-of-type){
+            padding-top: 8px;
+          }
+          display: inline-block;
+          margin-right: 16px;
+          a{
+            font-style: normal;
+            @include fade;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+

@@ -2,6 +2,7 @@
 
   Drupal.behaviors.iobytheme = {
     attach: function(context, settings) {
+
       //wysiwyg hiding
       $('.page-add-project-step-2 fieldset.filter-wrapper').remove();
 
@@ -53,10 +54,10 @@
       function miniview_tabs( element ) {
         $( element ).hover(
           function() {
-            $(this).children('.extra-info').addClass('is-active');
+            $(this).children('.extra-info').addClass('is-active')
           },
           function() {
-            $(this).children('.extra-info').removeClass('is-active');
+            $(this).children('.extra-info').removeClass('is-active')
 
           }
           );
@@ -178,8 +179,7 @@
           $("#dialog").remove();
 
           //build a dialog and open it
-          //$(this).prepend('<div id="dialog" class="region-content content">' + Drupal.settings.iobypopup["iobypopupGratuityRemove"] + '</div>');
-          $(this).prepend('<div id="dialog" class="region-content content">' + Drupal.settings.iobypopup[".iobypopupGratuityRemove"] + '</div>');
+          $(this).prepend('<div id="dialog" class="region-content content">' + Drupal.settings.iobypopup["iobypopupGratuityRemove"] + '</div>');
           $("#dialog")
           .dialog({
             buttons: { "remove": function() {
@@ -205,7 +205,7 @@
       //gratuity "what's this?" popup
       if ($.isFunction($.colorbox) && Drupal.settings.iobypopup != undefined) {
         $(".page-cart .views-field-line-item-title:contains('gratuity')").once('linked')
-        .prepend('<div style="display:none"><div id="gratuity-info-popup" class="region-content content">' + Drupal.settings.iobypopup.iobypopupGratuityInfo + '</div></div>')
+        .prepend('<div style="display:none"><div id="gratuity-info-popup" class="region-content content">' + Drupal.settings.iobypopup["iobypopupGratuityInfo"] + '</div></div>')
         .append(' <a href="#gratuity-info-popup" class="colorbox-load">what\'s this?</a>').children("a")
         .colorbox({
           innerWidth:500,
@@ -329,16 +329,13 @@
         });
 
         // pre-fill user data
-        first_name = $('#user_data').data('first-name');
-        if (first_name) {
+        if (first_name = $('#user_data').data('first-name')) {
           $('.wFormContainer input#tfa_1').val(first_name);
         }
-        last_name = $('#user_data').data('last-name');
-        if (last_name) {
+        if (last_name = $('#user_data').data('last-name')) {
           $('.wFormContainer input#tfa_2').val(last_name);
         }
-        email = $('#user_data').data('email');
-        if (email) {
+        if (email = $('#user_data').data('email')) {
           $('.wFormContainer input#tfa_5').val(email);
         }
       }
@@ -350,8 +347,7 @@
       if ($('#block-ioby-ioby-project-creation-indicator').length > 0) {
         current_path = window.location.pathname.toLowerCase();
         $('#block-ioby-ioby-project-creation-indicator .ioby-step-indicator li').each(function(e){
-          $li = $(this);
-          $a = $(this).find('a');
+          $li = $(this), $a = $(this).find('a');
           if ($a.length > 0) {
             a_lower = $a.attr('href').toLowerCase();
             if (a_lower.indexOf(current_path) !== -1){
@@ -390,34 +386,7 @@
       $('#project-2-node-form .form-submit').addClass('button');
 
       $('.or-after').after('<div class="or-divider"><span>Or</span><hr /></div>');
-
   }
-
 };
-$(function(){
-  // table fixes for actioncorps
-
-  if(window.location.href.indexOf("actioncorps") > -1) {
-    $("td").not(":has(p)").addClass("empty-td");
-  }
-  
-});
-
-
-  $(function(){
-    $('.hamburger').click(function() {
-    $(this).toggleClass('is-active');
-    $('#off-canvas').toggleClass('slide-in');
-    });
-  });
-
-  $(function(){
-
-    $("#page").fitVids();
-
-    $('span.nolink').click(function(){
-        $('.hidden-2').toggleClass('show');
-      });
-  });
 
 })(jQuery);

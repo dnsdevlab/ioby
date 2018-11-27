@@ -304,19 +304,16 @@ function iobytheme_preprocess_page(&$vars) {
       'preprocess' => FALSE,
       'group' => CSS_DEFAULT, //Add the default galleryview CSS before iobytheme-specific CSS files
       );
-    //drupal_add_css(path_to_theme() . '/js/galleryview/css/jquery.galleryview.css', $options);
-    drupal_add_css(path_to_theme() . '/css/plugins.min.css', $options);
+    drupal_add_css(path_to_theme() . '/js/galleryview/css/jquery.galleryview.css', $options);
     $vars['styles'] = drupal_get_css();
 
     $options['group'] = JS_THEME;
-    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.easing.js', $options);
-    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.timers.js', $options);
-    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.galleryview-ioby.js', $options);
-    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.ioby-rotator.js', $options);
+    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.easing.js', $options);
+    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.timers.js', $options);
+    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.galleryview-ioby.js', $options);
+    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.ioby-rotator.js', $options);
     $vars['script'] = drupal_get_js();
   }
-  
-  drupal_add_js(path_to_theme() . '/js/plugins.min.js', $options);
 
   // Footer Brand Image stuff, adds ~6 logos to footer based on 'Footer Brand Logo' content type
   // Looks like nodequeue neglected some of their internal API methods so part of it is dup'd here.
@@ -345,8 +342,6 @@ function iobytheme_preprocess_page(&$vars) {
 function iobytheme_preprocess_html(&$vars) {
   $logo_colors = array("blue","orange","active","plum","grey");
   $vars['classes_array'][] = 'logo-'. $logo_colors[ array_rand($logo_colors) ];
-
-  drupal_add_css(drupal_get_path('theme','iobytheme').'/css/app.min.css');
 
   $contexts = context_active_contexts();
   if (array_key_exists('idea_css', $contexts)){
@@ -380,14 +375,7 @@ function iobytheme_preprocess_html(&$vars) {
    //              <noscript><iframe src='https://www.googletagmanager.com/ns.html?id=GTM-KTTPQD'
    //              height='0' width='0' style='display:none;visibility:hidden'></iframe></noscript>
    //              <!-- End Google Tag Manager (noscript) -->";
-  $viewport = array(
-    '#tag' => 'meta',
-    '#attributes' => array(
-    'name' => 'viewport',
-    'content' => 'width=device-width, initial-scale=1, maximum-scale=1',
-  ),
- );
-  drupal_add_html_head($viewport, 'viewport');
+
 }
 
 function iobytheme_preprocess(&$vars) {

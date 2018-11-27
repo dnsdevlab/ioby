@@ -1,4 +1,4 @@
-/* Tokenizer for JavaScript code */
+﻿/* Tokenizer for JavaScript code */
 
 var tokenizeJavaScript = (function() {
   // Advance the stream until the given character (not preceded by a

@@ -1,4 +1,4 @@
-/* Demonstration of embedding CodeMirror in a bigger application. The
+﻿/* Demonstration of embedding CodeMirror in a bigger application. The
  * interface defined here is a mess of prompts and confirms, and
  * should probably not be used in a real project.
  */

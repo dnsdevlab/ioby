@@ -9,34 +9,23 @@ Drupal.behaviors.password = {
     var translate = settings.password;
     $('input.password-field', context).once('password', function () {
       var passwordInput = $(this);
-      var innerWrapper  = $(this).parent();
-      var outerWrapper  = $(this).parent().parent();
-      outerWrapper.append('<div class="left-wrapper"></div><div class="right-wrapper"></div>')
-
-      var leftWrapper   = $('.left-wrapper', outerWrapper);
-      var rightWrapper  = $('.right-wrapper', outerWrapper);
-      $('.form-item-pass').addClass('clearfix');
+      var innerWrapper = $(this).parent();
+      var outerWrapper = $(this).parent().parent();
 
       // Add identifying class to password element parent.
       innerWrapper.addClass('password-parent');
-      innerWrapper.prependTo(leftWrapper);
 
       // Add the password confirmation layer.
-      $('input.password-confirm', outerWrapper).parent().append('<div class="password-confirm">' + translate['confirmTitle'] + ' <span></span></div>').addClass('confirm-parent');
+      $('input.password-confirm', outerWrapper).parent().prepend('<div class="password-confirm">' + translate['confirmTitle'] + ' <span></span></div>').addClass('confirm-parent');
       var confirmInput = $('input.password-confirm', outerWrapper);
       var confirmResult = $('div.password-confirm', outerWrapper);
       var confirmChild = $('span', confirmResult);
 
-
-      $('.confirm-parent').appendTo(leftWrapper);
-
       // Add the description box.
       var passwordMeter = '<div class="password-strength"><div class="password-strength-text" aria-live="assertive"></div><div class="password-strength-title">' + translate['strengthTitle'] + '</div><div class="password-indicator"><div class="indicator"></div></div></div>';
-      rightWrapper.prepend(passwordMeter);
-      rightWrapper.append('<div class="password-suggestions description"></div>');
+      $(confirmInput).parent().after('<div class="password-suggestions description"></div>');
+      $(innerWrapper).prepend(passwordMeter);
       var passwordDescription = $('div.password-suggestions', outerWrapper).hide();
-
-
 
       // Check the password strength.
       var passwordCheck = function () {
@@ -58,10 +47,10 @@ Drupal.behaviors.password = {
         }
 
         // Adjust the length of the strength indicator.
-        $(rightWrapper).find('.indicator').css('width', result.strength + '%');
+        $(innerWrapper).find('.indicator').css('width', result.strength + '%');
 
         // Update the strength indication text.
-        $(rightWrapper).find('.password-strength-text').html(result.indicatorText);
+        $(innerWrapper).find('.password-strength-text').html(result.indicatorText);
 
         passwordCheckMatch();
       };
@@ -73,7 +62,7 @@ Drupal.behaviors.password = {
           var success = passwordInput.val() === confirmInput.val();
 
           // Show the confirm result.
-          confirmResult.css({ visibility: 'visible', display: 'block' });
+          confirmResult.css({ visibility: 'visible' });
 
           // Remove the previous styling if any exists.
           if (this.confirmClass) {

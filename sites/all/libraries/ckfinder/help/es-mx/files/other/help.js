@@ -1,4 +1,4 @@
-window.onload = function()
+﻿window.onload = function()
 {
 	var copyP = document.createElement( 'p' ) ;
 	copyP.className = 'copyright' ;

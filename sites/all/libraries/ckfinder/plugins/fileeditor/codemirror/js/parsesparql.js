@@ -1,4 +1,4 @@
-var SparqlParser = Editor.Parser = (function() {
+﻿var SparqlParser = Editor.Parser = (function() {
   function wordRegexp(words) {
     return new RegExp("^(?:" + words.join("|") + ")$", "i");
   }

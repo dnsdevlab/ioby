@@ -1,0 +1,19 @@
+diff --git a/og.module b/og.module
+index dac0ab7..3123235 100755
+--- a/og.module
++++ b/og.module
+@@ -828,7 +828,13 @@ function og_form_group_manager_validate($form, &$form_state) {
+     return;
+   }
+ 
+-  if ($access = og_get_best_group_audience_field('user', $account, $entity_type, $bundle)) {
++  // if og_field_access is enabled and entity is a new node, then skip check for view group audience field
++  $skip_access = FALSE;
++  if (module_exists('og_field_access') && $entity_type == 'node' && !$id) {
++    $skip_access = TRUE;
++  }
++
++  if ($access = og_get_best_group_audience_field('user', $account, $entity_type, $bundle, $skip_access)) {
+     // Matching group audience field found.
+     return;
+   }

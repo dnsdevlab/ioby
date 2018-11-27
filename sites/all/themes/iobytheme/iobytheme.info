@@ -1,0 +1,49 @@
+; Info for the admin themes page
+; ------------------------------
+name = ioby 2011
+description = Theme for ioby.org, written in HTML5 based on Boron theme
+
+
+; Set the Drupal version this theme can be used with
+; ------------------------------
+package = Core
+core = 7.x
+
+
+; For sub-themes, uncomment 'base theme' and comment out 'engine'
+; ------------------------------
+; engine = phptemplate
+base theme = boron
+
+
+; We use [screen] instead of [all] to avoid browser styles affecting
+; other media types. IE stylesheets are loaded through template.php
+; ------------------------------
+;stylesheets[all][] = css/fonts.css
+;stylesheets[screen][] = css/main.less
+;stylesheets[screen][] = css/panels.less
+;stylesheets[screen][] = css/prose.less
+;stylesheets[screen][] = css/jquery-ui-custom.less
+;stylesheets[screen][] = css/idea-form.less
+;this doesn't appear to do anything:
+stylesheets[all] = css/app.min.css
+
+; html5.js is required for IE to understand the new elements like article
+; http://remysharp.com/2009/01/07/html5-enabling-script/
+; ------------------------------
+scripts[] = js/app.min.js
+; scripts[] = js/curvycorners.js
+
+; simplified regions
+regions[loginpop] = Login form
+regions[search] = Search form
+regions[header] = Header Stripe
+regions[subhead] = Just beneath stripe
+regions[highlighted] = Highlighted
+regions[help] = Help
+regions[content] = Content
+regions[sidebar] = Sidebar
+regions[search_facets] = Search Facets
+regions[footer] = Footer
+regions[cart] = Shopping Cart
+regions[current_search] = Current Search

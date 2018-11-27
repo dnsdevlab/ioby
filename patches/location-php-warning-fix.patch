@@ -1,0 +1,17 @@
+diff --git a/sites/all/modules/contrib/location/location.views.inc b/sites/all/modules/contrib/location/location.views.inc
+index 0306c8f..916a628 100644
+--- a/sites/all/modules/contrib/location/location.views.inc
++++ b/sites/all/modules/contrib/location/location.views.inc
+@@ -575,8 +575,10 @@ function location_views_proximity_get_reference_location($view, $options) {
+         if ($nid && is_numeric($nid) && $tempnode = node_load($nid)) {
+           $field_name = $options['nid_loc_field'];
+           if ($field_name == 'node') {
+-            $coordinates['latitude'] = (float) $tempnode->location['latitude'];
+-            $coordinates['longitude'] = (float) $tempnode->location['longitude'];
++            if (!empty($tempnode->location)) {
++              $coordinates['latitude'] = (float) $tempnode->location['latitude'];
++              $coordinates['longitude'] = (float) $tempnode->location['longitude'];
++            }
+           }
+           else {
+             if (isset($tempnode->$field_name)) {

@@ -1,0 +1,10 @@
+name = IOBY Donations Module
+description = This module contains the logic for creating a Donation on the IOBY site.
+package = IOBY
+core = 7.x
+dependencies[] = ioby
+dependencies[] = iobyproject
+dependencies[] = commerce_line_item
+files[] = includes/iobydonation_handler_field_edit_amount.inc
+files[] = includes/iobydonation_handler_field_match_total.inc
+version = "7.x-1.0"

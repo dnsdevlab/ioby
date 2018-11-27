@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function iobycampaign_schema() {
+  $schema = array();
+
+  $schema['iobycampaign_project_caps'] = array(
+    'description' => 'Table to store individual matching cap for projects.',
+    'fields' => array(
+      'campaign_nid' => array(
+        'description' => 'The primary identifier for a campaign node.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'project_nid' => array(
+        'description' => 'The primary identifier for a project node.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'cap_amount' => array(
+        'description' => 'The amount to limit matches for a specific project under the campaign.',
+        'type' => 'numeric',
+        'precision' => 10,
+        'scale' => 2,
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('campaign_nid', 'project_nid'),
+  );
+
+  return $schema;
+}

@@ -1,0 +1,88 @@
+diff --git a/og_field_access/og_field_access.module b/og_field_access/og_field_access.module
+old mode 100644
+new mode 100755
+index 000ace9..cb9c47c
+--- a/og_field_access/og_field_access.module
++++ b/og_field_access/og_field_access.module
+@@ -19,8 +19,9 @@ function og_field_access_field_access($op, $field, $entity_type, $entity, $accou
+     return TRUE;
+   }
+ 
+-  $perm = $op == 'view' ? 'view ' . $field['field_name'] . ' field' : 'update ' . $field['field_name'] . ' field';
+   list($id,, $bundle) = entity_extract_ids($entity_type, $entity);
++  $bundle_field_name = $bundle . '-' . $field['field_name'];
++  $perm = $op == 'view' ? 'view ' . $bundle_field_name . ' field' : 'update ' . $bundle_field_name . ' field';
+   // Show fields in user registration form.
+   if ($entity_type == 'user' && !$id) {
+     return;
+@@ -66,11 +67,12 @@ function og_field_access_og_permission() {
+ 
+       foreach ($bundle_value as $field_name => $value) {
+         $label = $value['label'];
++        $bundle_field_name = $bundle . '-' . $field_name;
+ 
+-        $perm = 'view ' . $field_name . ' field';
++        $perm = 'view ' . $bundle_field_name . ' field';
+         $perms[$perm] = array(
+           'title' => t('View @label field', array('@label' => $label)),
+-          'description' => t('View the %fieldname field for existing groups.', array('%fieldname' => $field_name)),
++          'description' => t('View the %fieldname field for existing groups.', array('%fieldname' => $bundle_field_name)),
+           'roles' => array(OG_ANONYMOUS_ROLE, OG_AUTHENTICATED_ROLE),
+           'default role' => array(
+             OG_ANONYMOUS_ROLE,
+@@ -80,10 +82,10 @@ function og_field_access_og_permission() {
+           'module' => 'og_field_access',
+         );
+ 
+-        $perm = 'update ' . $field_name . ' field';
++        $perm = 'update ' . $bundle_field_name . ' field';
+         $perms[$perm] = array(
+           'title' => t('Edit @label field', array('@label' => $label)),
+-          'description' => t('Edit the %fieldname field for existing groups.', array('%fieldname' => $field_name)),
++          'description' => t('Edit the %fieldname field for existing groups.', array('%fieldname' => $bundle_field_name)),
+           'roles' => array(OG_ANONYMOUS_ROLE, OG_AUTHENTICATED_ROLE),
+           'default role' => array(OG_ADMINISTRATOR_ROLE),
+           'module' => 'og_field_access',
+diff --git a/og_field_access/og_field_access.test b/og_field_access/og_field_access.test
+old mode 100644
+new mode 100755
+index 15a9c09..f4b85bb
+--- a/og_field_access/og_field_access.test
++++ b/og_field_access/og_field_access.test
+@@ -43,8 +43,8 @@ class OgFieldAccessTestCase extends DrupalWebTestCase {
+     // Set global permissions.
+     $anon_rid = array_search(OG_ANONYMOUS_ROLE, $og_roles);
+     $permissions = array(
+-      'view body field' => 0,
+-      'update body field' => 0,
++      'view ' . $group_type->type . '-body field' => 0,
++      'update ' . $group_type->type . '-body field' => 0,
+       // Allow non-members to edit the group, so we can test the node-edit page.
+       'update group' => 1,
+     );
+@@ -69,7 +69,7 @@ class OgFieldAccessTestCase extends DrupalWebTestCase {
+     $this->assertNoText($node->body[LANGUAGE_NONE][0]['value'], t('Non group member can not view field.'));
+ 
+     // Change permissions and assert user can view the field.
+-    $permissions['view body field'] = 1;
++    $permissions['view ' . $group_type->type . '-body field'] = 1;
+     og_role_change_permissions($anon_rid, $permissions);
+     $this->drupalGet('node/' . $node->nid);
+     $this->assertText($node->body[LANGUAGE_NONE][0]['value'], t('Non group member can now view field.'));
+@@ -80,14 +80,14 @@ class OgFieldAccessTestCase extends DrupalWebTestCase {
+     $this->assertNoText($node->body[LANGUAGE_NONE][0]['value'], t('Non group member can not edit field.'));
+ 
+     // Change permissions and assert user can view the field.
+-    $permissions['update body field'] = 1;
++    $permissions['update ' . $group_type->type . '-body field'] = 1;
+     og_role_change_permissions($anon_rid, $permissions);
+     $this->drupalGet('node/' . $node->nid . '/edit');
+     $langcode = LANGUAGE_NONE;
+     $this->assertFieldByName("body[$langcode][0][value]", $node->body[LANGUAGE_NONE][0]['value'], t('Non group member can now edit field.'));
+ 
+     // Assert field permissions on group content.
+-    $permissions['view body field'] = 0;
++    $permissions['view ' . $group_type->type . '-body field'] = 0;
+     og_role_change_permissions($anon_rid, $permissions);
+ 
+     $settings = array();

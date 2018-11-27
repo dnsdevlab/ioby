@@ -1,0 +1,228 @@
+<?php
+
+$view = new view();
+$view->name = 'campaign_admin';
+$view->description = '';
+$view->tag = 'ioby, reports';
+$view->base_table = 'node';
+$view->human_name = 'Admin: Campaign';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Campaign Admin';
+$handler->display->display_options['use_more'] = TRUE;
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'role';
+$handler->display->display_options['access']['role'] = array(
+  3 => '3',
+);
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['query']['options']['query_comment'] = FALSE;
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'full';
+$handler->display->display_options['pager']['options']['items_per_page'] = '25';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['pager']['options']['id'] = '0';
+$handler->display->display_options['pager']['options']['quantity'] = '9';
+$handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['style_options']['columns'] = array(
+  'title' => 'title',
+  'field_campaign_sponsor' => 'field_campaign_sponsor',
+  'field_campaign_project' => 'field_campaign_project',
+  'field_percent_match' => 'field_percent_match',
+  'field_campaign_max' => 'field_campaign_max',
+  'field_campaign_amount' => 'field_campaign_amount',
+  'field_campaign_matched' => 'field_campaign_matched',
+  'match_total' => 'match_total',
+  'field_campaign_dates' => 'field_campaign_dates',
+  'field_campaign_complete' => 'field_campaign_complete',
+);
+$handler->display->display_options['style_options']['default'] = '-1';
+$handler->display->display_options['style_options']['info'] = array(
+  'title' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_campaign_sponsor' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_campaign_project' => array(
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_percent_match' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_campaign_max' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_campaign_amount' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_campaign_matched' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'match_total' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_campaign_dates' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_campaign_complete' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+);
+/* Relationship: Content: Campaign (field_donation_match_campaign) */
+$handler->display->display_options['relationships']['field_donation_match_campaign_nid']['id'] = 'field_donation_match_campaign_nid';
+$handler->display->display_options['relationships']['field_donation_match_campaign_nid']['table'] = 'field_data_field_donation_match_campaign';
+$handler->display->display_options['relationships']['field_donation_match_campaign_nid']['field'] = 'field_donation_match_campaign_nid';
+$handler->display->display_options['relationships']['field_donation_match_campaign_nid']['label'] = 'dmc';
+$handler->display->display_options['relationships']['field_donation_match_campaign_nid']['delta'] = '-1';
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['label'] = 'Campaign';
+$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+/* Field: Field: Sponsored By */
+$handler->display->display_options['fields']['field_campaign_sponsor']['id'] = 'field_campaign_sponsor';
+$handler->display->display_options['fields']['field_campaign_sponsor']['table'] = 'field_data_field_campaign_sponsor';
+$handler->display->display_options['fields']['field_campaign_sponsor']['field'] = 'field_campaign_sponsor';
+$handler->display->display_options['fields']['field_campaign_sponsor']['type'] = 'node_reference_plain';
+/* Field: Content: Project(s) */
+$handler->display->display_options['fields']['field_campaign_project']['id'] = 'field_campaign_project';
+$handler->display->display_options['fields']['field_campaign_project']['table'] = 'field_data_field_campaign_project';
+$handler->display->display_options['fields']['field_campaign_project']['field'] = 'field_campaign_project';
+$handler->display->display_options['fields']['field_campaign_project']['delta_offset'] = '0';
+$handler->display->display_options['fields']['field_campaign_project']['multi_type'] = 'ul';
+$handler->display->display_options['fields']['field_campaign_project']['separator'] = '<br />';
+/* Field: Content: Percent Match */
+$handler->display->display_options['fields']['field_percent_match']['id'] = 'field_percent_match';
+$handler->display->display_options['fields']['field_percent_match']['table'] = 'field_data_field_percent_match';
+$handler->display->display_options['fields']['field_percent_match']['field'] = 'field_percent_match';
+$handler->display->display_options['fields']['field_percent_match']['settings'] = array(
+  'thousand_separator' => ' ',
+  'decimal_separator' => '.',
+  'scale' => '2',
+  'prefix_suffix' => 1,
+);
+/* Field: Content: Maximum Match */
+$handler->display->display_options['fields']['field_campaign_max']['id'] = 'field_campaign_max';
+$handler->display->display_options['fields']['field_campaign_max']['table'] = 'field_data_field_campaign_max';
+$handler->display->display_options['fields']['field_campaign_max']['field'] = 'field_campaign_max';
+$handler->display->display_options['fields']['field_campaign_max']['settings'] = array(
+  'thousand_separator' => ' ',
+  'decimal_separator' => '.',
+  'scale' => '2',
+  'prefix_suffix' => 1,
+);
+/* Field: Content: Campaign Total */
+$handler->display->display_options['fields']['field_campaign_amount']['id'] = 'field_campaign_amount';
+$handler->display->display_options['fields']['field_campaign_amount']['table'] = 'field_data_field_campaign_amount';
+$handler->display->display_options['fields']['field_campaign_amount']['field'] = 'field_campaign_amount';
+$handler->display->display_options['fields']['field_campaign_amount']['settings'] = array(
+  'thousand_separator' => ',',
+  'decimal_separator' => '.',
+  'scale' => '2',
+  'prefix_suffix' => 1,
+);
+/* Field: Ioby Campaign: Campaign match total */
+$handler->display->display_options['fields']['match_total']['id'] = 'match_total';
+$handler->display->display_options['fields']['match_total']['table'] = 'iobydonation_custom';
+$handler->display->display_options['fields']['match_total']['field'] = 'match_total';
+$handler->display->display_options['fields']['match_total']['label'] = 'Amount Matched';
+$handler->display->display_options['fields']['match_total']['set_precision'] = TRUE;
+$handler->display->display_options['fields']['match_total']['precision'] = '2';
+$handler->display->display_options['fields']['match_total']['prefix'] = '$';
+/* Field: Content: Dates */
+$handler->display->display_options['fields']['field_campaign_dates']['id'] = 'field_campaign_dates';
+$handler->display->display_options['fields']['field_campaign_dates']['table'] = 'field_data_field_campaign_dates';
+$handler->display->display_options['fields']['field_campaign_dates']['field'] = 'field_campaign_dates';
+$handler->display->display_options['fields']['field_campaign_dates']['settings'] = array(
+  'format_type' => 'other_short_date',
+  'fromto' => 'both',
+  'multiple_number' => '',
+  'multiple_from' => '',
+  'multiple_to' => '',
+);
+/* Field: Content: Completed */
+$handler->display->display_options['fields']['field_campaign_complete']['id'] = 'field_campaign_complete';
+$handler->display->display_options['fields']['field_campaign_complete']['table'] = 'field_data_field_campaign_complete';
+$handler->display->display_options['fields']['field_campaign_complete']['field'] = 'field_campaign_complete';
+$handler->display->display_options['fields']['field_campaign_complete']['empty'] = 'On';
+$handler->display->display_options['fields']['field_campaign_complete']['empty_zero'] = TRUE;
+$handler->display->display_options['fields']['field_campaign_complete']['settings'] = array(
+  'format_type' => 'other_short_date',
+  'fromto' => 'both',
+  'multiple_number' => '',
+  'multiple_from' => '',
+  'multiple_to' => '',
+);
+/* Sort criterion: Content: Post date */
+$handler->display->display_options['sorts']['created']['id'] = 'created';
+$handler->display->display_options['sorts']['created']['table'] = 'node';
+$handler->display->display_options['sorts']['created']['field'] = 'created';
+$handler->display->display_options['sorts']['created']['order'] = 'DESC';
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'campaign' => 'campaign',
+);
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['path'] = 'admin/reports/ioby/campaign-admin';
+
+/* Display: Block */
+$handler = $view->new_display('block', 'Block', 'campaign_admin_block');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['defaults']['use_more'] = FALSE;
+$handler->display->display_options['use_more'] = TRUE;
+$handler->display->display_options['defaults']['pager'] = FALSE;
+$handler->display->display_options['pager']['type'] = 'some';
+$handler->display->display_options['pager']['options']['items_per_page'] = '5';
+$handler->display->display_options['pager']['options']['offset'] = '0';

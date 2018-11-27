@@ -1,0 +1,258 @@
+<?php
+/**
+ * @file
+ * Provides functionality for devel mail.
+ */
+
+/**
+ * Implements hook_entity_info().
+ */
+function devel_mail_entity_info() {
+  $entities['devel_mail_log'] = array(
+    'label' => t('Devel mail log'),
+    'controller class' => 'EntityAPIController',
+    'entity class' => 'DevelMailLogEntity',
+    'views controller class' => 'EntityDefaultViewsController',
+    'base table' => 'devel_mail_log',
+    'fieldable' => FALSE,
+    'exportable' => FALSE,
+    'entity keys' => array(
+      'id' => 'mail_log_id',
+    ),
+    'label callback' => 'entity_class_label',
+    'uri callback' => 'entity_class_uri',
+    'access callback' => 'devel_mail_log_access',
+    'module' => 'devel_mail',
+  );
+  return $entities;
+}
+
+/**
+ * Loads a mail log item by mail_log ID.
+ *
+ * @param $mail_log_id
+ *   The mail_log ID.
+ * @param $reset
+ *   Whether to reset the internal mail log loading cache.
+ *
+ * @return
+ *   A fully-populated devel_mail_log object
+ */
+function devel_mail_log_load($mail_log_id, $reset = FALSE) {
+  $devel_mail_log = devel_mail_log_load_multiple(array($mail_log_id), array(), $reset);
+  return reset($devel_mail_log);
+}
+
+/**
+ * Loads multiple mail log items by ID or based on a set of matching conditions.
+ *
+ * @see entity_load()
+ *
+ * @param $mail_log_ids
+ *   An array of mail_log IDs.
+ * @param $conditions
+ *   An array of conditions on the {devel_mail_log} table in the form
+ *     'field' => $value.
+ * @param $reset
+ *   Whether to reset the internal mail log loading cache.
+ *
+ * @return
+ *   An array of devel_mail_log objects indexed by mail_log_id.
+ */
+function devel_mail_log_load_multiple($mail_log_ids = array(), $conditions = array(), $reset = FALSE) {
+  return entity_load('devel_mail_log', $mail_log_ids, $conditions, $reset);
+}
+
+/**
+ * Deletes a mail log item.
+ *
+ * @param $devel_mail_log
+ *   A mail log entity object.
+ */
+function devel_mail_log_delete(DevelMailLogEntity $devel_mail_log) {
+  $devel_mail_log->delete();
+}
+
+/**
+ * Deletes multiple mail log items by mail_log IDs.
+ *
+ * @param $mail_log_ids
+ *   An array of mail_log IDs to delete.
+ */
+function devel_mail_log_delete_multiple($mail_log_ids) {
+  entity_get_controller('devel_mail_log')->delete($mail_log_ids);
+}
+
+/**
+ * Implements hook_permission().
+ */
+function devel_mail_permission() {
+  return array(
+    'administer mail log' => array(
+      'title' => t('Administer the devel mail log'),
+      'restrict access' => TRUE,
+    ),
+    'view mail log' => array(
+      'title' => t('View the devel mail log'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function devel_mail_menu() {
+  $items = array();
+
+  $items['admin/reports/devel-mail'] = array(
+    'title' => t('Mail Log'),
+    'description' => t('Displays all the recent outgoing email messages'),
+    'access arguments' => array('view mail log'),
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('admin/reports/devel-mail/log', array()),
+  );
+  
+  /*
+   * Defined by the view
+   * $items['admin/reports/devel-mail/log'] = ...
+   */
+  
+  $items['admin/reports/devel-mail/log/%devel_mail_log'] = array(
+    'title callback' => 'devel_mail_log_page_title',
+    'title arguments' => array(4),
+    'page callback' => 'devel_mail_log_page_view',
+    'page arguments' => array(4),
+    'access arguments' => array('view mail log'),
+    'type' => MENU_CALLBACK,
+    'file' => 'devel_mail.admin.inc',
+  );
+  $items['admin/reports/devel-mail/log/%devel_mail_log/view'] = array(
+    'title' => 'View',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+    'weight' => -10,
+  );
+  $items['admin/reports/devel-mail/log/%devel_mail_log/delete'] = array(
+    'title' => 'Delete',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('devel_mail_log_confirm', 4),
+    'access arguments' => array('administer mail log'),
+    'weight' => 1,
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+    'file' => 'devel_mail.admin.inc',
+  );
+  $items['admin/reports/devel-mail/log/%devel_mail_log/resend'] = array(
+    'title' => 'Resend',
+    'page callback' => 'devel_mail_log_resend',
+    'page arguments' => array(4),
+    'access arguments' => array('administer mail log'),
+    'weight' => 2,
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+    'file' => 'devel_mail.admin.inc',
+  );
+  $items['admin/config/devel-mail'] = array(
+    'title' => 'Mail log',
+    'description' => 'Configuration settings for the Devel Mail module.',
+    'page callback' => 'devel_mail_settings_page',
+    'access arguments' => array('administer mail log'),
+    'file' => 'devel_mail.admin.inc',
+  );
+  $items['admin/config/devel-mail/clear'] = array(
+    'title' => 'Clear log',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('devel_mail_clear_confirm_form'),
+    'access arguments' => array('administer mail log'),
+    'type' => MENU_VISIBLE_IN_BREADCRUMB,
+    'file' => 'devel_mail.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function devel_mail_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  if ($root_path == 'admin/reports/devel-mail/log') {
+    $item = menu_get_item('admin/config/devel-mail/clear');
+    if ($item['access']) {
+      $item['localized_options']['query'] = drupal_get_destination();
+      
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_action',
+        '#link' => $item,
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function devel_mail_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'devel_mail') . '/includes/views',
+  );
+}
+
+function devel_mail_log_page_title(DevelMailLogEntity $devel_mail_log) {
+  return t('Message #!mail_log_id', array('!mail_log_id' => $devel_mail_log->mail_log_id));
+}
+
+function devel_mail_log_access($op, $devel_mail_log = NULL, $account = NULL) {
+  if (!user_access('administer mail log')) {
+    return FALSE;
+  }
+  return TRUE;
+}
+
+/**
+ * The class used for devel_mail_log entities.
+ */
+class DevelMailLogEntity extends Entity {
+  public function __construct(array $values = array(), $entityType = NULL) {
+    parent::__construct($values, 'devel_mail_log');
+
+    // Add default values, if they are not set.
+    $values += array(
+      'mail_log_id' => 0,
+      'message_id' => '',
+      'message_module' => '',
+      'message_key' => '',
+      'message_to' => '',
+      'message_from' => '',
+      'message_subject' => '',
+      'message_body' => '',
+      'message_headers' => '',
+      'message_params' => '',
+      'message_language' => '',
+      'message' => '',
+      'message_sent' => '',
+    );
+    foreach ($values as $key => $value) {
+      if (!isset($this->$key)) {
+        $this->$key = $value;
+      }
+    }
+  }
+
+  protected function defaultUri() {
+    return array('path' => 'admin/reports/devel-mail/log/' . $this->mail_log_id);
+  }
+
+  /**
+   * Permanently saves the entity.
+   *
+   * @see entity_save()
+   */
+  public function save() {
+    if (empty($this->mail_log_id)) {
+      $this->message_sent = REQUEST_TIME;
+    }
+    return parent::save();
+  }
+}

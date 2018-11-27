@@ -1,0 +1,12 @@
+diff --git a/sites/all/modules/contrib/location/location.module b/sites/all/modules/contrib/location/location.module
+index 8e7a1f2..033971f 100644
+--- a/sites/all/modules/contrib/location/location.module
++++ b/sites/all/modules/contrib/location/location.module
+@@ -954,6 +954,7 @@ function location_load_locations($id, $key = 'vid') {
+   $query = db_select('location_instance', 'l');
+   $lid_field = $query->addField('l', 'lid');
+   $query->condition($key, $id);
++  $query->condition('genid', '', '=');
+   $result = $query->execute();
+   $locations = array();
+   foreach ($result as $lid) {

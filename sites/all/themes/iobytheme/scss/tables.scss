@@ -1,0 +1,222 @@
+@charset "utf-8";
+
+// campaigns
+#content .view-campaign-tabs .view-content ul{
+  overflow: hidden;
+  margin-left: 0;
+}
+
+.view-campaign-tabs .view-content ul li{
+  list-style: none;
+  margin: 0;
+  overflow: hidden;
+  width: 33%;
+  float: left;
+}
+
+.view-campaign-tabs .view-content ul li article{
+  width: 100%;
+}
+
+@media screen and (max-width: 768px){
+  .view-campaign-tabs .view-content ul li{
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 550px){
+  .view-campaign-tabs .view-content ul li{
+    width: 100%;
+  }
+}
+
+// about
+
+@media screen and (max-width: 768px){
+  
+  //table reset styles
+  .node-about-ioby-section{
+    table,thead,tbody,tr,td{
+      display: block !important;
+      width: auto !important;
+    }
+
+    table{
+      tr{
+        overflow: hidden;
+      }
+
+      td{
+        box-sizing: border-box !important;
+        width: 50% !important;
+        float: left !important;
+        margin: 0 !important;
+      }
+
+      img{
+        display: block !important;
+        width: 100% !important;
+        padding: 20px;
+        box-sizing: border-box !important;
+        height: auto !important;
+      }
+    }
+  }
+
+  //contact
+  #node-276{
+    table{
+      tr{
+        overflow: hidden;
+      }
+
+      td{
+        box-sizing: border-box !important;
+        width: 50% !important;
+        float: left !important;
+        margin: 0 !important;
+      }
+
+      img{
+        display: block !important;
+        width: 100% !important;
+        padding: 20px;
+        box-sizing: border-box !important;
+        height: auto !important;
+      }
+    }
+  }
+
+  //press room
+  #node-568{
+    table,thead,tbody,tr,td{
+      display: block !important;
+      width: auto !important;
+    }
+
+    tr{
+      padding-bottom: 16px;
+      display: block !important;
+      overflow: hidden !important;
+
+      td{
+        width: 50% !important;
+        display: block !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 620px){
+  #node-276{
+    table{
+      td{
+        width: 100% !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 500px){
+  .node-about-ioby-section{
+    table{
+      td{
+        width: 100% !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 400px){
+  #node-568{
+    table,thead,tbody,tr,td{
+      display: block !important;
+      width: auto !important;
+    }
+
+    tr{
+      padding-bottom: 16px;
+      display: block !important;
+      overflow: hidden !important;
+
+      td{
+        width: 100% !important;
+        display: block !important;
+      }
+    }
+  }
+}
+
+
+// /actioncorps
+.node-type-page .field-name-body,
+.page-node-34018,
+.page-node-34007,
+.page-node-34008,
+.page-node-27373,
+.page-node-34006{
+  @media screen and (max-width: 960px){
+
+    #main-wrapper{
+      max-width: none;
+      width:94.5%;
+      margin: 0 auto;
+    }
+
+    .field-name-body p > img{
+      width: 100% !important;
+      height: auto !important;
+    }
+
+    table{
+      width: 100% !important;
+
+      tbody,tr{
+        overflow: hidden;
+        width: 100% !important;
+      }
+
+      td{
+        box-sizing: border-box !important;
+        width: 25% !important;
+        float: left !important;
+        margin: 0 !important;
+        min-height: 443px;
+
+        &:empty{
+          min-height: 0 !important;
+        }
+
+        & > p img{
+          margin-top: -15px;
+        }
+
+        & > p[style]{
+          margin-top: .9em !important;
+        }
+
+        @media screen and(max-width: 680px){
+          width: 33.3% !important;
+          min-height: 512px;
+        }
+
+        @media screen and(max-width: 460px){
+          width: 50% !important;
+          min-height: 431px;
+        }      
+      }
+
+      img{
+        display: block !important;
+        width: 100% !important;
+        padding: 0px;
+        box-sizing: border-box !important;
+        height: auto !important;
+      }
+    }
+  }
+}
+
+#node-276 td{
+  min-height: 0px;
+}

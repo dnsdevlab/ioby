@@ -1,0 +1,6 @@
+name = IOBY Module
+description = This module contains various customizations for the IOBY site.
+package = IOBY
+core = 7.x
+files[] = ioby.inc
+version = "7.x-1.0"

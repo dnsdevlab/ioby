@@ -1,0 +1,125 @@
+<?php
+
+$view = new view();
+$view->name = 'commerce_products';
+$view->description = 'Display a list of products for store admin.';
+$view->tag = 'commerce, ioby';
+$view->base_table = 'commerce_product';
+$view->human_name = 'Products';
+$view->core = 0;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Defaults */
+$handler = $view->new_display('default', 'Defaults', 'default');
+$handler->display->display_options['title'] = 'Products';
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['access']['perm'] = 'administer commerce_product entities';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'full';
+$handler->display->display_options['pager']['options']['items_per_page'] = 50;
+$handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['style_options']['grouping'] = '';
+$handler->display->display_options['style_options']['columns'] = array(
+  'created' => 'created',
+  'sku' => 'sku',
+  'title' => 'title',
+  'type' => 'type',
+  'commerce_price' => 'commerce_price',
+  'operations' => 'operations',
+);
+$handler->display->display_options['style_options']['default'] = 'created';
+$handler->display->display_options['style_options']['info'] = array(
+  'created' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'desc',
+    'align' => '',
+    'separator' => '',
+  ),
+  'sku' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+  ),
+  'title' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+  ),
+  'type' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+  ),
+  'commerce_price' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+  ),
+  'operations' => array(
+    'align' => '',
+    'separator' => '',
+  ),
+);
+/* No results behavior: Global: Text area */
+$handler->display->display_options['empty']['text']['id'] = 'text';
+$handler->display->display_options['empty']['text']['table'] = 'views';
+$handler->display->display_options['empty']['text']['field'] = 'area';
+$handler->display->display_options['empty']['text']['content'] = 'No products have been created yet.';
+/* Field: Commerce Product: Created date */
+$handler->display->display_options['fields']['created']['id'] = 'created';
+$handler->display->display_options['fields']['created']['table'] = 'commerce_product';
+$handler->display->display_options['fields']['created']['field'] = 'created';
+$handler->display->display_options['fields']['created']['label'] = 'Created';
+$handler->display->display_options['fields']['created']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['created']['date_format'] = 'short';
+/* Field: Commerce Product: SKU */
+$handler->display->display_options['fields']['sku']['id'] = 'sku';
+$handler->display->display_options['fields']['sku']['table'] = 'commerce_product';
+$handler->display->display_options['fields']['sku']['field'] = 'sku';
+$handler->display->display_options['fields']['sku']['link_to_product'] = 0;
+/* Field: Commerce Product: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'commerce_product';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['link_to_product'] = 1;
+/* Field: Commerce Product: Type */
+$handler->display->display_options['fields']['type']['id'] = 'type';
+$handler->display->display_options['fields']['type']['table'] = 'commerce_product';
+$handler->display->display_options['fields']['type']['field'] = 'type';
+$handler->display->display_options['fields']['type']['link_to_product'] = 0;
+/* Field: Commerce Product: Price */
+$handler->display->display_options['fields']['commerce_price']['id'] = 'commerce_price';
+$handler->display->display_options['fields']['commerce_price']['table'] = 'field_data_commerce_price';
+$handler->display->display_options['fields']['commerce_price']['field'] = 'commerce_price';
+$handler->display->display_options['fields']['commerce_price']['click_sort_column'] = 'amount';
+$handler->display->display_options['fields']['commerce_price']['type'] = 'commerce_price_formatted_amount';
+/* Field: Commerce Product: Operations links */
+$handler->display->display_options['fields']['operations']['id'] = 'operations';
+$handler->display->display_options['fields']['operations']['table'] = 'commerce_product';
+$handler->display->display_options['fields']['operations']['field'] = 'operations';
+$handler->display->display_options['fields']['operations']['label'] = 'Operations';
+/* Sort criterion: Commerce Product: Created date */
+$handler->display->display_options['sorts']['created']['id'] = 'created';
+$handler->display->display_options['sorts']['created']['table'] = 'commerce_product';
+$handler->display->display_options['sorts']['created']['field'] = 'created';
+
+/* Display: Admin page */
+$handler = $view->new_display('page', 'Admin page', 'admin_page');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['path'] = 'admin/commerce/products/list';
+$handler->display->display_options['menu']['type'] = 'default tab';
+$handler->display->display_options['menu']['title'] = 'List';
+$handler->display->display_options['menu']['weight'] = '-10';
+$handler->display->display_options['tab_options']['type'] = 'normal';
+$handler->display->display_options['tab_options']['title'] = 'Products';
+$handler->display->display_options['tab_options']['description'] = 'Manage products and product types in the store.';
+$handler->display->display_options['tab_options']['weight'] = '';
+$handler->display->display_options['tab_options']['name'] = 'management';

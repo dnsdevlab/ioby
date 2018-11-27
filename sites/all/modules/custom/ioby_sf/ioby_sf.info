@@ -1,0 +1,7 @@
+name = IOBY Salesforce Integration (New)
+description = This module contains integration point for the new Salesforce Structure.
+package = IOBY
+core = 7.x
+version = "7.x-1.0"
+
+dependencies[] = xautoload

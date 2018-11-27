@@ -1,0 +1,371 @@
+<?php
+
+/**
+ * Implements hook_menu()
+ *
+ * @return array
+ */
+function iobydonation_menu() {
+  $items = array();
+
+  $items['admin/config/iobymail'] = array(
+    'title' => 'IOBY Mail',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('iobydonation_settings'),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['admin/config/iobymail/mail'] = array(
+    'title' => 'IOBY Donation mailer settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('iobydonation_settings'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'access arguments' => array('administer site configuration'),
+  );
+
+  return $items;
+}
+
+function iobydonation_settings() {
+  $form = array();
+
+  $form['iobydonation_mail_subject'] = array(
+    '#type' => 'textfield',
+    '#title' => 'Mail Subject line',
+    '#default_value' => variable_get('iobydonation_mail_subject'),
+  );
+
+  $intro = variable_get('iobydonation_mail_intro');
+  $form['iobydonation_mail_intro'] = array(
+    '#type' => 'text_format',
+    '#title' => 'Mail introduction text',
+    '#format' => 'filtered_html',
+    '#default_value' => $intro['value'],
+  );
+
+  $outro = variable_get('iobydonation_mail_outro');
+  $form['iobydonation_mail_outro'] = array(
+    '#type' => 'text_format',
+    '#title' => 'Mail outro text',
+    '#format' => 'filtered_html',
+    '#default_value' => $outro['value'],
+  );
+
+  return system_settings_form($form);
+}
+
+function iobydonation_views_api() {
+  return array(
+    'api' => '3',
+  );
+}
+/**
+ * Creates a donation node
+ */
+function iobydonation_create_donation($project_id, $amount, $line_item_id = 0, $uid = 1, $donor_display_name = 'Anonymous') {
+  $project = node_load($project_id);
+  $title = '$' . number_format($amount, 2) . ' donation to project ' . $project->title;
+
+  // create Donation Node
+  $donation = new stdClass();
+  $donation->type = 'donation';
+  $donation->title = $title;
+  $donation->language = LANGUAGE_NONE;
+  node_object_prepare($donation);
+  $donation->field_donation_project['und'][0]['nid'] = $project_id;
+  $donation->field_donation_amount['und'][0]['value'] = $amount;
+  if (!empty($line_item_id)) {
+    $donation->field_donation_line_item['und'][0]['line_item_id'] = $line_item_id;
+  }
+  $donation->field_entry_type['und'][0]['value'] = 'website';
+  $donation->field_donation_user['und'][0]['uid'] = $uid;
+  $donation->field_donor_display_name['und'][0]['value'] = $donor_display_name;
+  node_save($donation);
+  watchdog(__FUNCTION__, "created donation with nid " . l($donation->nid, 'node/'.$donation->nid));
+  return $donation->nid;
+}
+
+/**
+ * creates donation after checkout is complete to assure
+ * user is create by rules. Place at end.
+ */
+function iobydonation_after_checkout_complete($order) {
+  if(gettype($order) == 'string') {
+    $order = commerce_order_load($order);
+  }
+  // load functionality for finalized match.
+  module_load_include('inc', 'ioby', 'includes/ioby');
+
+  // Check tht order balance to see if the payment has been completed
+  $balance = commerce_payment_order_balance($order);
+  if ($balance['amount'] <= 0) {
+    // Wrap it.
+    $order = entity_metadata_wrapper('commerce_order', $order);
+    $order_user_uid = $order->commerce_customer_billing->uid->value();
+
+    if($order->owner->field_user_fullname->value() == '') {
+      $full_name = $order->owner->field_user_fullname->value();
+      if($full_name == '') {
+        $full_name = $order->commerce_customer_billing->commerce_customer_address->first_name->value() . ' ' . $order->commerce_customer_billing->commerce_customer_address->last_name->value();
+
+        // update user profile with info out of billing information
+        $order->owner->field_user_fullname->set($full_name);
+        user_save($order->owner->value());
+        watchdog(__FUNCTION__, "Updated user {$order_user_uid} name to {$full_name}");
+      }
+    }
+
+    $donor_display_name = _generate_donor_display_name($order->commerce_customer_billing);
+
+    foreach ($order->commerce_line_items as $line_item_wrapper) {
+      // only create donations for products!
+      if($line_item_wrapper->type->value() == 'product') {
+        if($line_item_wrapper->commerce_product->type->value() == 'project') {
+          $product = $line_item_wrapper->commerce_product;
+
+          $line_item_id = $line_item_wrapper->line_item_id->value();
+          $donation_amount = commerce_currency_amount_to_decimal($product->commerce_price->amount->value(), 'USD');
+          $project_id = $product->value()->field_project_node[LANGUAGE_NONE][0]['nid'];
+          iobydonation_create_donation($project_id, $donation_amount, $line_item_id, $order_user_uid, $donor_display_name);
+
+          // Finalize donation match
+          ioby_sponsor_finalize_match($line_item_id);
+
+          iobyproject_check_project_funding($project_id);
+        }
+      }
+    }
+
+    iobydonation_mail_sender($order);
+  }
+}
+
+/**
+ * Sends formatted thank you mail.
+ * @param type $order
+ */
+function iobydonation_mail_sender($order) {
+  if(gettype($order) == 'string') {
+    $order = commerce_order_load($order);
+  }
+
+  $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
+  $order_id = $order_wrapper->order_id->value();
+  $order_create = date('m/d/Y', $order_wrapper->created->value());
+  $order_total = $order_wrapper->commerce_order_total->amount->value();
+  $order_total = commerce_currency_format($order_total, 'USD');
+  $billing_info   = $order_wrapper->commerce_customer_billing;
+  $donation_email = $billing_info->user->mail->value();
+  $billing_address = $billing_info->commerce_customer_address;
+
+  $donation_name   = $billing_address->first_name->value();
+  $donation_name  .= ' ' . $billing_address->last_name->value();
+
+  $donation_address  = $billing_address->thoroughfare->value();
+  if ($billing_address->premise->value() != '')
+  {
+    $donation_address .= '<br/>' . $billing_address->premise->value();
+  }
+  $donation_address .= '<br/>' . $billing_address->locality->value();
+  $donation_address .= ' ' . $billing_address->administrative_area->value();
+  $donation_address .= ' ' . $billing_address->postal_code->value();
+  $donation_address .= '<br/>' . $billing_address->country->value();
+
+  // get payment info
+  $payment = db_select('commerce_payment_transaction', 'a')
+    ->fields('a', array('payment_method', 'remote_id'))
+    ->condition('order_id', $order_id)
+    ->execute()
+    ->fetchAssoc();
+
+  $payment_id = '';
+  if($payment['payment_method'] == 'commerce_no_payment') {
+    $payment_id = 'No charges made.';
+  }
+  else {
+    $payment_id = $payment['remote_id'];
+  }
+  $product_lines = $gratuity_line = $coupon_line = '';
+  foreach($order_wrapper->commerce_line_items as $line_item) {
+    if($line_item->type->value() == 'product') {
+      $product = $line_item->commerce_product;
+      $type = $product->type->value();
+      if($product->type->value() == 'project') {
+        $sponsor_msg = '';
+        $line_item_id = $line_item->line_item_id->value();
+        $msg = ioby_sponsor_find_sponsor($line_item_id);
+        if($msg) {
+          foreach($msg as $message) {
+            $sponsor_msg = '<br/>' . $message;
+          }
+        }
+        $project = node_load($product->value()->field_project_node[LANGUAGE_NONE][0]['nid']);
+        $project = $project->title;
+        $amount = $line_item->commerce_product->commerce_price->amount->value();
+        $amount = commerce_currency_format($amount, 'USD');
+        $product_lines .= "<tr><td>{$project}{$sponsor_msg}</td><td>{$amount}</td></tr>" ;
+      }
+      else {
+        $amount = $line_item->commerce_product->commerce_price->amount->value();
+        $amount = commerce_currency_format($amount, 'USD');
+        $gratuity_line = "<tr><td>Gratuity to ioby (THANK YOU!)</td><td>{$amount}</td></tr>";
+      }
+    }
+    else if(preg_match('/coupon/', $line_item->type->value())) {
+      $out = '';
+      $msg = ioby_sponsor_coupon_sponsor($line_item);
+      if($msg) {
+        $out = '<br/>' . $msg;
+      }
+      $coupon_amount = $line_item->commerce_total->amount->value();
+      $coupon_amount = commerce_currency_format($coupon_amount, 'USD');
+      $coupon_line = "<tr><td>Giving Card{$out}</td><td>{$coupon_amount}</td></tr>";
+    }
+  }
+  $intro = variable_get('iobydonation_mail_intro', '');
+  $intro = $intro['value'];
+  $outro = variable_get('iobydonation_mail_outro', '');
+  $outro = $outro['value'];
+
+  // setup message body;
+  $msg = <<<EOD
+  Dear $donation_name,<br/>
+  $intro<br/>
+  <br/>
+  <b>Date</b>: $order_create<br/>
+  <b>Order</b>: $order_id<br/>
+  <b>Confirmation #</b>: $payment_id<br/><br/>
+  <b>Billing Information</b>:<br/>
+  $donation_name<br/>
+  $donation_email<br/>
+  $donation_address<br/><br />
+  <b>Donation Detail</b>:<br/>
+  <table>
+    <tr><td>Project</td><td>Amount</td></tr>
+    $product_lines
+    $gratuity_line
+    $coupon_line
+    <tr><td><b>Total Donation</b>:</td><td>$order_total</td></tr>
+  </table>
+  <br/>
+  $outro
+EOD;
+
+  $from = 'donations@ioby.org';
+  $message = array(
+   'id' => 'iobydonation_' . __FUNCTION__,
+   'key' => 'iobydonation_' . __FUNCTION__,
+   'module' => 'ioby_donation',
+   'to' => $donation_email,
+   'subject' => variable_get('iobydonation_mail_subject', 'Thanks for your donation!'),
+   'body' => array($msg),
+   'headers' => array(
+     'From' => $from,
+     'Sender' => $from,
+     'Return-Path' => $from,
+     'Content-Type' => 'text/html; charset=UTF-8; format=flowed',
+   ),
+  );
+
+  $system = drupal_mail_system('iobydonation', __FUNCTION__);
+  $message = $system->format($message);
+  if ($system->mail($message)) {
+    //watchdog(__FUNCTION__, 'Mail sent');
+  }
+  else {
+    watchdog(__FUNCTION__, 'Unable to send mail.');
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function iobydonation_cron() {
+  _expire_reserved_donation_matches();
+}
+
+/**
+ * Helper function to determine which reserved donation match records should be
+ * expired to free up the money in the campaign pot.
+ */
+function _expire_reserved_donation_matches() {
+  $expiration_time = strtotime("-30 minutes", REQUEST_TIME);
+
+  $query = new EntityFieldQuery();
+
+  $query->entityCondition('entity_type', 'node')
+        ->entityCondition('bundle', 'donation_match')
+        ->propertyCondition('changed', $expiration_time, '<')
+        ->fieldCondition('field_donation_match_status', 'value', DONATION_MATCH_STATUS_RESERVED, '=')
+        ->addTag('DANGEROUS_ACCESS_CHECK_OPT_OUT')
+        ->range(0, 50);
+
+  $result = $query->execute();
+
+  if (!empty($result['node'])) {
+    $matches_to_expire = node_load_multiple(array_keys($result['node']));
+
+    foreach ($matches_to_expire as $match_to_expire) {
+      $match_to_expire->field_donation_match_status[$match_to_expire->language][0]['value'] = DONATION_MATCH_STATUS_EXPIRED;
+      node_save($match_to_expire);
+    }
+  }
+}
+
+/**
+ * Gets the donation match total for a given campaign.
+ *
+ * @param int $campaign_nid
+ *  The nid for the campaign to return the match total for.
+ * @return int
+ *  The calculated matched total.
+ */
+function get_campaign_match_total($campaign_nid) {
+  $campaign_totals = &drupal_static(__FUNCTION__);
+
+  if (!isset($campaign_totals)) {
+    $query = db_select('node', 'n');
+    $query->innerJoin('field_data_field_donation_match_amount', 'a',
+      'n.nid = a.entity_id AND (a.entity_type = :entity_type AND a.deleted = 0)',
+      array(':entity_type' => 'node')
+    );
+    $query->innerJoin('field_data_field_donation_match_status', 's',
+      'n.nid = s.entity_id AND (s.entity_type = :entity_type AND s.deleted = 0)',
+      array(':entity_type' => 'node')
+    );
+    $query->innerJoin('field_data_field_donation_match_campaign', 'c',
+      'n.nid = c.entity_id AND (c.entity_type = :entity_type AND c.deleted = 0)',
+      array(':entity_type' => 'node')
+    );
+    $query->addField('c', 'field_donation_match_campaign_nid', 'campaign_nid');
+    $query->condition('n.type', 'donation_match', '=')
+      ->condition('s.field_donation_match_status_value', DONATION_MATCH_STATUS_COMPLETE, '=')
+      ->groupBy('campaign_nid')
+      ->addExpression('SUM(a.field_donation_match_amount_value)', 'total');
+
+    $result = $query->execute();
+
+    $campaign_totals = $result->fetchAllKeyed();
+  }
+
+  return isset($campaign_totals[$campaign_nid]) ? $campaign_totals[$campaign_nid] : 0;
+}
+
+function _generate_donor_display_name($commerce_customer_billing) {
+  if ($commerce_customer_billing->field_hide_donor_info->value() == 1) {
+    $display_name = 'Anonymous';
+  }
+  else {
+    $display_name = (trim($commerce_customer_billing->field_donor_display_name->value()) != '')
+      ? $commerce_customer_billing->field_donor_display_name->value()
+      : _abbreviate_donor_name($commerce_customer_billing->commerce_customer_address->first_name->value(), $commerce_customer_billing->commerce_customer_address->last_name->value());
+  }
+
+  return $display_name;
+}
+
+function _abbreviate_donor_name($firstname, $lastname) {
+  // Use whole first name and initial for last name.
+  return $firstname . ' ' . substr($lastname, 0, 1) . '.';
+}

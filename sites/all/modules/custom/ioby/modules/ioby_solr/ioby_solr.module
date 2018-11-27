@@ -1,0 +1,220 @@
+<?php
+
+define('BROWSE_PROJECTS_PATH', 'projects/browse');
+define('BROWSE_PROJECTS_PAGE', 'browse_projects');
+define('BROWSE_PROJECTS_MAP_PATH', 'projects/map');
+define('BROWSE_PROJECTS_MAP_PAGE', 'browse_projects_map');
+
+define('SOLR_INDEX_FIELD_CITY', 'sm_locs_city');
+
+/**
+ *  Implements hook_apachesolr_exclude().
+ */
+function ioby_solr_apachesolr_exclude($entity_id, $entity_type, $row, $env_id) {
+  $include_types = array(
+//    'campaign',
+//    'faq',
+//    'about_ioby_section',
+//    'page',
+    'project_2',
+//    'project_blog',
+  );
+
+  $exclude_nids = array(
+    238,
+    239,
+    7512,
+    7514
+  );
+
+  if ($entity_type == 'node' && (!in_array($row->bundle, $include_types) || in_array($entity_id, $exclude_nids))) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Implements hook_apachesolr_index_documents_alter().
+ */
+function ioby_solr_apachesolr_index_documents_alter(array &$documents, $entity, $entity_type, $env_id) {
+  if (isset($entity->type) && $entity->type == 'project_2') {
+    if (!empty($entity->field_project_address[LANGUAGE_NONE][0]) && $entity->field_project_address[LANGUAGE_NONE][0]['country'] == 'us') {
+      $zip = substr(trim($entity->field_project_address[LANGUAGE_NONE][0]['postal_code']), 0, 5);
+      $city = db_select('zipcodes', 'z')
+        ->fields('z', array('city'))
+        ->condition('country', 'us', '=')
+        ->condition('zip', $zip, '=')
+        ->execute()->fetchField();
+
+      if ($city) {
+        $city_field = $documents[0]->getField(SOLR_INDEX_FIELD_CITY);
+        $documents[0]->setField(SOLR_INDEX_FIELD_CITY, $city, $city_field['boost']);
+      }
+      else {
+        unset($documents[0]->{SOLR_INDEX_FIELD_CITY});
+      }
+    }
+  }
+}
+
+/**
+ *  Implements hook_apachesolr_query_alter().
+ */
+function ioby_solr_apachesolr_query_alter(DrupalSolrQueryInterface $query) {
+  if ($query instanceof IobySolrBaseQuery && in_array($query->getBasePath(), array(BROWSE_PROJECTS_PATH, BROWSE_PROJECTS_MAP_PATH))) {
+    // Limit project statuses
+    $project_statuses = array(
+      PROJECT_STATUS_OPEN,
+      PROJECT_STATUS_UNDERWAY,
+      PROJECT_STATUS_COMPLETED,
+    );
+    $query->addFilter('sm_field_project_status', '('. implode(' OR ', $project_statuses) .')');
+  }
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function ioby_solr_block_info() {
+  $search_pages = _ioby_solr_search_pages();
+  $visible_pages = '';
+
+  foreach ($search_pages as $page_id => $path) {
+    $visible_pages .= $path . "\n" . $path . "/*\n";
+  }
+
+  $blocks['project_browse_search'] = array(
+    'info' => t('Browse Projects Search Form'),
+    'cache' => DRUPAL_NO_CACHE,
+    'visibility' => BLOCK_VISIBILITY_LISTED,
+    'pages' => $visible_pages,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function ioby_solr_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'project_browse_search':
+      $block['subject'] = t('Search Projects');
+      $block['content'] = _ioby_solr_search_block();
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Implements hook_preprocess_search_results().
+ */
+function ioby_solr_preprocess_search_results(&$variables) {
+  if ($variables['module'] == 'apachesolr_search') {
+    if (!empty($variables['search_page']['page_id']) && $variables['search_page']['page_id'] == BROWSE_PROJECTS_MAP_PAGE) {
+      $nids = array();
+      foreach ($variables['results'] as $item) {
+        if ($item['bundle'] == 'project_2') {
+          $nids[] = $item['node']->entity_id;
+        }
+      }
+
+      if (!empty($nids)) {
+        $projects = node_load_multiple($nids);
+
+        $map = array(
+          'id'          => 'browse-project-map',
+          'width'       => '734px',
+          'height'      => '647px',
+          'latitude'    => '38.822591',
+          'longitude'   => '-93.99999999999999',
+          'zoom'        => 4,
+          'align'       => 'center',
+          'maptype'     => 'Map',
+          'controltype' => 'Large',
+          'mtc'         => 'menu',
+          'markername'  => 'lblue',
+          'rmtcallback' => url('projectinfo/popup'),
+        );
+
+        $markers = array();
+
+        foreach ($projects as $project) {
+          if (array_key_exists(LANGUAGE_NONE, $project->field_project_address)) {
+            $lat = $project->field_project_address[LANGUAGE_NONE][0]['latitude'];
+            $lon = $project->field_project_address[LANGUAGE_NONE][0]['longitude'];
+            $has_coordinates = (int) ($lat + $lon);
+
+            if ($has_coordinates) {
+              $markers[] = array(
+                'markername' => 'lblue',
+                'latitude' => $lat,
+                'longitude' => $lon,
+                'rmt' => $project->nid,
+              );
+            }
+          }
+        }
+
+        $map['markers'] = $markers;
+        $element = array('#type' => 'gmap', '#gmap_settings' => $map);
+
+        $variables['projects_map'] = drupal_render($element);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_apachesolr_query_prepare().
+ */
+function ioby_solr_apachesolr_query_prepare(DrupalSolrQueryInterface $query) {
+  // If there are no search terms for the query set the sort to the created date
+  if ($query->getParam('q') == '') {
+    $query->setSolrsort('ds_created', 'desc');
+  }
+}
+
+/**
+ * Callback to return search form for the browse projects page.
+ */
+function _ioby_solr_search_block() {
+  $search_pages = _ioby_solr_search_pages();
+
+  foreach ($search_pages as $id => $path) {
+    if (substr($_GET['q'], 0, strlen($path)) == $path) {
+      $page_id = $id;
+      break;
+    }
+  }
+
+  if (!isset($page_id)) {
+    return '';
+  }
+
+  $search_page = apachesolr_search_page_load($page_id);
+
+  $keys = str_replace($search_pages[$page_id], '', $_GET['q']);
+
+  if (strlen($keys)) {
+    $keys = substr($keys, 1);
+  }
+
+  $search_form = drupal_get_form('apachesolr_search_custom_page_search_form', $search_page, $keys);
+
+  return $search_form;
+}
+
+/**
+ * Lookup of solr search page_id => page_path
+ */
+function _ioby_solr_search_pages() {
+  return array(
+    BROWSE_PROJECTS_PAGE => BROWSE_PROJECTS_PATH,
+    BROWSE_PROJECTS_MAP_PAGE => BROWSE_PROJECTS_MAP_PATH,
+  );
+}

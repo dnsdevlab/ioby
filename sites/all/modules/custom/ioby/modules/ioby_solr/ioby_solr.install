@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * Implements hook_enable().
+ */
+function ioby_solr_enable() {
+  variable_set('apachesolr_query_class', array(
+    'file' => 'IobySolrBaseQuery',
+    'module' => 'ioby_solr',
+    'class' => 'IobySolrBaseQuery'));
+}
+
+/**
+ * Implements hook_disable().
+ */
+function ioby_solr_disable() {
+  variable_del('apachesolr_query_class');
+}

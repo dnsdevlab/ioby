@@ -1,0 +1,27 @@
+diff --git a/commerce_authnet.module b/commerce_authnet.module
+index 066712d..d4089bf 100644
+--- a/commerce_authnet.module
++++ b/commerce_authnet.module
+@@ -429,14 +429,14 @@ function commerce_authnet_aim_submit_form_submit($payment_method, $pane_form, $p
+ 
+     $nvp += array(
+       // Customer Billing Address
+-      'x_first_name' => substr($billing_address['first_name'], 0, 50),
+-      'x_last_name' => substr($billing_address['last_name'], 0, 50),
+-      'x_company' => substr($billing_address['organisation_name'], 0, 50),
+-      'x_address' => substr($billing_address['thoroughfare'], 0, 60),
+-      'x_city' => substr($billing_address['locality'], 0, 40),
+-      'x_state' => substr($billing_address['administrative_area'], 0, 40),
+-      'x_zip' => substr($billing_address['postal_code'], 0, 20),
+-      'x_country' => $billing_address['country'],
++      'x_first_name' => !empty($billing_address['first_name']) ? substr($billing_address['first_name'], 0, 50) : NULL,
++      'x_last_name' => !empty($billing_address['last_name']) ? substr($billing_address['last_name'], 0, 50) : NULL,
++      'x_company' => !empty($billing_address['organisation_name']) ? substr($billing_address['organisation_name'], 0, 50) : NULL,
++      'x_address' => !empty($billing_address['thoroughfare']) ? substr($billing_address['thoroughfare'], 0, 60) : NULL,
++      'x_city' => !empty($billing_address['locality']) ? substr($billing_address['locality'], 0, 40) : NULL,
++      'x_state' => !empty($billing_address['administrative_area']) ? substr($billing_address['administrative_area'], 0, 40) : NULL,
++      'x_zip' => !empty($billing_address['postal_code']) ? substr($billing_address['postal_code'], 0, 20) : NULL,
++      'x_country' => !empty($billing_address['country']) ? $billing_address['country'] : NULL,
+     );
+   }
+   else {

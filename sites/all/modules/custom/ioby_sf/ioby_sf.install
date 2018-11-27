@@ -1,0 +1,1156 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function ioby_sf_schema() {
+  $schema['ioby_sf_accounts'] = array(
+    'description' => '',
+    'fields' => array(
+      'account_id' => array(
+        'description' => '',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'account_name' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),
+      'billing_street' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),
+      'billing_city' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '120',
+        'not null' => FALSE,
+      ),
+      'billing_state' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => FALSE,
+      ),
+      'billing_zip' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => FALSE,
+      ),
+      'billing_country' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => FALSE,
+      ),
+      'sponsor_nid' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'salesforce_record_id' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'changed' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'needs_update' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'default' => 1,
+      ),
+    ),
+    'primary key' => array('account_id'),
+    'unique keys' => array(
+      'sponsor_nid' => array('sponsor_nid'),
+      'salesforce_record_id' => array('salesforce_record_id')
+    ),
+    'indexes' => array(
+      'changed' => array('changed'),
+      'created' => array('created'),
+      'needs_update' => array('needs_update'),
+    ),
+  );
+
+  $schema['ioby_sf_campaigns'] = array(
+    'description' => 'Projects from Drupal',
+    'fields' => array(
+      'project_nid' => array(
+        'description' => 'The nid of the project node in Drupal.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => 'The title of the project node in Drupal.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'project_street' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '150',
+        'not null' => FALSE,
+      ),
+      'project_street2' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '150',
+        'not null' => FALSE,
+      ),
+      'project_city' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '120',
+        'not null' => FALSE,
+      ),
+      'project_state' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '2',
+        'not null' => FALSE,
+      ),
+      'project_zip' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '10',
+        'not null' => FALSE,
+      ),
+      'project_borough' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '150',
+        'not null' => FALSE,
+      ),
+      'status' => array(
+        'description' => 'The project status from Drupal.',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => TRUE,
+      ),
+      'start_date' => array(
+        'description' => 'The project start date from Drupal.',
+        'type' => 'varchar',
+        'length' => '20',
+        'not null' => TRUE,
+      ),
+      'deadline_date' => array(
+        'description' => 'The project deadline date from Drupal.',
+        'type' => 'varchar',
+        'length' => '20',
+        'not null' => FALSE,
+      ),
+      'expected_revenue' => array(
+        'description' => 'The amount that the project needs to raise.',
+        'type' => 'numeric',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+        'precision' => '10',
+        'scale' => '2',
+      ),
+      'volunteers_accepted' => array(
+        'description' => 'If this project accepts volunteers.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+      ),
+      'volunteers_description' => array(
+        'description' => 'Description for what volunteers will be doing.',
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+      'salesforce_record_id' => array(
+        'description' => 'Thi Salesforce ID of this project (Campaign).',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => 'The timestamp of when this record was created.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'changed' => array(
+        'description' => 'The timestamp of when this record was last updated.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'needs_update' => array(
+        'description' => 'Boolean indicating that this project information needs to be updated in Salesforce.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'default' => 1,
+      ),
+      'is_new' => array(
+        'description' => 'Boolean indicating that this project is new and needs to be pushed to Salesforce.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('project_nid'),
+    'unique keys' => array(
+      'salesforce_record_id' => array('salesforce_record_id')
+    ),
+    'indexes' => array(
+      'changed' => array('changed'),
+      'created' => array('created'),
+      'needs_update' => array('needs_update'),
+      'is_new' => array('is_new'),
+    ),
+  );
+
+  $schema['ioby_sf_project_participations'] = array(
+    'description' => 'Maps to the project participations relationship object in Salesforce.',
+    'fields' => array(
+      'project_participation_id' => array(
+        'description' => '',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'account_id' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'project_nid' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'salesforce_record_id' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('project_participation_id'),
+    'unique keys' => array(
+      'account_id_project_nid' => array('account_id', 'project_nid'),
+      'salesforce_record_id' => array('salesforce_record_id')
+    ),
+  );
+
+  $schema['ioby_sf_contacts'] = array(
+    'description' => 'Users and contact information from Drupal',
+    'fields' => array(
+      'email' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '150',
+        'not null' => TRUE,
+      ),
+      'uid' => array(
+        'description' => 'The uid of the Drupal user (if connected to a Drupal user).',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'first_name' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '150',
+        'not null' => FALSE,
+      ),
+      'last_name' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '150',
+        'not null' => FALSE,
+      ),
+      'birth_date' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '20',
+        'not null' => FALSE,
+      ),
+      'mailing_street' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),
+      'mailing_city' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '120',
+        'not null' => FALSE,
+      ),
+      'mailing_state' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => FALSE,
+      ),
+      'mailing_zip' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => FALSE,
+      ),
+      'mailing_country' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => FALSE,
+      ),
+      'other_street' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),
+      'other_city' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '120',
+        'not null' => FALSE,
+      ),
+      'other_state' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => FALSE,
+      ),
+      'other_zip' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => FALSE,
+      ),
+      'other_country' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '50',
+        'not null' => FALSE,
+      ),
+      'alternate_email' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '150',
+        'not null' => FALSE,
+      ),
+      'phone' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '150',
+        'not null' => FALSE,
+      ),
+      'other_phone' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '150',
+        'not null' => FALSE,
+      ),
+      'salesforce_record_id' => array(
+        'description' => 'The Salesforce ID of this contact record in Salesforce.',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => 'The timestamp of when this record was created.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'changed' => array(
+        'description' => 'The timestamp of when this record was last changed.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'needs_update' => array(
+        'description' => 'Boolean indicating that this project information needs to be updated in Salesforce.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'default' => 1,
+      ),
+      'update_mailing_address' => array(
+        'description' => 'Boolean indicating that the mailing address needs to be updated in Salesforce.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'update_other_address' => array(
+        'description' => 'Boolean indicating that the other address needs to be updated in Salesforce.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('email'),
+    'unique keys' => array(
+      'salesforce_record_id' => array('salesforce_record_id')
+    ),
+    'indexes' => array(
+      'uid' => array('uid'),
+      'changed' => array('changed'),
+      'created' => array('created'),
+      'needs_update' => array('needs_update'),
+    ),
+  );
+
+  $schema['ioby_sf_campaign_members'] = array(
+    'description' => 'Maps to the Campaign Member relationship object in Salesforce.',
+    'fields' => array(
+      'campaign_member_id' => array(
+        'description' => '',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'email' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '150',
+        'not null' => TRUE,
+      ),
+      'project_nid' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'salesforce_record_id' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+      'project_leader' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'project_donor' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'needs_update' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'default' => 1,
+      ),
+    ),
+    'primary key' => array('campaign_member_id'),
+    'unique keys' => array(
+      'email_project_id' => array('email', 'project_nid'),
+      'salesforce_record_id' => array('salesforce_record_id')
+    ),
+    'indexes' => array(
+      'needs_update' => array('needs_update'),
+    ),
+  );
+
+  $schema['ioby_sf_affiliations'] = array(
+    'description' => 'Maps to the affiliations relationship object in Salesforce.',
+    'fields' => array(
+      'affiliation_id' => array(
+        'description' => '',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'email' => array(
+        'description' => 'The email of the contact.',
+        'type' => 'varchar',
+        'length' => '150',
+        'not null' => TRUE,
+      ),
+      'account_id' => array(
+        'description' => 'The account_id from the account that is related to the campaign.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'salesforce_record_id' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('affiliation_id'),
+    'unique keys' => array(
+      'email_account_id' => array('email', 'account_id'),
+      'salesforce_record_id' => array('salesforce_record_id')
+    ),
+  );
+
+  $schema['ioby_sf_opportunities'] = array(
+    'description' => '',
+    'fields' => array(
+      'opportunity_id' => array(
+        'description' => '',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'nid' => array(
+        'description' => 'The node.nid from the donation or donation match record from Drupal.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'name' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '120',
+        'not null' => FALSE,
+      ),
+      'description' => array(
+        'description' => '',
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+      'entry_type' => array(
+        'description' => 'Indicates if this was from a website order or a manual entry.',
+        'type' => 'varchar',
+        'length' => '20',
+        'not null' => FALSE,
+      ),
+      'opportunity_type' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+      'project_nid' => array(
+        'description' => 'The nid from the project in that this donation applies to.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'sponsor_nid' => array(
+        'description' => 'The nid from sponsor that this coupon (if this is a coupon) applies to.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'order_id' => array(
+        'description' => 'The id of the order that this donation is from.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'line_item_id' => array(
+        'description' => 'The order line item id that is associated with this donation.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'amount' => array(
+        'description' => 'The amount of the donation.',
+        'type' => 'numeric',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'precision' => '10',
+        'scale' => '2',
+      ),
+      'closed_date' => array(
+        'description' => 'The datetime timestamp of when this donation was made.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'stage' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+      'campaign_nid' => array(
+        'description' => 'The nid of the campaign (fund) that this match applies to.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'contact_email' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '150',
+        'not null' => FALSE,
+      ),
+      'salesforce_record_id' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'changed' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'needs_update' => array(
+        'description' => 'Boolean indicating that this opportunity information needs to be updated in Salesforce.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('opportunity_id'),
+    'unique keys' => array(
+      'salesforce_record_id' => array('salesforce_record_id'),
+      'nid' => array('nid'),
+    ),
+    'indexes' => array(
+      'campaign_nid' => array('campaign_nid'),
+      'changed' => array('changed'),
+      'contact_email' => array('contact_email'),
+      'created' => array('created'),
+      'entry_type' => array('entry_type'),
+      'project_nid' => array('project_nid'),
+      'sponsor_nid' => array('sponsor_nid'),
+    ),
+  );
+
+  $schema['ioby_sf_orders'] = array(
+    'description' => 'Used to keep track of queued orders.',
+    'fields' => array(
+      'order_id' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array('order_id'),
+  );
+
+  $schema['ioby_sf_funds'] = array(
+    'description' => '',
+    'fields' => array(
+      'campaign_nid' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'name' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => FALSE,
+      ),
+      'sponsor_nid' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'total_value' => array(
+        'description' => '',
+        'type' => 'numeric',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+        'precision' => '10',
+        'scale' => '2',
+      ),
+      'description' => array(
+        'description' => '',
+        'type' => 'text',
+        'not null' => FALSE,
+      ),
+      'fund_type' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+      'salesforce_record_id' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+      'created' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'changed' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'needs_update' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'default' => 1,
+      ),
+    ),
+    'primary key' => array('campaign_nid'),
+    'unique keys' => array(
+      'salesforce_record_id' => array('salesforce_record_id')
+    ),
+    'indexes' => array(
+      'sponsor_nid' => array('sponsor_nid'),
+      'created' => array('created'),
+      'changed' => array('changed'),
+      'needs_update' => array('needs_update'),
+    ),
+  );
+
+  $schema['ioby_sf_fund_groupings'] = array(
+    'description' => 'Maps to the fund campaign grouping object in Salesforce.',
+    'fields' => array(
+      'fund_grouping_id' => array(
+        'description' => '',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'campaign_nid' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'project_nid' => array(
+        'description' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'salesforce_record_id' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('fund_grouping_id'),
+    'unique keys' => array(
+      'campaign_nid_project_nid' => array('campaign_nid', 'project_nid'),
+      'salesforce_record_id' => array('salesforce_record_id')
+    ),
+  );
+
+  $schema['ioby_sf_potential_projects'] = array(
+    'description' => 'Table to attach extra metadata to project_2 nodes to map projects to Campaigns in Salesforce.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The node id of the project.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'salesforce_record_id' => array(
+        'description' => 'The Salesforce ID of the record to sync this project with.',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+      'create_new_sf_object' => array(
+        'description' => 'Boolean indicating that a new Campaign object needs to be created in Salesforce.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'connected_to_sf' => array(
+        'description' => 'Boolean indicating that the project is already connected to a Salesforce Campaign Object.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('nid'),
+    'unique keys' => array(
+      'salesforce_record_id' => array('salesforce_record_id')
+    ),
+  );
+
+  $schema['ioby_sf_commerce_orders'] = array(
+    'description' => 'Keeps track of Commerce orders once they\'ve been pushed to Salesforce as Orders.',
+    'fields' => array(
+      'commerce_order_id' => array(
+        'description' => 'The Commerce order number (in Drupal).',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'salesforce_record_id' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('commerce_order_id'),
+  );
+
+  $schema['ioby_sf_order_line_items'] = array(
+    'description' => 'Transitional table for storing Commerce Line Items orders in preparation for creation in Salesforce as Order Line Items.',
+    'fields' => array(
+      'commerce_order_id' => array(
+        'description' => 'The Commerce order number (in Drupal) this Line Item belongs to.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'line_item_id' => array(
+        'description' => 'The ID of the Commerce Line Items (in Drupal).',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'amount' => array(
+        'description' => 'The amount of the donation.',
+        'type' => 'numeric',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'precision' => '10',
+        'scale' => '2',
+      ),
+      'opportunity_type' => array(
+        'description' => '',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+      'salesforce_record_id' => array(
+        'description' => 'The Salesforce ID of the Order Line Item this was turned into.',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => FALSE,
+      ),
+      'needs_update' => array(
+        'description' => 'Boolean indicating that this Commerce Line Item needs to be pushed to Salesforce.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+      'created' => array(
+        'description' => 'The timestamp of when this record was created.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+      ),
+      'opportunity_salesforce_record_id' => array(
+        'description' => 'The Salesforce ID of the Opportunity this Line Item was initially created as.',
+        'type' => 'varchar',
+        'length' => '25',
+        'not null' => TRUE,
+      ),
+    ),
+    'primary key' => array(
+      'commerce_order_id',
+      'line_item_id',
+      ),
+    'unique keys' => array(
+      'opportunity_salesforce_record_id' => array('opportunity_salesforce_record_id')
+    ),
+    'indexes' => array(
+      'needs_update' => array('needs_update'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Adds address columns to the ioby_sf_campaigns table.
+ */
+function ioby_sf_update_7000() {
+  $columns['project_street'] = array(
+    'description' => '',
+    'type' => 'varchar',
+    'length' => '150',
+    'not null' => FALSE,
+  );
+  $columns['project_street2'] = array(
+    'description' => '',
+    'type' => 'varchar',
+    'length' => '150',
+    'not null' => FALSE,
+  );
+  $columns['project_city'] = array(
+    'description' => '',
+    'type' => 'varchar',
+    'length' => '120',
+    'not null' => FALSE,
+  );
+  $columns['project_state'] = array(
+    'description' => '',
+    'type' => 'varchar',
+    'length' => '2',
+    'not null' => FALSE,
+  );
+  $columns['project_zip'] = array(
+    'description' => '',
+    'type' => 'varchar',
+    'length' => '10',
+    'not null' => FALSE,
+  );
+  $columns['project_borough'] = array(
+    'description' => '',
+    'type' => 'varchar',
+    'length' => '150',
+    'not null' => FALSE,
+  );
+
+  foreach ($columns as $column_name => $column_definition) {
+    db_add_field('ioby_sf_campaigns', $column_name, $column_definition);
+  }
+}
+
+/**
+ * Add birth_date column to ioby_sf_contacts.
+ */
+function ioby_sf_update_7001() {
+  $columns['birth_date'] = array(
+    'description' => '',
+    'type' => 'varchar',
+    'length' => '20',
+    'not null' => FALSE,
+  );
+
+  db_add_field('ioby_sf_contacts', 'birth_date', $columns['birth_date']);
+}
+
+/**
+ * Rename budgeted_cost to expected_revenue in ioby_sf_campaigns
+ */
+function ioby_sf_update_7002() {
+  $field = array(
+    'description' => 'The amount that the project needs to raise.',
+    'type' => 'numeric',
+    'unsigned' => TRUE,
+    'not null' => FALSE,
+    'default' => 0,
+    'precision' => '10',
+    'scale' => '2',
+  );
+
+  db_change_field('ioby_sf_campaigns', 'budgeted_cost', 'expected_revenue', $field);
+}
+
+/**
+ * Add the needs_update column to ioby_sf_opportunities.
+ */
+function ioby_sf_update_7003() {
+  $columns['needs_update'] = array(
+    'description' => 'Boolean indicating that this opportunity information needs to be updated in Salesforce.',
+    'type' => 'int',
+    'unsigned' => TRUE,
+    'size' => 'tiny',
+    'not null' => FALSE,
+    'default' => 0,
+  );
+
+  db_add_field('ioby_sf_opportunities', 'needs_update', $columns['needs_update']);
+}
+
+/**
+ * Add end_date column to ioby_sf_campaigns and populate with values if there are any
+ */
+function ioby_sf_update_7004() {
+  $columns['end_date'] = array(
+    'description' => 'The project deadline date from Drupal.',
+    'type' => 'varchar',
+    'length' => '20',
+    'not null' => FALSE,
+  );
+
+  db_add_field('ioby_sf_campaigns', 'end_date', $columns['end_date']);
+
+  $query = db_select('field_data_field_deadline', 'd')
+    ->fields('d', array('entity_id', 'field_deadline_value'))
+    ->isNotNull('d.field_deadline_value')
+    ->condition('d.field_deadline_value', '', '<>');
+
+  $query->innerJoin('ioby_sf_campaigns', 'c', 'd.entity_id = c.project_nid');
+
+  $records = $query->execute()->fetchAll();
+
+  foreach ($records as $row) {
+    db_update('ioby_sf_campaigns')
+      ->fields(array(
+        'end_date' => $row->field_deadline_value,
+        'needs_update' => 1
+      ))
+      ->condition('project_nid', $row->entity_id, '=')
+      ->execute();
+  }
+}
+
+/**
+ * Rename ioby_sf_campaigns.end_date column to deadline_date
+ */
+function ioby_sf_update_7005() {
+  if (db_field_exists('ioby_sf_campaigns', 'end_date') && !db_field_exists('ioby_sf_campaigns', 'deadline_date')) {
+    $column = array(
+      'description' => 'The project deadline date from Drupal.',
+      'type' => 'varchar',
+      'length' => '20',
+      'not null' => FALSE,
+    );
+
+    db_change_field('ioby_sf_campaigns', 'end_date', 'deadline_date', $column);
+  }
+}
+
+/**
+ * Add ioby_sf_potential_projects table
+ */
+function ioby_sf_update_7006() {
+  $schema = ioby_sf_schema();
+  if (!db_table_exists('ioby_sf_potential_projects')) {
+    db_create_table('ioby_sf_potential_projects', $schema['ioby_sf_potential_projects']);
+  }
+
+  db_query("INSERT INTO {ioby_sf_potential_projects} (nid, salesforce_record_id, create_new_sf_object, connected_to_sf) SELECT c.project_nid, c.salesforce_record_id, 1, 1 FROM {ioby_sf_campaigns} c WHERE c.salesforce_record_id IS NOT NULL");
+}
+
+/**
+ * Add is_new column to ioby_sf_campaigns
+ */
+function ioby_sf_update_7007() {
+  $schema = ioby_sf_schema();
+
+  if (!db_field_exists('ioby_sf_campaigns', 'is_new')) {
+    db_add_field('ioby_sf_campaigns', 'is_new', $schema['ioby_sf_campaigns']['fields']['is_new']);
+    db_add_index('ioby_sf_campaigns', 'is_new', array('is_new'));
+  }
+}
+
+/**
+ * Add title column to ioby_sf_potential_projects table.
+ */
+function ioby_sf_update_7008() {
+  $columns['title'] = array(
+    'description' => 'The title of the Potential Project from Salesforce.',
+    'type' => 'varchar',
+    'length' => '255',
+    'not null' => FALSE,
+  );
+
+  db_add_field('ioby_sf_potential_projects', 'title', $columns['title']);
+}
+
+/**
+ * Change the unique key to the salesforce_record_id.
+ */
+function ioby_sf_update_7009() {
+  // Drop existing keys and indexes.
+  db_drop_primary_key('ioby_sf_potential_projects');
+  db_drop_unique_key('ioby_sf_potential_projects', 'salesforce_record_id');
+
+  // Before we can add a primary key on the SF record id, we have to make sure
+  // none of them are NULL.
+  $null_records = db_query("SELECT nid FROM {ioby_sf_potential_projects} WHERE salesforce_record_id IS NULL");
+  if ($null_records->rowCount() > 0) {
+    foreach ($null_records as $key => $row) {
+      $query = db_update('ioby_sf_potential_projects')
+              ->fields(array(
+                'salesforce_record_id' => $key,
+              ))
+              ->condition('nid', $row->nid)
+              ->execute();
+    }
+  }
+
+  // nid needs a default value.
+  $column = array(
+    'description' => 'The node id of the project.',
+    'type' => 'int',
+    'unsigned' => TRUE,
+    'not null' => FALSE,
+    'default' => NULL,
+  );
+  db_change_field('ioby_sf_potential_projects', 'nid', 'nid', $column);
+
+  // Add 'em back, plus a new one for the title.
+  db_add_primary_key('ioby_sf_potential_projects', array('salesforce_record_id'));
+  db_add_index('ioby_sf_potential_projects', 'nid', array('nid'));
+  db_add_index('ioby_sf_potential_projects', 'title', array('title'));
+}
+
+/**
+ * Create tables for creation of Orders and Order Line Items. See IOBY-16.
+ */
+function ioby_sf_update_7010() {
+  $schema = ioby_sf_schema();
+
+  if (!db_table_exists('ioby_sf_commerce_orders')) {
+    db_create_table('ioby_sf_commerce_orders', $schema['ioby_sf_commerce_orders']);
+  }
+
+  if (!db_table_exists('ioby_sf_order_line_items')) {
+    db_create_table('ioby_sf_order_line_items', $schema['ioby_sf_order_line_items']);
+  }
+}

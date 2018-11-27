@@ -1,0 +1,153 @@
+<?php
+
+$view = new view();
+$view->name = 'project_location';
+$view->description = '';
+$view->tag = 'default';
+$view->base_table = 'node';
+$view->human_name = 'Project Location';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Projects on a map, wow!';
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'none';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['style_plugin'] = 'gmap';
+$handler->display->display_options['style_options']['grouping'] = '';
+$handler->display->display_options['style_options']['latfield'] = 'latitude';
+$handler->display->display_options['style_options']['lonfield'] = 'latitude';
+$handler->display->display_options['style_options']['markerfield'] = 'latitude';
+$handler->display->display_options['style_options']['enablermt'] = 0;
+$handler->display->display_options['style_options']['rmtfield'] = 'latitude';
+$handler->display->display_options['style_options']['tooltipenabled'] = 1;
+$handler->display->display_options['style_options']['tooltipfield'] = 'title';
+$handler->display->display_options['row_plugin'] = 'fields';
+/* Field: Location: Latitude */
+$handler->display->display_options['fields']['latitude']['id'] = 'latitude';
+$handler->display->display_options['fields']['latitude']['table'] = 'location';
+$handler->display->display_options['fields']['latitude']['field'] = 'latitude';
+$handler->display->display_options['fields']['latitude']['label'] = '';
+$handler->display->display_options['fields']['latitude']['exclude'] = TRUE;
+$handler->display->display_options['fields']['latitude']['element_label_colon'] = FALSE;
+/* Field: Location: Longitude */
+$handler->display->display_options['fields']['longitude']['id'] = 'longitude';
+$handler->display->display_options['fields']['longitude']['table'] = 'location';
+$handler->display->display_options['fields']['longitude']['field'] = 'longitude';
+$handler->display->display_options['fields']['longitude']['label'] = '';
+$handler->display->display_options['fields']['longitude']['exclude'] = TRUE;
+$handler->display->display_options['fields']['longitude']['element_label_colon'] = FALSE;
+/* Field: Content: Path */
+$handler->display->display_options['fields']['path']['id'] = 'path';
+$handler->display->display_options['fields']['path']['table'] = 'node';
+$handler->display->display_options['fields']['path']['field'] = 'path';
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['label'] = 'Project:';
+$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+$handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
+/* Sort criterion: Content: Post date */
+$handler->display->display_options['sorts']['created']['id'] = 'created';
+$handler->display->display_options['sorts']['created']['table'] = 'node';
+$handler->display->display_options['sorts']['created']['field'] = 'created';
+$handler->display->display_options['sorts']['created']['order'] = 'DESC';
+/* Filter criterion: Content: Published */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'node';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['value'] = 1;
+$handler->display->display_options['filters']['status']['group'] = 0;
+$handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'project_2' => 'project_2',
+);
+$handler->display->display_options['filters']['type']['group'] = '0';
+/* Filter criterion: Location: Latitude */
+$handler->display->display_options['filters']['latitude']['id'] = 'latitude';
+$handler->display->display_options['filters']['latitude']['table'] = 'location';
+$handler->display->display_options['filters']['latitude']['field'] = 'latitude';
+$handler->display->display_options['filters']['latitude']['operator'] = '!=';
+$handler->display->display_options['filters']['latitude']['value']['value'] = '0';
+$handler->display->display_options['filters']['latitude']['group'] = '0';
+/* Filter criterion: Location: Longitude */
+$handler->display->display_options['filters']['longitude']['id'] = 'longitude';
+$handler->display->display_options['filters']['longitude']['table'] = 'location';
+$handler->display->display_options['filters']['longitude']['field'] = 'longitude';
+$handler->display->display_options['filters']['longitude']['operator'] = '!=';
+$handler->display->display_options['filters']['longitude']['value']['value'] = '0';
+$handler->display->display_options['filters']['longitude']['group'] = '0';
+/* Filter criterion: Content: Project Status (field_project_status) */
+$handler->display->display_options['filters']['field_project_status_value']['id'] = 'field_project_status_value';
+$handler->display->display_options['filters']['field_project_status_value']['table'] = 'field_data_field_project_status';
+$handler->display->display_options['filters']['field_project_status_value']['field'] = 'field_project_status_value';
+$handler->display->display_options['filters']['field_project_status_value']['value'] = array(
+  1 => '1',
+);
+$handler->display->display_options['filters']['field_project_status_value']['group'] = '0';
+
+/* Display: Block */
+$handler = $view->new_display('block', 'Block', 'block');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['block_description'] = 'Project Map';
+
+/* Display: Context */
+$handler = $view->new_display('ctools_context', 'Context', 'ctools_context_1');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['style_plugin'] = 'ctools_context';
+$handler->display->display_options['row_plugin'] = 'fields';
+$handler->display->display_options['defaults']['relationships'] = FALSE;
+/* Relationship: Broken/missing handler */
+$handler->display->display_options['relationships']['field_campain_projects_nid']['id'] = 'field_campain_projects_nid';
+$handler->display->display_options['relationships']['field_campain_projects_nid']['table'] = 'field_data_field_campain_projects';
+$handler->display->display_options['relationships']['field_campain_projects_nid']['field'] = 'field_campain_projects_nid';
+$handler->display->display_options['defaults']['fields'] = FALSE;
+/* Field: Location: Latitude */
+$handler->display->display_options['fields']['latitude']['id'] = 'latitude';
+$handler->display->display_options['fields']['latitude']['table'] = 'location';
+$handler->display->display_options['fields']['latitude']['field'] = 'latitude';
+$handler->display->display_options['fields']['latitude']['label'] = '';
+$handler->display->display_options['fields']['latitude']['exclude'] = TRUE;
+$handler->display->display_options['fields']['latitude']['element_label_colon'] = FALSE;
+/* Field: Location: Longitude */
+$handler->display->display_options['fields']['longitude']['id'] = 'longitude';
+$handler->display->display_options['fields']['longitude']['table'] = 'location';
+$handler->display->display_options['fields']['longitude']['field'] = 'longitude';
+$handler->display->display_options['fields']['longitude']['label'] = '';
+$handler->display->display_options['fields']['longitude']['exclude'] = TRUE;
+$handler->display->display_options['fields']['longitude']['element_label_colon'] = FALSE;
+/* Field: Content: Path */
+$handler->display->display_options['fields']['path_1']['id'] = 'path_1';
+$handler->display->display_options['fields']['path_1']['table'] = 'node';
+$handler->display->display_options['fields']['path_1']['field'] = 'path';
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['label'] = 'Project:';
+$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+$handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
+/* Field: Content: Project Cost */
+$handler->display->display_options['fields']['field_project_cost']['id'] = 'field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['table'] = 'field_data_field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['field'] = 'field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['settings'] = array(
+  'thousand_separator' => ' ',
+  'decimal_separator' => '.',
+  'scale' => '0',
+  'prefix_suffix' => 1,
+);

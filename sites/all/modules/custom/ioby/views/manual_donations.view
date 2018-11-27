@@ -1,0 +1,227 @@
+<?php
+
+$view = new view();
+$view->name = 'manual_donations';
+$view->description = 'View to expose and sum all manual donations.';
+$view->tag = 'ioby, reports';
+$view->base_table = 'node';
+$view->human_name = 'Manual Donations';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Manual Donations';
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'role';
+$handler->display->display_options['access']['role'] = array(
+  3 => '3',
+  4 => '4',
+);
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'full';
+$handler->display->display_options['pager']['options']['items_per_page'] = '100';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['pager']['options']['id'] = '0';
+$handler->display->display_options['pager']['options']['quantity'] = '9';
+$handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['style_options']['columns'] = array(
+  'title' => 'title',
+  'field_donation_project' => 'field_donation_project',
+  'field_donation_amount' => 'field_donation_amount',
+  'created' => 'created',
+  'edit_node' => 'edit_node',
+);
+$handler->display->display_options['style_options']['default'] = 'created';
+$handler->display->display_options['style_options']['info'] = array(
+  'title' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_donation_project' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_donation_amount' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'created' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'desc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'edit_node' => array(
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+);
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+/* Field: Field: Name to display on donor roster */
+$handler->display->display_options['fields']['field_donor_display_name']['id'] = 'field_donor_display_name';
+$handler->display->display_options['fields']['field_donor_display_name']['table'] = 'field_data_field_donor_display_name';
+$handler->display->display_options['fields']['field_donor_display_name']['field'] = 'field_donor_display_name';
+$handler->display->display_options['fields']['field_donor_display_name']['label'] = 'Donor Display Name';
+/* Field: Content: Project */
+$handler->display->display_options['fields']['field_donation_project']['id'] = 'field_donation_project';
+$handler->display->display_options['fields']['field_donation_project']['table'] = 'field_data_field_donation_project';
+$handler->display->display_options['fields']['field_donation_project']['field'] = 'field_donation_project';
+/* Field: Content: Amount */
+$handler->display->display_options['fields']['field_donation_amount']['id'] = 'field_donation_amount';
+$handler->display->display_options['fields']['field_donation_amount']['table'] = 'field_data_field_donation_amount';
+$handler->display->display_options['fields']['field_donation_amount']['field'] = 'field_donation_amount';
+$handler->display->display_options['fields']['field_donation_amount']['settings'] = array(
+  'thousand_separator' => ',',
+  'decimal_separator' => '.',
+  'scale' => '2',
+  'prefix_suffix' => 1,
+);
+/* Field: Content: Post date */
+$handler->display->display_options['fields']['created']['id'] = 'created';
+$handler->display->display_options['fields']['created']['table'] = 'node';
+$handler->display->display_options['fields']['created']['field'] = 'created';
+$handler->display->display_options['fields']['created']['label'] = 'Date posted';
+$handler->display->display_options['fields']['created']['date_format'] = 'custom';
+$handler->display->display_options['fields']['created']['custom_date_format'] = 'm/d/Y g:h A';
+/* Field: Content: Edit link */
+$handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
+$handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';
+$handler->display->display_options['fields']['edit_node']['field'] = 'edit_node';
+$handler->display->display_options['fields']['edit_node']['label'] = 'Operations';
+$handler->display->display_options['fields']['edit_node']['element_label_colon'] = FALSE;
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'donation' => 'donation',
+);
+$handler->display->display_options['filters']['type']['group'] = 1;
+/* Filter criterion: Content: Entry Type (field_entry_type) */
+$handler->display->display_options['filters']['field_entry_type_value']['id'] = 'field_entry_type_value';
+$handler->display->display_options['filters']['field_entry_type_value']['table'] = 'field_data_field_entry_type';
+$handler->display->display_options['filters']['field_entry_type_value']['field'] = 'field_entry_type_value';
+$handler->display->display_options['filters']['field_entry_type_value']['value'] = array(
+  'manual' => 'manual',
+);
+$handler->display->display_options['filters']['field_entry_type_value']['group'] = 1;
+$handler->display->display_options['filters']['field_entry_type_value']['expose']['operator_id'] = 'field_entry_type_value_op';
+$handler->display->display_options['filters']['field_entry_type_value']['expose']['label'] = 'Entry Type';
+$handler->display->display_options['filters']['field_entry_type_value']['expose']['operator'] = 'field_entry_type_value_op';
+$handler->display->display_options['filters']['field_entry_type_value']['expose']['identifier'] = 'field_entry_type_value';
+$handler->display->display_options['filters']['field_entry_type_value']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+/* Filter criterion: Content: Project (field_donation_project) */
+$handler->display->display_options['filters']['field_donation_project_nid']['id'] = 'field_donation_project_nid';
+$handler->display->display_options['filters']['field_donation_project_nid']['table'] = 'field_data_field_donation_project';
+$handler->display->display_options['filters']['field_donation_project_nid']['field'] = 'field_donation_project_nid';
+$handler->display->display_options['filters']['field_donation_project_nid']['group'] = 1;
+$handler->display->display_options['filters']['field_donation_project_nid']['exposed'] = TRUE;
+$handler->display->display_options['filters']['field_donation_project_nid']['expose']['operator_id'] = 'field_donation_project_nid_op';
+$handler->display->display_options['filters']['field_donation_project_nid']['expose']['label'] = 'Project';
+$handler->display->display_options['filters']['field_donation_project_nid']['expose']['operator'] = 'field_donation_project_nid_op';
+$handler->display->display_options['filters']['field_donation_project_nid']['expose']['identifier'] = 'field_donation_project_nid';
+$handler->display->display_options['filters']['field_donation_project_nid']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+/* Filter criterion: Date: Date (node) */
+$handler->display->display_options['filters']['date_filter']['id'] = 'date_filter';
+$handler->display->display_options['filters']['date_filter']['table'] = 'node';
+$handler->display->display_options['filters']['date_filter']['field'] = 'date_filter';
+$handler->display->display_options['filters']['date_filter']['operator'] = 'between';
+$handler->display->display_options['filters']['date_filter']['group'] = 1;
+$handler->display->display_options['filters']['date_filter']['exposed'] = TRUE;
+$handler->display->display_options['filters']['date_filter']['expose']['operator_id'] = 'date_filter_op';
+$handler->display->display_options['filters']['date_filter']['expose']['operator'] = 'date_filter_op';
+$handler->display->display_options['filters']['date_filter']['expose']['identifier'] = 'posted_date';
+$handler->display->display_options['filters']['date_filter']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+$handler->display->display_options['filters']['date_filter']['group_info']['label'] = 'Date (node)';
+$handler->display->display_options['filters']['date_filter']['group_info']['identifier'] = 'date_filter';
+$handler->display->display_options['filters']['date_filter']['group_info']['remember'] = FALSE;
+$handler->display->display_options['filters']['date_filter']['group_info']['group_items'] = array(
+  1 => array(),
+  2 => array(),
+  3 => array(),
+);
+$handler->display->display_options['filters']['date_filter']['form_type'] = 'date_popup';
+$handler->display->display_options['filters']['date_filter']['date_fields'] = array(
+  'node.created' => 'node.created',
+);
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['path'] = 'admin/reports/ioby/manual-donations';
+
+/* Display: Attachment */
+$handler = $view->new_display('attachment', 'Attachment', 'attachment_1');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['defaults']['group_by'] = FALSE;
+$handler->display->display_options['group_by'] = TRUE;
+$handler->display->display_options['pager']['type'] = 'some';
+$handler->display->display_options['defaults']['style_plugin'] = FALSE;
+$handler->display->display_options['style_plugin'] = 'default';
+$handler->display->display_options['defaults']['style_options'] = FALSE;
+$handler->display->display_options['defaults']['row_plugin'] = FALSE;
+$handler->display->display_options['row_plugin'] = 'fields';
+$handler->display->display_options['defaults']['row_options'] = FALSE;
+$handler->display->display_options['defaults']['fields'] = FALSE;
+/* Field: Content: Amount */
+$handler->display->display_options['fields']['field_donation_amount']['id'] = 'field_donation_amount';
+$handler->display->display_options['fields']['field_donation_amount']['table'] = 'field_data_field_donation_amount';
+$handler->display->display_options['fields']['field_donation_amount']['field'] = 'field_donation_amount';
+$handler->display->display_options['fields']['field_donation_amount']['group_type'] = 'sum';
+$handler->display->display_options['fields']['field_donation_amount']['label'] = 'Total';
+$handler->display->display_options['fields']['field_donation_amount']['element_type'] = 'span';
+$handler->display->display_options['fields']['field_donation_amount']['element_label_type'] = 'span';
+$handler->display->display_options['fields']['field_donation_amount']['element_wrapper_type'] = 'h3';
+$handler->display->display_options['fields']['field_donation_amount']['settings'] = array(
+  'thousand_separator' => ',',
+  'decimal_separator' => '.',
+  'scale' => '2',
+  'prefix_suffix' => 1,
+);
+$handler->display->display_options['displays'] = array(
+  'page' => 'page',
+  'default' => 0,
+);
+$handler->display->display_options['attachment_position'] = 'both';
+$handler->display->display_options['inherit_exposed_filters'] = TRUE;

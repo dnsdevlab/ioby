@@ -1,0 +1,6 @@
+name = ioby Solr Integration
+description = Solr search integration for the ioby website.
+package = IOBY
+core = 7.x
+dependencies[] = apachesolr
+version = "7.x-1.0"

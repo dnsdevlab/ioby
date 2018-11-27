@@ -1,0 +1,195 @@
+<?php
+
+$view = new view();
+$view->name = 'project_donations';
+$view->description = 'Donations listed here';
+$view->tag = 'ioby';
+$view->base_table = 'node';
+$view->human_name = 'Project Donations';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Donations';
+$handler->display->display_options['use_ajax'] = TRUE;
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'og_context';
+$handler->display->display_options['access']['perm'] = 'view project donations';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['query']['options']['disable_sql_rewrite'] = TRUE;
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'full';
+$handler->display->display_options['pager']['options']['items_per_page'] = '100';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['pager']['options']['id'] = '0';
+$handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['style_options']['columns'] = array(
+  'field_share_donor_email' => 'field_share_donor_email',
+  'field_hide_donor_info' => 'field_hide_donor_info',
+  'field_donation_amount' => 'field_donation_amount',
+  'order_id' => 'order_id',
+  'created' => 'created',
+  'field_donor_display_name' => 'field_donor_display_name',
+  'mail' => 'mail',
+);
+$handler->display->display_options['style_options']['default'] = '-1';
+$handler->display->display_options['style_options']['info'] = array(
+  'field_share_donor_email' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_hide_donor_info' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_donation_amount' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'order_id' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'created' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_donor_display_name' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'mail' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+);
+/* Relationship: Content: Referenced line items */
+$handler->display->display_options['relationships']['field_donation_line_item_line_item_id']['id'] = 'field_donation_line_item_line_item_id';
+$handler->display->display_options['relationships']['field_donation_line_item_line_item_id']['table'] = 'field_data_field_donation_line_item';
+$handler->display->display_options['relationships']['field_donation_line_item_line_item_id']['field'] = 'field_donation_line_item_line_item_id';
+/* Relationship: Commerce Line Item: Order ID */
+$handler->display->display_options['relationships']['order_id']['id'] = 'order_id';
+$handler->display->display_options['relationships']['order_id']['table'] = 'commerce_line_item';
+$handler->display->display_options['relationships']['order_id']['field'] = 'order_id';
+$handler->display->display_options['relationships']['order_id']['relationship'] = 'field_donation_line_item_line_item_id';
+/* Relationship: Commerce Order: Referenced customer profile */
+$handler->display->display_options['relationships']['commerce_customer_billing_profile_id']['id'] = 'commerce_customer_billing_profile_id';
+$handler->display->display_options['relationships']['commerce_customer_billing_profile_id']['table'] = 'field_data_commerce_customer_billing';
+$handler->display->display_options['relationships']['commerce_customer_billing_profile_id']['field'] = 'commerce_customer_billing_profile_id';
+$handler->display->display_options['relationships']['commerce_customer_billing_profile_id']['relationship'] = 'order_id';
+/* Field: Share email? */
+$handler->display->display_options['fields']['field_share_donor_email']['id'] = 'field_share_donor_email';
+$handler->display->display_options['fields']['field_share_donor_email']['table'] = 'field_data_field_share_donor_email';
+$handler->display->display_options['fields']['field_share_donor_email']['field'] = 'field_share_donor_email';
+$handler->display->display_options['fields']['field_share_donor_email']['relationship'] = 'commerce_customer_billing_profile_id';
+$handler->display->display_options['fields']['field_share_donor_email']['ui_name'] = 'Share email?';
+$handler->display->display_options['fields']['field_share_donor_email']['label'] = '';
+$handler->display->display_options['fields']['field_share_donor_email']['exclude'] = TRUE;
+$handler->display->display_options['fields']['field_share_donor_email']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['field_share_donor_email']['type'] = 'list_key';
+/* Field: Anonymous? */
+$handler->display->display_options['fields']['field_hide_donor_info']['id'] = 'field_hide_donor_info';
+$handler->display->display_options['fields']['field_hide_donor_info']['table'] = 'field_data_field_hide_donor_info';
+$handler->display->display_options['fields']['field_hide_donor_info']['field'] = 'field_hide_donor_info';
+$handler->display->display_options['fields']['field_hide_donor_info']['relationship'] = 'commerce_customer_billing_profile_id';
+$handler->display->display_options['fields']['field_hide_donor_info']['ui_name'] = 'Anonymous?';
+$handler->display->display_options['fields']['field_hide_donor_info']['label'] = '';
+$handler->display->display_options['fields']['field_hide_donor_info']['exclude'] = TRUE;
+$handler->display->display_options['fields']['field_hide_donor_info']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['field_hide_donor_info']['type'] = 'list_key';
+/* Field: Content: Post date */
+$handler->display->display_options['fields']['created']['id'] = 'created';
+$handler->display->display_options['fields']['created']['table'] = 'node';
+$handler->display->display_options['fields']['created']['field'] = 'created';
+$handler->display->display_options['fields']['created']['label'] = 'Date';
+$handler->display->display_options['fields']['created']['date_format'] = 'other_short_datetime';
+$handler->display->display_options['fields']['created']['second_date_format'] = 'long';
+/* Field: Commerce Line Item: Order ID */
+$handler->display->display_options['fields']['order_id']['id'] = 'order_id';
+$handler->display->display_options['fields']['order_id']['table'] = 'commerce_line_item';
+$handler->display->display_options['fields']['order_id']['field'] = 'order_id';
+$handler->display->display_options['fields']['order_id']['relationship'] = 'field_donation_line_item_line_item_id';
+$handler->display->display_options['fields']['order_id']['label'] = 'Order';
+$handler->display->display_options['fields']['order_id']['alter']['path'] = 'admin/commerce/orders/[order_id]';
+$handler->display->display_options['fields']['order_id']['empty'] = 'N/A';
+/* Field: Display name? */
+$handler->display->display_options['fields']['field_donor_display_name']['id'] = 'field_donor_display_name';
+$handler->display->display_options['fields']['field_donor_display_name']['table'] = 'field_data_field_donor_display_name';
+$handler->display->display_options['fields']['field_donor_display_name']['field'] = 'field_donor_display_name';
+$handler->display->display_options['fields']['field_donor_display_name']['ui_name'] = 'Display name?';
+$handler->display->display_options['fields']['field_donor_display_name']['label'] = 'Name';
+/* Field: Commerce Order: E-mail */
+$handler->display->display_options['fields']['mail']['id'] = 'mail';
+$handler->display->display_options['fields']['mail']['table'] = 'commerce_order';
+$handler->display->display_options['fields']['mail']['field'] = 'mail';
+$handler->display->display_options['fields']['mail']['relationship'] = 'order_id';
+$handler->display->display_options['fields']['mail']['label'] = 'Email';
+$handler->display->display_options['fields']['mail']['render_as_link'] = 0;
+/* Field: Content: Amount */
+$handler->display->display_options['fields']['field_donation_amount']['id'] = 'field_donation_amount';
+$handler->display->display_options['fields']['field_donation_amount']['table'] = 'field_data_field_donation_amount';
+$handler->display->display_options['fields']['field_donation_amount']['field'] = 'field_donation_amount';
+$handler->display->display_options['fields']['field_donation_amount']['settings'] = array(
+  'thousand_separator' => ' ',
+  'decimal_separator' => '.',
+  'scale' => '2',
+  'prefix_suffix' => 1,
+);
+/* Sort criterion: Content: Post date */
+$handler->display->display_options['sorts']['created']['id'] = 'created';
+$handler->display->display_options['sorts']['created']['table'] = 'node';
+$handler->display->display_options['sorts']['created']['field'] = 'created';
+$handler->display->display_options['sorts']['created']['order'] = 'DESC';
+/* Contextual filter: Content: Project (field_donation_project) */
+$handler->display->display_options['arguments']['field_donation_project_nid']['id'] = 'field_donation_project_nid';
+$handler->display->display_options['arguments']['field_donation_project_nid']['table'] = 'field_data_field_donation_project';
+$handler->display->display_options['arguments']['field_donation_project_nid']['field'] = 'field_donation_project_nid';
+$handler->display->display_options['arguments']['field_donation_project_nid']['default_action'] = 'not found';
+$handler->display->display_options['arguments']['field_donation_project_nid']['title_enable'] = TRUE;
+$handler->display->display_options['arguments']['field_donation_project_nid']['title'] = 'Donations for: %1';
+$handler->display->display_options['arguments']['field_donation_project_nid']['default_argument_type'] = 'fixed';
+$handler->display->display_options['arguments']['field_donation_project_nid']['summary']['number_of_records'] = '0';
+$handler->display->display_options['arguments']['field_donation_project_nid']['summary']['format'] = 'default_summary';
+$handler->display->display_options['arguments']['field_donation_project_nid']['summary_options']['items_per_page'] = '25';
+$handler->display->display_options['arguments']['field_donation_project_nid']['specify_validation'] = TRUE;
+$handler->display->display_options['arguments']['field_donation_project_nid']['validate']['type'] = 'og';
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'donation' => 'donation',
+);
+/* Filter criterion: Content: Amount (field_donation_amount) */
+$handler->display->display_options['filters']['field_donation_amount_value']['id'] = 'field_donation_amount_value';
+$handler->display->display_options['filters']['field_donation_amount_value']['table'] = 'field_data_field_donation_amount';
+$handler->display->display_options['filters']['field_donation_amount_value']['field'] = 'field_donation_amount_value';
+$handler->display->display_options['filters']['field_donation_amount_value']['operator'] = '>';
+$handler->display->display_options['filters']['field_donation_amount_value']['value']['value'] = '0';
+
+/* Display: Block */
+$handler = $view->new_display('block', 'Block', 'block_1');

@@ -1,0 +1,245 @@
+<?php
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function iobycampaign_form_campaign_node_form_alter(&$form, &$form_state, $form_id) {
+  $campaign_nid = $form['nid']['#value'];
+
+  $form['field_campaign_sponsor']['#weight'] = 1;
+
+  if (!empty($campaign_nid)) {
+    $project_caps = array();
+    $query = db_select('iobycampaign_project_caps', 'pc');
+    $query->innerJoin('node', 'n', 'pc.project_nid = n.nid');
+    $project_caps = $query
+      ->fields('pc', array('project_nid', 'cap_amount'))
+      ->fields('n', array('title'))
+      ->condition('pc.campaign_nid', $campaign_nid, '=')
+      ->condition('n.type', 'project_2', '=')
+      ->addTag('node_access')
+      ->execute()->fetchAllAssoc('project_nid', PDO::FETCH_ASSOC);
+
+    $form['project_caps'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Project Caps'),
+      '#description' => t('Set individual project cap amounts.'),
+      '#collapsible' => FALSE,
+      '#weight' => 4,
+    );
+
+    if (!empty($form['#node']->field_campaign_project['und'])) {
+      $form['#validate'][] = 'iobycampaign_project_cap_validate';
+      $form['#submit'][] = 'iobycampaign_project_cap_submit';
+      $form['project_caps']['headings'] = array(
+        '#type' => 'item',
+        '#title' => '<strong>' . t('Project Name') . '</strong>',
+        '#title_display' => 'after',
+        '#markup' => '<strong>' . t('Cap Amount') . '</strong>'
+      );
+      foreach ($form['#node']->field_campaign_project['und'] as $project) {
+        $project = node_load($project['nid']);
+
+        $form['project_caps']['project_' . $project->nid] = array(
+          '#type' => 'textfield',
+          '#title' => '<strong>' . t($project->title) . '</strong>',
+          '#title_display' => 'after',
+          '#size' => 5,
+          '#prefix' => '<div class="container-inline">',
+          '#suffix' => '</div>',
+          '#default_value' => !empty($project_caps[$project->nid]) ? $project_caps[$project->nid]['cap_amount'] : "0.00",
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Custom callback to validate entered values for the project caps.
+ */
+function iobycampaign_project_cap_validate($form, &$form_state) {
+  foreach ($form_state['values']['field_campaign_project']['und'] as $project) {
+    if (isset($project['nid'])) {  // TODO: Look at project caps functionality, something seems not right
+      $project_cap_key = 'project_' . $project['nid'];
+      $project_cap = $form_state['values'][$project_cap_key];
+      $campaign_total = $form_state['values']['field_campaign_amount']['und'][0]['value'];
+
+      if (!empty($campaign_total) && $campaign_total > 0) {
+        if ($project_cap > $campaign_total) {
+          form_set_error($project_cap_key, t('Individual project caps cannot be greater than the campaign total amount.'));
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Custom submit callback to insert/update project caps in our custom table.
+ */
+function iobycampaign_project_cap_submit($form, &$form_state) {
+
+  // Clear out existing values
+  db_delete('iobycampaign_project_caps')
+    ->condition('campaign_nid', $form_state['values']['nid'], '=')
+    ->execute();
+
+  $insert_values = array();
+
+  foreach ($form_state['values'] as $key => $value) {
+    if (substr($key, 0, 8) == 'project_') {
+      if ($value > 0) {
+        $insert_values[] = array(
+          'campaign_nid' => $form_state['values']['nid'],
+          'project_nid' => str_replace('project_', '', $key),
+          'cap_amount' => $value
+        );
+      }
+    }
+  }
+
+  if (!empty($insert_values)) {
+    $insert_query = db_insert('iobycampaign_project_caps')->fields(array('campaign_nid', 'project_nid', 'cap_amount'));
+
+    foreach ($insert_values as $insert_value) {
+      $insert_query->values($insert_value);
+    }
+    $insert_query->execute();
+  }
+}
+
+/**
+ * Gets the set match cap amount for a project in a campaign.
+ *
+ * @param int $campaign_nid
+ *   The nid of the campaign node to return results for.
+ * @param int $project_nid
+ *   The nid of the project node to return results for.
+ * @return int
+ *   The cap amount for a project in a campaign or 0 if there is no result.
+ */
+function iobycampaign_get_cap_amount_for_project($campaign_nid, $project_nid) {
+  $cap_amount = db_select('iobycampaign_project_caps', 'pc')
+    ->fields('pc', array('cap_amount'))
+    ->condition('campaign_nid', $campaign_nid, '=')
+    ->condition('project_nid', $project_nid, '=')
+    ->execute()->fetchField();
+
+  if ($cap_amount === FALSE) {
+    $cap_amount = 0;
+  }
+
+  return $cap_amount;
+}
+
+/**
+ * Gets the summed matches for a campaign.
+ *
+ * @param int $campaign_nid
+ *   The nid of the campaign node to return results for.
+ * @param int $line_item_id
+ * @return int
+ *   The summed amount of all non-expired matches for a campaign.
+ */
+function iobycampaign_get_match_totals($campaign_nid, $line_item_id) {
+  $total_matches_amount = &drupal_static(__FUNCTION__, array());
+
+  if (!isset($total_matches_amount[$campaign_nid])) {
+    $query = _iobycampaign_match_totals_base_query($campaign_nid, $line_item_id);
+    $query->addExpression('SUM(a.field_donation_match_amount_value)', 'match_total');
+
+    $result = $query->execute();
+
+    $total_matches_amount[$campaign_nid] = $result->fetchField();
+  }
+
+  return (isset($total_matches_amount[$campaign_nid]) && $total_matches_amount[$campaign_nid] !== FALSE) ? $total_matches_amount[$campaign_nid] : 0;
+}
+
+/**
+ * Gets the summed matches per-project for a campaign.
+ *
+ * @param int $campaign_nid
+ *   The nid of the campaign node to return results for.
+ * @param int $line_item_id
+ * @return array
+ *   An associative array of project nid mapped to the summed match amount for
+ *   that project, or an empty array if there is no result set.
+ */
+function iobycampaign_get_match_totals_by_project($campaign_nid, $line_item_id) {
+  $project_total_matches = &drupal_static(__FUNCTION__, array());
+
+  if (!isset($project_total_matches[$campaign_nid])) {
+    $query = _iobycampaign_match_totals_base_query($campaign_nid, $line_item_id);
+    $query->fields('p', array('field_donation_match_project_nid'))
+          ->fields('pn', array('title'))
+          ->groupBy('p.field_donation_match_project_nid')
+          ->addExpression('SUM(a.field_donation_match_amount_value)', 'project_match_total');
+
+    $result = $query->execute();
+
+    $project_total_matches[$campaign_nid] = $result->fetchAllKeyed(0, 2);
+  }
+
+  return $project_total_matches[$campaign_nid];
+}
+
+/**
+ * Gets the summed matches of a project in a campaign.
+ *
+ * @param int $campaign_nid
+ *   The nid of the campaign node to return results for.
+ * @param int $project_nid
+ *   The nid of the project node to return results for.
+ * @param int $line_item_id
+ * @return int
+ *   The summed amount of matches for a project in a campaign.
+ */
+function iobycampaign_get_match_total_for_project($campaign_nid, $project_nid, $line_item_id) {
+  $project_totals = iobycampaign_get_match_totals_by_project($campaign_nid, $line_item_id);
+
+  return (isset($project_totals[$project_nid])) ? $project_totals[$project_nid] : 0;
+}
+
+/**
+ * Internal helper function for building a query object to sum donation matches
+ * for a campaign.
+ *
+ * @param int $campaign_nid
+ *   The nid of the campaign node to return results for.
+ * @param int $line_item_id
+ * @return SelectQuery
+ *   A SelectQuery object containing the base query structure for summing
+ *   matches for a campaign.
+ */
+function _iobycampaign_match_totals_base_query($campaign_nid, $line_item_id) {
+  $query = db_select('node', 'n');
+  $query->innerJoin('field_data_field_donation_match_status', 's',
+    'n.nid = s.entity_id AND (s.entity_type = :entity_type AND s.deleted = 0)',
+    array(':entity_type' => 'node')
+  );
+  $query->innerJoin('field_data_field_donation_match_project', 'p',
+    'n.nid = p.entity_id AND (p.entity_type = :entity_type AND p.deleted = 0)',
+    array(':entity_type' => 'node')
+  );
+  $query->innerJoin('node', 'pn', 'p.field_donation_match_project_nid = pn.nid');
+  $query->innerJoin('field_data_field_donation_match_amount', 'a',
+    'n.nid = a.entity_id AND (a.entity_type = :entity_type AND a.deleted = 0)',
+    array(':entity_type' => 'node')
+  );
+  $query->innerJoin('field_data_field_donation_match_campaign', 'c',
+    'n.nid = c.entity_id AND (c.entity_type = :entity_type AND c.deleted = 0)',
+    array(':entity_type' => 'node')
+  );
+  $query->innerJoin('field_data_field_donation_match_line_item', 'li',
+    'n.nid = li.entity_id AND (li.entity_type = :entity_type AND c.deleted = 0)',
+    array(':entity_type' => 'node')
+  );
+
+  $query->condition('n.type', 'donation_match', '=')
+        ->condition('li.field_donation_match_line_item_line_item_id', $line_item_id, '<>')
+        ->isNotNull('p.field_donation_match_project_nid')
+        ->condition('s.field_donation_match_status_value', DONATION_MATCH_STATUS_EXPIRED, '<>')
+        ->condition('c.field_donation_match_campaign_nid', $campaign_nid, '=');
+
+  return $query;
+}

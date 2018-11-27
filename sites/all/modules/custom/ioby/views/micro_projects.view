@@ -1,0 +1,117 @@
+<?php
+
+$view = new view();
+$view->name = 'micro_projects';
+$view->description = 'Contains views that show projects in a "micro" format';
+$view->tag = 'default';
+$view->base_table = 'node';
+$view->human_name = 'Micro Project Views';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Nearby Projects';
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['query']['options']['distinct'] = TRUE;
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'some';
+$handler->display->display_options['pager']['options']['items_per_page'] = '8';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['style_plugin'] = 'default';
+$handler->display->display_options['row_plugin'] = 'node';
+$handler->display->display_options['row_options']['links'] = FALSE;
+/* No results behavior: Global: Text area */
+$handler->display->display_options['empty']['area']['id'] = 'area';
+$handler->display->display_options['empty']['area']['table'] = 'views';
+$handler->display->display_options['empty']['area']['field'] = 'area';
+$handler->display->display_options['empty']['area']['content'] = 'Sorry, no nearby projects found.';
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['label'] = '';
+$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+/* Sort criterion: Location: Distance / Proximity */
+$handler->display->display_options['sorts']['distance']['id'] = 'distance';
+$handler->display->display_options['sorts']['distance']['table'] = 'location';
+$handler->display->display_options['sorts']['distance']['field'] = 'distance';
+$handler->display->display_options['sorts']['distance']['origin'] = 'nid_arg';
+$handler->display->display_options['sorts']['distance']['nid_arg'] = 'nid';
+/* Sort criterion: Content: Post date */
+$handler->display->display_options['sorts']['created']['id'] = 'created';
+$handler->display->display_options['sorts']['created']['table'] = 'node';
+$handler->display->display_options['sorts']['created']['field'] = 'created';
+$handler->display->display_options['sorts']['created']['order'] = 'DESC';
+/* Contextual filter: Content: Nid */
+$handler->display->display_options['arguments']['nid']['id'] = 'nid';
+$handler->display->display_options['arguments']['nid']['table'] = 'node';
+$handler->display->display_options['arguments']['nid']['field'] = 'nid';
+$handler->display->display_options['arguments']['nid']['default_action'] = 'empty';
+$handler->display->display_options['arguments']['nid']['default_argument_type'] = 'fixed';
+$handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+$handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+$handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+$handler->display->display_options['arguments']['nid']['specify_validation'] = TRUE;
+$handler->display->display_options['arguments']['nid']['validate']['type'] = 'node';
+$handler->display->display_options['arguments']['nid']['validate_options']['types'] = array(
+  'project_2' => 'project_2',
+);
+$handler->display->display_options['arguments']['nid']['validate']['fail'] = 'empty';
+$handler->display->display_options['arguments']['nid']['not'] = TRUE;
+/* Filter criterion: Content: Published */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'node';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['value'] = 1;
+$handler->display->display_options['filters']['status']['group'] = 0;
+$handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'project_2' => 'project_2',
+);
+/* Filter criterion: Location: Distance / Proximity */
+$handler->display->display_options['filters']['distance']['id'] = 'distance';
+$handler->display->display_options['filters']['distance']['table'] = 'location';
+$handler->display->display_options['filters']['distance']['field'] = 'distance';
+$handler->display->display_options['filters']['distance']['value'] = array(
+  'latitude' => '',
+  'longitude' => '',
+  'postal_code' => '',
+  'country' => '',
+  'php_code' => '',
+  'nid_arg' => 'nid',
+  'nid_loc_field' => 'field_project_address',
+  'uid_arg' => '',
+  'search_distance' => '50',
+  'search_units' => 'mile',
+);
+$handler->display->display_options['filters']['distance']['group'] = '0';
+$handler->display->display_options['filters']['distance']['origin'] = 'nid_arg';
+/* Filter criterion: Content: Project Status (field_project_status) */
+$handler->display->display_options['filters']['field_project_status_value']['id'] = 'field_project_status_value';
+$handler->display->display_options['filters']['field_project_status_value']['table'] = 'field_data_field_project_status';
+$handler->display->display_options['filters']['field_project_status_value']['field'] = 'field_project_status_value';
+$handler->display->display_options['filters']['field_project_status_value']['value'] = array(
+  1 => '1',
+  2 => '2',
+  3 => '3',
+);
+$handler->display->display_options['filters']['field_project_status_value']['group'] = '0';
+
+/* Display: Block */
+$handler = $view->new_display('block', 'Block', 'block');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page_1');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['path'] = 'projects/near/%';

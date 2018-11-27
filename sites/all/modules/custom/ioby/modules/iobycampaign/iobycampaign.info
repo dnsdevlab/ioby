@@ -1,0 +1,6 @@
+name = IOBY Campaign Module
+description = This module contains custom functionality for campaigns.
+package = IOBY
+core = 7.x
+dependencies[] = ioby
+version = "7.x-1.0"

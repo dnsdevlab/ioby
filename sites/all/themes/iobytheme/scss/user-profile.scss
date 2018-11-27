@@ -1,0 +1,38 @@
+article.profile {
+  dl {
+    line-height: 1.2em;    
+    width:580px;
+    margin-left: 10px;
+    float: left;
+  
+    dt {
+      color:$active;
+      font-weight: bold;
+      float:left;
+      clear: both;
+      width: 170px;
+      display: block;
+      padding-top: 10px;
+      text-align: right;
+      text-transform: uppercase;
+      margin-right:10px;
+    }
+    
+    dd {
+      padding-top: 10px;
+      margin-bottom: 0.8em;
+      display: block;
+      float: left;
+      width: 400px;
+    }
+    
+  }
+
+  .user-picture {
+    float:right;
+    background-color: $vlight;
+    padding: 10px;
+    width: 320px;
+    text-align: center;
+  }
+}

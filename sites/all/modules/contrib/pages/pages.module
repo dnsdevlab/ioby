@@ -1,0 +1,133 @@
+<?php
+// $Id: pages.module,v 1.1 2011/01/22 02:30:55 goodman Exp $
+
+/**
+ * @file
+ * Add pages in the simplest way.
+ */
+
+/**
+ * TODO:
+ * - Set node's translation instead of new node
+ * - Full HTML support
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function pages_enable() {
+  $options = array('menu' => 'main-menu');
+  pages_create($options);
+}
+
+/**
+ * Create pages from text files.
+ */
+function pages_create($options = NULL) {
+  foreach (pages_scan() as $file) {
+    pages_create_page($file, $options);
+  }
+}
+
+/**
+ * Scan pages directories.
+ */
+function pages_scan() {
+  $files = array();
+  $searchdir = array();
+
+  $searchdir[] = drupal_get_path('module', 'pages') . '/pages';
+  $searchdir[] = 'sites/default/files/pages';
+
+  $nomask = array('.', '..');
+
+  foreach ($searchdir as $dir) {
+    if (is_dir($dir) && $handle = opendir($dir)) {
+      while (FALSE !== ($file = readdir($handle))) {
+        if (!in_array($file, $nomask)) {
+          if (!is_dir("$dir/$file")) {
+            $files[] = "$dir/$file";
+          }
+        }
+      }
+      closedir($handle);
+    }
+  }
+
+  return $files;
+}
+
+/**
+ * Save files as pages.
+ */
+function pages_create_page($path, $options = NULL) {
+  $node = new StdClass();
+
+  $node->type = 'page';
+  $node->module = 'node';
+  $node->status = 1;
+
+  $basename = basename($path, '.txt');
+
+  if (strrchr($basename, '-')) {
+    $lang = substr($basename, strrpos($basename, '-') + 1);
+    $title = substr($basename, 0, strrpos($basename, '-'));
+  }
+  else {
+    $lang = 'und';
+    $title = $basename;
+  }
+
+  // Multi-word title
+  $title = str_replace('_', ' ', $title);
+  // Capitalize letters
+  $title = ucwords($title);
+
+  $node->title = $title;
+  $node->body[$lang][0]['value'] = file_get_contents($path);
+  $node->language = $lang;
+
+  // Check if there is original node and this node should be a translation
+  if ($lang != 'und') {
+    $nodes = node_load_multiple(NULL, array('type' => 'page', 'title' => $title));
+
+    if (is_array($nodes) && !empty($nodes) && module_exists('translation')) {
+      $orig_node = array_pop($nodes);
+
+      if ($lang != $orig_node->language) {
+        $translation = array(
+          'translate' => 0,
+          'status' => 1,
+          'language' => $lang,
+          'source' => $orig_node->language,
+        );
+        $values = array(
+          // @todo Title not always enabled!
+          'title_field' => $node->title,
+          'body' => $node->body,
+        );
+
+        $handler = translation_get_handler('node', $orig_node);
+        $handler->setTranslation($translation, $values);
+        field_attach_update('page', $node);
+
+        // we don't need normal save or menu item for the translation
+        return;
+      }
+    }
+  }
+
+  if (isset($options['menu'])) {
+    $node->menu['enabled'] = 1;
+    $node->menu['link_title'] = $node->title;
+    $node->menu['description'] = $node->title;
+    $node->menu['menu_name'] = $options['menu'];
+    $node->menu['parent'] = $options['menu'] . ':0';
+    $node->menu['mlid'] = 0;
+    $node->menu['plid'] = 0;
+  }
+
+  if ($node = node_submit($node)) {
+    node_save($node);
+  }
+}

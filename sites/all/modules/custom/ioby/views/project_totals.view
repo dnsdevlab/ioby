@@ -1,0 +1,448 @@
+<?php
+
+$view = new view();
+$view->name = 'project_totals';
+$view->description = 'View to display an overview of all projects, their budgets and their statuses.';
+$view->tag = 'ioby, reports';
+$view->base_table = 'node';
+$view->human_name = 'Project Totals';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Project Totals';
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'role';
+$handler->display->display_options['access']['role'] = array(
+  3 => '3',
+  4 => '4',
+);
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['query']['options']['distinct'] = TRUE;
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'full';
+$handler->display->display_options['pager']['options']['items_per_page'] = '50';
+$handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['style_options']['columns'] = array(
+  'title' => 'title',
+  'name' => 'name',
+  'field_contact_last' => 'field_contact_last',
+  'field_contact_first' => 'field_contact_last',
+  'field_project_contact_email' => 'field_project_contact_email',
+  'field_project_address' => 'field_project_address',
+  'created' => 'created',
+  'changed' => 'changed',
+  'field_project_status' => 'field_project_status',
+  'field_project_cost' => 'field_project_cost',
+  'total' => 'total',
+);
+$handler->display->display_options['style_options']['default'] = 'created';
+$handler->display->display_options['style_options']['info'] = array(
+  'title' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'name' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_contact_last' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => ', ',
+    'empty_column' => 0,
+  ),
+  'field_contact_first' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_project_contact_email' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_project_address' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'created' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'desc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'changed' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_project_status' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_project_cost' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'total' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+);
+/* Relationship: Content: Author */
+$handler->display->display_options['relationships']['uid']['id'] = 'uid';
+$handler->display->display_options['relationships']['uid']['table'] = 'node';
+$handler->display->display_options['relationships']['uid']['field'] = 'uid';
+/* Relationship: Content: Project Address */
+$handler->display->display_options['relationships']['field_data_field_project_address']['id'] = 'field_data_field_project_address';
+$handler->display->display_options['relationships']['field_data_field_project_address']['table'] = 'node';
+$handler->display->display_options['relationships']['field_data_field_project_address']['field'] = 'field_data_field_project_address';
+$handler->display->display_options['relationships']['field_data_field_project_address']['label'] = 'addresslocation';
+/* Relationship: Content: Project (field_donation_match_project) - reverse */
+$handler->display->display_options['relationships']['reverse_field_donation_match_project_node']['id'] = 'reverse_field_donation_match_project_node';
+$handler->display->display_options['relationships']['reverse_field_donation_match_project_node']['table'] = 'node';
+$handler->display->display_options['relationships']['reverse_field_donation_match_project_node']['field'] = 'reverse_field_donation_match_project_node';
+$handler->display->display_options['relationships']['reverse_field_donation_match_project_node']['label'] = 'Donation Match (for campaign)';
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+/* Field: User: Name */
+$handler->display->display_options['fields']['name']['id'] = 'name';
+$handler->display->display_options['fields']['name']['table'] = 'users';
+$handler->display->display_options['fields']['name']['field'] = 'name';
+$handler->display->display_options['fields']['name']['relationship'] = 'uid';
+$handler->display->display_options['fields']['name']['label'] = 'User';
+/* Field: Content: Your Last Name */
+$handler->display->display_options['fields']['field_contact_last']['id'] = 'field_contact_last';
+$handler->display->display_options['fields']['field_contact_last']['table'] = 'field_data_field_contact_last';
+$handler->display->display_options['fields']['field_contact_last']['field'] = 'field_contact_last';
+$handler->display->display_options['fields']['field_contact_last']['label'] = 'Name';
+/* Field: Content: Your First Name */
+$handler->display->display_options['fields']['field_contact_first']['id'] = 'field_contact_first';
+$handler->display->display_options['fields']['field_contact_first']['table'] = 'field_data_field_contact_first';
+$handler->display->display_options['fields']['field_contact_first']['field'] = 'field_contact_first';
+$handler->display->display_options['fields']['field_contact_first']['label'] = 'First Name';
+/* Field: Content: email */
+$handler->display->display_options['fields']['field_project_contact_email']['id'] = 'field_project_contact_email';
+$handler->display->display_options['fields']['field_project_contact_email']['table'] = 'field_data_field_project_contact_email';
+$handler->display->display_options['fields']['field_project_contact_email']['field'] = 'field_project_contact_email';
+$handler->display->display_options['fields']['field_project_contact_email']['label'] = 'Email';
+$handler->display->display_options['fields']['field_project_contact_email']['type'] = 'email_plain';
+/* Field: Content: Phone */
+$handler->display->display_options['fields']['field_project_contact_phone']['id'] = 'field_project_contact_phone';
+$handler->display->display_options['fields']['field_project_contact_phone']['table'] = 'field_data_field_project_contact_phone';
+$handler->display->display_options['fields']['field_project_contact_phone']['field'] = 'field_project_contact_phone';
+/* Field: Location: City */
+$handler->display->display_options['fields']['city']['id'] = 'city';
+$handler->display->display_options['fields']['city']['table'] = 'location';
+$handler->display->display_options['fields']['city']['field'] = 'city';
+$handler->display->display_options['fields']['city']['relationship'] = 'field_data_field_project_address';
+/* Field: Location: Province */
+$handler->display->display_options['fields']['province']['id'] = 'province';
+$handler->display->display_options['fields']['province']['table'] = 'location';
+$handler->display->display_options['fields']['province']['field'] = 'province';
+$handler->display->display_options['fields']['province']['relationship'] = 'field_data_field_project_address';
+$handler->display->display_options['fields']['province']['label'] = 'State';
+$handler->display->display_options['fields']['province']['style'] = 'code';
+/* Field: Location: Postal Code */
+$handler->display->display_options['fields']['postal_code']['id'] = 'postal_code';
+$handler->display->display_options['fields']['postal_code']['table'] = 'location';
+$handler->display->display_options['fields']['postal_code']['field'] = 'postal_code';
+$handler->display->display_options['fields']['postal_code']['relationship'] = 'field_data_field_project_address';
+$handler->display->display_options['fields']['postal_code']['label'] = 'Zip';
+/* Field: Content: Post date */
+$handler->display->display_options['fields']['created']['id'] = 'created';
+$handler->display->display_options['fields']['created']['table'] = 'node';
+$handler->display->display_options['fields']['created']['field'] = 'created';
+$handler->display->display_options['fields']['created']['label'] = 'Date posted';
+$handler->display->display_options['fields']['created']['date_format'] = 'custom';
+$handler->display->display_options['fields']['created']['custom_date_format'] = 'm/d/Y g:h A';
+/* Field: Content: Updated date */
+$handler->display->display_options['fields']['changed']['id'] = 'changed';
+$handler->display->display_options['fields']['changed']['table'] = 'node';
+$handler->display->display_options['fields']['changed']['field'] = 'changed';
+$handler->display->display_options['fields']['changed']['label'] = 'Date last updated';
+$handler->display->display_options['fields']['changed']['date_format'] = 'custom';
+$handler->display->display_options['fields']['changed']['custom_date_format'] = 'm/d/Y g:h A';
+/* Field: Content: Project Status */
+$handler->display->display_options['fields']['field_project_status']['id'] = 'field_project_status';
+$handler->display->display_options['fields']['field_project_status']['table'] = 'field_data_field_project_status';
+$handler->display->display_options['fields']['field_project_status']['field'] = 'field_project_status';
+$handler->display->display_options['fields']['field_project_status']['label'] = 'Status';
+/* Field: Content: Project Cost */
+$handler->display->display_options['fields']['field_project_cost']['id'] = 'field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['table'] = 'field_data_field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['field'] = 'field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['label'] = 'Budget total';
+$handler->display->display_options['fields']['field_project_cost']['settings'] = array(
+  'thousand_separator' => ',',
+  'decimal_separator' => '.',
+  'scale' => '2',
+  'prefix_suffix' => 1,
+);
+/* Field: Ioby Project: Project Total */
+$handler->display->display_options['fields']['total']['id'] = 'total';
+$handler->display->display_options['fields']['total']['table'] = 'iobyproject_totals_cache';
+$handler->display->display_options['fields']['total']['field'] = 'total';
+$handler->display->display_options['fields']['total']['set_precision'] = TRUE;
+$handler->display->display_options['fields']['total']['precision'] = '2';
+$handler->display->display_options['fields']['total']['prefix'] = '$';
+/* Sort criterion: Content: Post date */
+$handler->display->display_options['sorts']['created']['id'] = 'created';
+$handler->display->display_options['sorts']['created']['table'] = 'node';
+$handler->display->display_options['sorts']['created']['field'] = 'created';
+$handler->display->display_options['sorts']['created']['order'] = 'DESC';
+/* Filter criterion: Content: Published */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'node';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['value'] = 1;
+$handler->display->display_options['filters']['status']['group'] = 1;
+$handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'project_2' => 'project_2',
+);
+$handler->display->display_options['filters']['type']['group'] = 1;
+/* Filter criterion: Content: Campaign (field_donation_match_campaign) */
+$handler->display->display_options['filters']['field_donation_match_campaign_nid']['id'] = 'field_donation_match_campaign_nid';
+$handler->display->display_options['filters']['field_donation_match_campaign_nid']['table'] = 'field_data_field_donation_match_campaign';
+$handler->display->display_options['filters']['field_donation_match_campaign_nid']['field'] = 'field_donation_match_campaign_nid';
+$handler->display->display_options['filters']['field_donation_match_campaign_nid']['relationship'] = 'reverse_field_donation_match_project_node';
+$handler->display->display_options['filters']['field_donation_match_campaign_nid']['group'] = 1;
+$handler->display->display_options['filters']['field_donation_match_campaign_nid']['exposed'] = TRUE;
+$handler->display->display_options['filters']['field_donation_match_campaign_nid']['expose']['operator_id'] = 'field_donation_match_campaign_nid_op';
+$handler->display->display_options['filters']['field_donation_match_campaign_nid']['expose']['label'] = 'Campaign';
+$handler->display->display_options['filters']['field_donation_match_campaign_nid']['expose']['operator'] = 'field_donation_match_campaign_nid_op';
+$handler->display->display_options['filters']['field_donation_match_campaign_nid']['expose']['identifier'] = 'campaign';
+$handler->display->display_options['filters']['field_donation_match_campaign_nid']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+/* Filter criterion: Content: Title */
+$handler->display->display_options['filters']['title']['id'] = 'title';
+$handler->display->display_options['filters']['title']['table'] = 'node';
+$handler->display->display_options['filters']['title']['field'] = 'title';
+$handler->display->display_options['filters']['title']['group'] = 1;
+$handler->display->display_options['filters']['title']['exposed'] = TRUE;
+$handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
+$handler->display->display_options['filters']['title']['expose']['label'] = 'Project title';
+$handler->display->display_options['filters']['title']['expose']['use_operator'] = TRUE;
+$handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
+$handler->display->display_options['filters']['title']['expose']['identifier'] = 'title';
+$handler->display->display_options['filters']['title']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+/* Filter criterion: User: Name */
+$handler->display->display_options['filters']['uid']['id'] = 'uid';
+$handler->display->display_options['filters']['uid']['table'] = 'users';
+$handler->display->display_options['filters']['uid']['field'] = 'uid';
+$handler->display->display_options['filters']['uid']['relationship'] = 'uid';
+$handler->display->display_options['filters']['uid']['value'] = '';
+$handler->display->display_options['filters']['uid']['group'] = 1;
+$handler->display->display_options['filters']['uid']['exposed'] = TRUE;
+$handler->display->display_options['filters']['uid']['expose']['operator_id'] = 'uid_op';
+$handler->display->display_options['filters']['uid']['expose']['label'] = 'User';
+$handler->display->display_options['filters']['uid']['expose']['operator'] = 'uid_op';
+$handler->display->display_options['filters']['uid']['expose']['identifier'] = 'uid';
+$handler->display->display_options['filters']['uid']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+/* Filter criterion: Content: Your Last Name (field_contact_last) */
+$handler->display->display_options['filters']['field_contact_last_value']['id'] = 'field_contact_last_value';
+$handler->display->display_options['filters']['field_contact_last_value']['table'] = 'field_data_field_contact_last';
+$handler->display->display_options['filters']['field_contact_last_value']['field'] = 'field_contact_last_value';
+$handler->display->display_options['filters']['field_contact_last_value']['group'] = 1;
+$handler->display->display_options['filters']['field_contact_last_value']['exposed'] = TRUE;
+$handler->display->display_options['filters']['field_contact_last_value']['expose']['operator_id'] = 'last_name_op';
+$handler->display->display_options['filters']['field_contact_last_value']['expose']['label'] = 'Last Name';
+$handler->display->display_options['filters']['field_contact_last_value']['expose']['use_operator'] = TRUE;
+$handler->display->display_options['filters']['field_contact_last_value']['expose']['operator'] = 'field_contact_last_value_op';
+$handler->display->display_options['filters']['field_contact_last_value']['expose']['identifier'] = 'last_name';
+$handler->display->display_options['filters']['field_contact_last_value']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+/* Filter criterion: Content: email (field_project_contact_email) */
+$handler->display->display_options['filters']['field_project_contact_email_email']['id'] = 'field_project_contact_email_email';
+$handler->display->display_options['filters']['field_project_contact_email_email']['table'] = 'field_data_field_project_contact_email';
+$handler->display->display_options['filters']['field_project_contact_email_email']['field'] = 'field_project_contact_email_email';
+$handler->display->display_options['filters']['field_project_contact_email_email']['group'] = 1;
+$handler->display->display_options['filters']['field_project_contact_email_email']['exposed'] = TRUE;
+$handler->display->display_options['filters']['field_project_contact_email_email']['expose']['operator_id'] = 'email_op';
+$handler->display->display_options['filters']['field_project_contact_email_email']['expose']['label'] = 'Email';
+$handler->display->display_options['filters']['field_project_contact_email_email']['expose']['use_operator'] = TRUE;
+$handler->display->display_options['filters']['field_project_contact_email_email']['expose']['operator'] = 'field_project_contact_email_email_op';
+$handler->display->display_options['filters']['field_project_contact_email_email']['expose']['identifier'] = 'email';
+$handler->display->display_options['filters']['field_project_contact_email_email']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+/* Filter criterion: Location: City */
+$handler->display->display_options['filters']['city']['id'] = 'city';
+$handler->display->display_options['filters']['city']['table'] = 'location';
+$handler->display->display_options['filters']['city']['field'] = 'city';
+$handler->display->display_options['filters']['city']['relationship'] = 'field_data_field_project_address';
+$handler->display->display_options['filters']['city']['group'] = 1;
+$handler->display->display_options['filters']['city']['exposed'] = TRUE;
+$handler->display->display_options['filters']['city']['expose']['operator_id'] = 'city_op';
+$handler->display->display_options['filters']['city']['expose']['label'] = 'City';
+$handler->display->display_options['filters']['city']['expose']['use_operator'] = TRUE;
+$handler->display->display_options['filters']['city']['expose']['operator'] = 'city_op';
+$handler->display->display_options['filters']['city']['expose']['identifier'] = 'city';
+$handler->display->display_options['filters']['city']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+/* Filter criterion: Location: Province */
+$handler->display->display_options['filters']['province']['id'] = 'province';
+$handler->display->display_options['filters']['province']['table'] = 'location';
+$handler->display->display_options['filters']['province']['field'] = 'province';
+$handler->display->display_options['filters']['province']['group'] = 1;
+$handler->display->display_options['filters']['province']['exposed'] = TRUE;
+$handler->display->display_options['filters']['province']['expose']['operator_id'] = 'province_op';
+$handler->display->display_options['filters']['province']['expose']['label'] = 'State';
+$handler->display->display_options['filters']['province']['expose']['operator'] = 'province_op';
+$handler->display->display_options['filters']['province']['expose']['identifier'] = 'province';
+$handler->display->display_options['filters']['province']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+/* Filter criterion: Date: Date (node) */
+$handler->display->display_options['filters']['date_filter']['id'] = 'date_filter';
+$handler->display->display_options['filters']['date_filter']['table'] = 'node';
+$handler->display->display_options['filters']['date_filter']['field'] = 'date_filter';
+$handler->display->display_options['filters']['date_filter']['operator'] = 'between';
+$handler->display->display_options['filters']['date_filter']['group'] = 1;
+$handler->display->display_options['filters']['date_filter']['exposed'] = TRUE;
+$handler->display->display_options['filters']['date_filter']['expose']['operator_id'] = 'post_date_op';
+$handler->display->display_options['filters']['date_filter']['expose']['label'] = 'Date Posted';
+$handler->display->display_options['filters']['date_filter']['expose']['use_operator'] = TRUE;
+$handler->display->display_options['filters']['date_filter']['expose']['operator'] = 'date_filter_op';
+$handler->display->display_options['filters']['date_filter']['expose']['identifier'] = 'post_date';
+$handler->display->display_options['filters']['date_filter']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+$handler->display->display_options['filters']['date_filter']['form_type'] = 'date_popup';
+$handler->display->display_options['filters']['date_filter']['date_fields'] = array(
+  'node.created' => 'node.created',
+);
+/* Filter criterion: Date: Date (node) */
+$handler->display->display_options['filters']['date_filter_1']['id'] = 'date_filter_1';
+$handler->display->display_options['filters']['date_filter_1']['table'] = 'node';
+$handler->display->display_options['filters']['date_filter_1']['field'] = 'date_filter';
+$handler->display->display_options['filters']['date_filter_1']['operator'] = 'between';
+$handler->display->display_options['filters']['date_filter_1']['group'] = 1;
+$handler->display->display_options['filters']['date_filter_1']['exposed'] = TRUE;
+$handler->display->display_options['filters']['date_filter_1']['expose']['operator_id'] = 'updated_date_op';
+$handler->display->display_options['filters']['date_filter_1']['expose']['label'] = 'Date Last Updated';
+$handler->display->display_options['filters']['date_filter_1']['expose']['use_operator'] = TRUE;
+$handler->display->display_options['filters']['date_filter_1']['expose']['operator'] = 'date_filter_1_op';
+$handler->display->display_options['filters']['date_filter_1']['expose']['identifier'] = 'updated_date';
+$handler->display->display_options['filters']['date_filter_1']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+$handler->display->display_options['filters']['date_filter_1']['form_type'] = 'date_popup';
+$handler->display->display_options['filters']['date_filter_1']['date_fields'] = array(
+  'node.changed' => 'node.changed',
+);
+/* Filter criterion: Content: Project Status (field_project_status) */
+$handler->display->display_options['filters']['field_project_status_value']['id'] = 'field_project_status_value';
+$handler->display->display_options['filters']['field_project_status_value']['table'] = 'field_data_field_project_status';
+$handler->display->display_options['filters']['field_project_status_value']['field'] = 'field_project_status_value';
+$handler->display->display_options['filters']['field_project_status_value']['group'] = 1;
+$handler->display->display_options['filters']['field_project_status_value']['exposed'] = TRUE;
+$handler->display->display_options['filters']['field_project_status_value']['expose']['operator_id'] = 'field_project_status_value_op';
+$handler->display->display_options['filters']['field_project_status_value']['expose']['label'] = 'Project Status';
+$handler->display->display_options['filters']['field_project_status_value']['expose']['operator'] = 'field_project_status_value_op';
+$handler->display->display_options['filters']['field_project_status_value']['expose']['identifier'] = 'project_status';
+$handler->display->display_options['filters']['field_project_status_value']['expose']['multiple'] = TRUE;
+$handler->display->display_options['filters']['field_project_status_value']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['path'] = 'admin/reports/ioby/project-totals';

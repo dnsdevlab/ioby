@@ -1,0 +1,12 @@
+name = Coupon Batch
+description = Enables the mass generation of coupons.
+package = Commerce Coupon
+dependencies[] = commerce_coupon_ui
+core = 7.x
+
+; Information added by drupal.org packaging script on 2013-09-30
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "commerce_coupon_batch"
+datestamp = "1380560092"
+

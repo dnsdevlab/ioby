@@ -1,0 +1,89 @@
+<?php
+
+/**
+* Implements hook_schema()
+*/
+function iobyproject_schema() {
+  $schema = array();
+
+  $schema['iobyproject_totals_cache'] = array(
+    'description' => 'Table to store the calculated total raised for projects.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The primary identifier for a node.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'total' => array(
+        'description' => 'The calculated total amount for the project.',
+        'type' => 'numeric',
+        'precision' => 10,
+        'scale' => 2,
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'changed' => array(
+        'description' => 'The Unix timestamp when the cache was most recently updated.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('nid'),
+  );
+
+  $schema['iobyproject_funding_notifications'] = array(
+    'description' => 'Table to log which budget/funding threshold notifications have been sent.',
+    'fields' => array(
+      'nid' => array(
+        'description' => 'The node id of the project.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'next_notification_threshold' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'size' => 'tiny',
+        'description' => 'The next threshold level to send a notification at.',
+      ),
+      'changed' => array(
+        'description' => 'The Unix timestamp when the table was last updated.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'primary key' => array('nid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Add and populate the iobyproject_totals_cache table
+ */
+function iobyproject_update_7000() {
+  $schema = iobyproject_schema();
+  db_create_table('iobyproject_totals_cache', $schema['iobyproject_totals_cache']);
+
+  // Tally the totals and update the table
+  update_project_totals_cache();
+}
+
+/**
+ * Add the iobyproject_funding_notifications table
+ */
+function iobyproject_update_7001() {
+  $schema = iobyproject_schema();
+  if (!db_table_exists('iobyproject_funding_notifications')) {
+    db_create_table('iobyproject_funding_notifications', $schema['iobyproject_funding_notifications']);
+  }
+}
+
+function iobyproject_update_7002(){
+  iobyproject_update_complete_steps();
+}

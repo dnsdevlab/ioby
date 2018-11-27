@@ -1,0 +1,37 @@
+<?php
+
+function _initialize_ioby_variables() {
+  variable_set('iobypopup_gratuity_info', array(
+    'value' => '<h2>What is ioby gratuity?</h2><p>ioby gratuity is an optional &mdash; but crucial &mdash; part of your tax-deductible donation.</p>
+<p>When you include this, we add 20% (similar to a restaurant gratuity) to your donation.</p>
+<p>Your donation (all of it) still funds the project(s) you picked. But your gratuity keeps ioby&#39;s lights on, our computers running, and our rent up to date.</p>
+<p>So include gratuity, and help us to continue creating grassroots change in our backyards.</p>',
+    'format' => 'filtered_html'
+  ));
+  variable_set('iobypopup_gratuity_remove', array(
+    'value' => '<p>Are you sure? ioby gratuity is optional, but crucial. It keeps ioby&#39;s lights on, our computers running, and our rent up to date. Include gratuity, and help us to continue creating grassroots change in our backyards.</p>',
+    'format' => 'filtered_text'
+  ));
+}
+
+/**
+ * Implements hook_install().
+ */
+function ioby_install() {
+  initialize_ioby_variables();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function ioby_uninstall() {
+  variable_del('iobypopup_gratuity_info');
+  variable_del('iobypopup_gratuity_remove');
+}
+
+/**
+ * Initializes variables for popup boxes.
+ */
+function ioby_update_7000() {
+  _initialize_ioby_variables();
+}

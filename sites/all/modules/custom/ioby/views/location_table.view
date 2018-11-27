@@ -1,0 +1,79 @@
+<?php
+
+$view = new view();
+$view->name = 'location_table';
+$view->description = 'Node location table.';
+$view->tag = 'ioby';
+$view->base_table = 'node';
+$view->human_name = '';
+$view->core = 0;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Defaults */
+$handler = $view->new_display('default', 'Defaults', 'default');
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['access']['perm'] = 'view node location table';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'full';
+$handler->display->display_options['style_plugin'] = 'gmap';
+$handler->display->display_options['style_options']['grouping'] = '';
+$handler->display->display_options['style_options']['latfield'] = 'title';
+$handler->display->display_options['style_options']['lonfield'] = 'title';
+$handler->display->display_options['style_options']['markerfield'] = 'title';
+$handler->display->display_options['style_options']['enablermt'] = 0;
+$handler->display->display_options['style_options']['rmtfield'] = 'title';
+$handler->display->display_options['style_options']['tooltipfield'] = 'title';
+$handler->display->display_options['row_plugin'] = 'fields';
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+/* Field: Location: Street */
+$handler->display->display_options['fields']['street']['id'] = 'street';
+$handler->display->display_options['fields']['street']['table'] = 'location';
+$handler->display->display_options['fields']['street']['field'] = 'street';
+/* Field: Location: City */
+$handler->display->display_options['fields']['city']['id'] = 'city';
+$handler->display->display_options['fields']['city']['table'] = 'location';
+$handler->display->display_options['fields']['city']['field'] = 'city';
+/* Field: Location: Province */
+$handler->display->display_options['fields']['province']['id'] = 'province';
+$handler->display->display_options['fields']['province']['table'] = 'location';
+$handler->display->display_options['fields']['province']['field'] = 'province';
+/* Field: Location: Postal Code */
+$handler->display->display_options['fields']['postal_code']['id'] = 'postal_code';
+$handler->display->display_options['fields']['postal_code']['table'] = 'location';
+$handler->display->display_options['fields']['postal_code']['field'] = 'postal_code';
+/* Field: Location: Country */
+$handler->display->display_options['fields']['country']['id'] = 'country';
+$handler->display->display_options['fields']['country']['table'] = 'location';
+$handler->display->display_options['fields']['country']['field'] = 'country';
+$handler->display->display_options['filter_groups']['groups'] = array(
+  1 => 'AND',
+  2 => 'AND',
+);
+/* Filter criterion: Content: Published or admin */
+$handler->display->display_options['filters']['status_extra']['id'] = 'status_extra';
+$handler->display->display_options['filters']['status_extra']['table'] = 'node';
+$handler->display->display_options['filters']['status_extra']['field'] = 'status_extra';
+$handler->display->display_options['filters']['status_extra']['group'] = 1;
+$handler->display->display_options['filters']['status_extra']['expose']['operator'] = FALSE;
+/* Filter criterion: Location: Lid */
+$handler->display->display_options['filters']['lid']['id'] = 'lid';
+$handler->display->display_options['filters']['lid']['table'] = 'location';
+$handler->display->display_options['filters']['lid']['field'] = 'lid';
+$handler->display->display_options['filters']['lid']['operator'] = 'not empty';
+$handler->display->display_options['filters']['lid']['group'] = 1;
+$handler->display->display_options['filters']['lid']['expose']['operator'] = FALSE;
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page_1');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['path'] = 'location/views';
+$handler->display->display_options['menu']['type'] = 'normal';
+$handler->display->display_options['menu']['title'] = 'Location table';
+$handler->display->display_options['menu']['weight'] = '0';

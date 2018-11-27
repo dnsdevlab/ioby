@@ -1,0 +1,362 @@
+<?php
+
+$view = new view();
+$view->name = 'redeemed_coupon_codes';
+$view->description = 'View to expose and sum all redeemed coupon codes.';
+$view->tag = 'ioby, reports';
+$view->base_table = 'commerce_line_item';
+$view->human_name = 'Redeemed Coupon Codes';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Redeemed Coupon Codes';
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'role';
+$handler->display->display_options['access']['role'] = array(
+  3 => '3',
+  4 => '4',
+);
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'none';
+$handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['style_options']['columns'] = array(
+  'order_id' => 'order_id',
+  'created' => 'created',
+  'commerce_customer_address_last_name' => 'commerce_customer_address_last_name',
+  'commerce_customer_address_first_name' => 'commerce_customer_address_last_name',
+  'mail' => 'mail',
+  'name' => 'name',
+  'commerce_customer_address_locality' => 'commerce_customer_address_locality',
+  'commerce_customer_address_administrative_area' => 'commerce_customer_address_administrative_area',
+  'commerce_customer_address_postal_code' => 'commerce_customer_address_postal_code',
+  'type' => 'type',
+  'commerce_coupon_reference' => 'commerce_coupon_reference',
+  'commerce_total' => 'commerce_total',
+  'edit_order' => 'edit_order',
+);
+$handler->display->display_options['style_options']['default'] = '-1';
+$handler->display->display_options['style_options']['info'] = array(
+  'order_id' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'created' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'desc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'commerce_customer_address_last_name' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => ', ',
+    'empty_column' => 0,
+  ),
+  'commerce_customer_address_first_name' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'mail' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'name' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'commerce_customer_address_locality' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'commerce_customer_address_administrative_area' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'commerce_customer_address_postal_code' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'type' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'commerce_coupon_reference' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'commerce_total' => array(
+    'sortable' => 1,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'edit_order' => array(
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+);
+/* Relationship: Commerce Line Item: Order ID */
+$handler->display->display_options['relationships']['order_id']['id'] = 'order_id';
+$handler->display->display_options['relationships']['order_id']['table'] = 'commerce_line_item';
+$handler->display->display_options['relationships']['order_id']['field'] = 'order_id';
+$handler->display->display_options['relationships']['order_id']['required'] = TRUE;
+/* Relationship: Entity Reference: Referenced Entity */
+$handler->display->display_options['relationships']['commerce_coupon_reference_target_id']['id'] = 'commerce_coupon_reference_target_id';
+$handler->display->display_options['relationships']['commerce_coupon_reference_target_id']['table'] = 'field_data_commerce_coupon_reference';
+$handler->display->display_options['relationships']['commerce_coupon_reference_target_id']['field'] = 'commerce_coupon_reference_target_id';
+/* Relationship: Commerce Order: Owner */
+$handler->display->display_options['relationships']['uid']['id'] = 'uid';
+$handler->display->display_options['relationships']['uid']['table'] = 'commerce_order';
+$handler->display->display_options['relationships']['uid']['field'] = 'uid';
+$handler->display->display_options['relationships']['uid']['relationship'] = 'order_id';
+/* Relationship: Commerce Order: Referenced customer profile */
+$handler->display->display_options['relationships']['commerce_customer_billing_profile_id']['id'] = 'commerce_customer_billing_profile_id';
+$handler->display->display_options['relationships']['commerce_customer_billing_profile_id']['table'] = 'field_data_commerce_customer_billing';
+$handler->display->display_options['relationships']['commerce_customer_billing_profile_id']['field'] = 'commerce_customer_billing_profile_id';
+$handler->display->display_options['relationships']['commerce_customer_billing_profile_id']['relationship'] = 'order_id';
+/* Field: Commerce Order: Order ID */
+$handler->display->display_options['fields']['order_id']['id'] = 'order_id';
+$handler->display->display_options['fields']['order_id']['table'] = 'commerce_order';
+$handler->display->display_options['fields']['order_id']['field'] = 'order_id';
+$handler->display->display_options['fields']['order_id']['relationship'] = 'order_id';
+$handler->display->display_options['fields']['order_id']['label'] = 'Order #';
+$handler->display->display_options['fields']['order_id']['link_to_order'] = 'admin';
+/* Field: Commerce Order: Created date */
+$handler->display->display_options['fields']['created']['id'] = 'created';
+$handler->display->display_options['fields']['created']['table'] = 'commerce_order';
+$handler->display->display_options['fields']['created']['field'] = 'created';
+$handler->display->display_options['fields']['created']['relationship'] = 'order_id';
+$handler->display->display_options['fields']['created']['label'] = 'Order Date';
+$handler->display->display_options['fields']['created']['date_format'] = 'custom';
+$handler->display->display_options['fields']['created']['custom_date_format'] = 'm/d/Y g:h A';
+/* Field: Commerce Customer profile: Address - Last name */
+$handler->display->display_options['fields']['commerce_customer_address_last_name']['id'] = 'commerce_customer_address_last_name';
+$handler->display->display_options['fields']['commerce_customer_address_last_name']['table'] = 'field_data_commerce_customer_address';
+$handler->display->display_options['fields']['commerce_customer_address_last_name']['field'] = 'commerce_customer_address_last_name';
+$handler->display->display_options['fields']['commerce_customer_address_last_name']['relationship'] = 'commerce_customer_billing_profile_id';
+$handler->display->display_options['fields']['commerce_customer_address_last_name']['label'] = 'Name';
+/* Field: Commerce Customer profile: Address - First name */
+$handler->display->display_options['fields']['commerce_customer_address_first_name']['id'] = 'commerce_customer_address_first_name';
+$handler->display->display_options['fields']['commerce_customer_address_first_name']['table'] = 'field_data_commerce_customer_address';
+$handler->display->display_options['fields']['commerce_customer_address_first_name']['field'] = 'commerce_customer_address_first_name';
+$handler->display->display_options['fields']['commerce_customer_address_first_name']['relationship'] = 'commerce_customer_billing_profile_id';
+/* Field: User: E-mail */
+$handler->display->display_options['fields']['mail']['id'] = 'mail';
+$handler->display->display_options['fields']['mail']['table'] = 'users';
+$handler->display->display_options['fields']['mail']['field'] = 'mail';
+$handler->display->display_options['fields']['mail']['relationship'] = 'uid';
+$handler->display->display_options['fields']['mail']['label'] = 'Email';
+$handler->display->display_options['fields']['mail']['link_to_user'] = '0';
+/* Field: User: Name */
+$handler->display->display_options['fields']['name']['id'] = 'name';
+$handler->display->display_options['fields']['name']['table'] = 'users';
+$handler->display->display_options['fields']['name']['field'] = 'name';
+$handler->display->display_options['fields']['name']['relationship'] = 'uid';
+$handler->display->display_options['fields']['name']['label'] = 'User';
+/* Field: Commerce Customer profile: Address - Locality (i.e. City) */
+$handler->display->display_options['fields']['commerce_customer_address_locality']['id'] = 'commerce_customer_address_locality';
+$handler->display->display_options['fields']['commerce_customer_address_locality']['table'] = 'field_data_commerce_customer_address';
+$handler->display->display_options['fields']['commerce_customer_address_locality']['field'] = 'commerce_customer_address_locality';
+$handler->display->display_options['fields']['commerce_customer_address_locality']['relationship'] = 'commerce_customer_billing_profile_id';
+$handler->display->display_options['fields']['commerce_customer_address_locality']['label'] = 'City';
+/* Field: Commerce Customer profile: Address - Administrative area (i.e. State / Province) */
+$handler->display->display_options['fields']['commerce_customer_address_administrative_area']['id'] = 'commerce_customer_address_administrative_area';
+$handler->display->display_options['fields']['commerce_customer_address_administrative_area']['table'] = 'field_data_commerce_customer_address';
+$handler->display->display_options['fields']['commerce_customer_address_administrative_area']['field'] = 'commerce_customer_address_administrative_area';
+$handler->display->display_options['fields']['commerce_customer_address_administrative_area']['relationship'] = 'commerce_customer_billing_profile_id';
+$handler->display->display_options['fields']['commerce_customer_address_administrative_area']['label'] = 'State';
+/* Field: Commerce Customer profile: Address - Postal code */
+$handler->display->display_options['fields']['commerce_customer_address_postal_code']['id'] = 'commerce_customer_address_postal_code';
+$handler->display->display_options['fields']['commerce_customer_address_postal_code']['table'] = 'field_data_commerce_customer_address';
+$handler->display->display_options['fields']['commerce_customer_address_postal_code']['field'] = 'commerce_customer_address_postal_code';
+$handler->display->display_options['fields']['commerce_customer_address_postal_code']['relationship'] = 'commerce_customer_billing_profile_id';
+$handler->display->display_options['fields']['commerce_customer_address_postal_code']['label'] = 'Zip';
+/* Field: Commerce Coupon: Type */
+$handler->display->display_options['fields']['type']['id'] = 'type';
+$handler->display->display_options['fields']['type']['table'] = 'commerce_coupon';
+$handler->display->display_options['fields']['type']['field'] = 'type';
+$handler->display->display_options['fields']['type']['relationship'] = 'commerce_coupon_reference_target_id';
+$handler->display->display_options['fields']['type']['label'] = 'Coupon Type';
+/* Field: Field: Sponsor */
+$handler->display->display_options['fields']['field_campaign_sponsor']['id'] = 'field_campaign_sponsor';
+$handler->display->display_options['fields']['field_campaign_sponsor']['table'] = 'field_data_field_campaign_sponsor';
+$handler->display->display_options['fields']['field_campaign_sponsor']['field'] = 'field_campaign_sponsor';
+$handler->display->display_options['fields']['field_campaign_sponsor']['relationship'] = 'commerce_coupon_reference_target_id';
+/* Field: Commerce Line item: Coupon */
+$handler->display->display_options['fields']['commerce_coupon_reference']['id'] = 'commerce_coupon_reference';
+$handler->display->display_options['fields']['commerce_coupon_reference']['table'] = 'field_data_commerce_coupon_reference';
+$handler->display->display_options['fields']['commerce_coupon_reference']['field'] = 'commerce_coupon_reference';
+$handler->display->display_options['fields']['commerce_coupon_reference']['label'] = 'Coupon Code';
+$handler->display->display_options['fields']['commerce_coupon_reference']['settings'] = array(
+  'link' => 0,
+);
+/* Field: Commerce Line item: Total */
+$handler->display->display_options['fields']['commerce_total']['id'] = 'commerce_total';
+$handler->display->display_options['fields']['commerce_total']['table'] = 'field_data_commerce_total';
+$handler->display->display_options['fields']['commerce_total']['field'] = 'commerce_total';
+$handler->display->display_options['fields']['commerce_total']['label'] = 'Discount Amount';
+$handler->display->display_options['fields']['commerce_total']['click_sort_column'] = 'amount';
+$handler->display->display_options['fields']['commerce_total']['type'] = 'commerce_price_formatted_amount';
+$handler->display->display_options['fields']['commerce_total']['settings'] = array(
+  'calculation' => FALSE,
+);
+/* Field: Commerce Order: Edit link */
+$handler->display->display_options['fields']['edit_order']['id'] = 'edit_order';
+$handler->display->display_options['fields']['edit_order']['table'] = 'commerce_order';
+$handler->display->display_options['fields']['edit_order']['field'] = 'edit_order';
+$handler->display->display_options['fields']['edit_order']['relationship'] = 'order_id';
+$handler->display->display_options['fields']['edit_order']['label'] = 'Operations';
+/* Filter criterion: Commerce Line Item: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'commerce_line_item';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'commerce_coupon' => 'commerce_coupon',
+);
+$handler->display->display_options['filters']['type']['group'] = 1;
+/* Filter criterion: Commerce Order: Order status */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'commerce_order';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['relationship'] = 'order_id';
+$handler->display->display_options['filters']['status']['value'] = array(
+  'completed' => 'completed',
+);
+$handler->display->display_options['filters']['status']['group'] = 1;
+/* Filter criterion: Commerce Coupon: Type */
+$handler->display->display_options['filters']['type_1']['id'] = 'type_1';
+$handler->display->display_options['filters']['type_1']['table'] = 'commerce_coupon';
+$handler->display->display_options['filters']['type_1']['field'] = 'type';
+$handler->display->display_options['filters']['type_1']['relationship'] = 'commerce_coupon_reference_target_id';
+$handler->display->display_options['filters']['type_1']['group'] = 1;
+$handler->display->display_options['filters']['type_1']['exposed'] = TRUE;
+$handler->display->display_options['filters']['type_1']['expose']['operator_id'] = 'type_1_op';
+$handler->display->display_options['filters']['type_1']['expose']['label'] = 'Coupon Type';
+$handler->display->display_options['filters']['type_1']['expose']['operator'] = 'type_1_op';
+$handler->display->display_options['filters']['type_1']['expose']['identifier'] = 'type_1';
+$handler->display->display_options['filters']['type_1']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+/* Filter criterion: Date: Date (commerce_order) */
+$handler->display->display_options['filters']['date_filter']['id'] = 'date_filter';
+$handler->display->display_options['filters']['date_filter']['table'] = 'commerce_order';
+$handler->display->display_options['filters']['date_filter']['field'] = 'date_filter';
+$handler->display->display_options['filters']['date_filter']['relationship'] = 'order_id';
+$handler->display->display_options['filters']['date_filter']['operator'] = 'between';
+$handler->display->display_options['filters']['date_filter']['group'] = 1;
+$handler->display->display_options['filters']['date_filter']['exposed'] = TRUE;
+$handler->display->display_options['filters']['date_filter']['expose']['operator_id'] = 'date_filter_op';
+$handler->display->display_options['filters']['date_filter']['expose']['operator'] = 'date_filter_op';
+$handler->display->display_options['filters']['date_filter']['expose']['identifier'] = 'order_date';
+$handler->display->display_options['filters']['date_filter']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+$handler->display->display_options['filters']['date_filter']['form_type'] = 'date_popup';
+$handler->display->display_options['filters']['date_filter']['date_fields'] = array(
+  'commerce_order.created' => 'commerce_order.created',
+);
+/* Filter criterion: Field: Sponsor (field_campaign_sponsor) */
+$handler->display->display_options['filters']['field_campaign_sponsor_nid']['id'] = 'field_campaign_sponsor_nid';
+$handler->display->display_options['filters']['field_campaign_sponsor_nid']['table'] = 'field_data_field_campaign_sponsor';
+$handler->display->display_options['filters']['field_campaign_sponsor_nid']['field'] = 'field_campaign_sponsor_nid';
+$handler->display->display_options['filters']['field_campaign_sponsor_nid']['relationship'] = 'commerce_coupon_reference_target_id';
+$handler->display->display_options['filters']['field_campaign_sponsor_nid']['group'] = 1;
+$handler->display->display_options['filters']['field_campaign_sponsor_nid']['exposed'] = TRUE;
+$handler->display->display_options['filters']['field_campaign_sponsor_nid']['expose']['operator_id'] = 'field_campaign_sponsor_nid_op';
+$handler->display->display_options['filters']['field_campaign_sponsor_nid']['expose']['label'] = 'Sponsor';
+$handler->display->display_options['filters']['field_campaign_sponsor_nid']['expose']['operator'] = 'field_campaign_sponsor_nid_op';
+$handler->display->display_options['filters']['field_campaign_sponsor_nid']['expose']['identifier'] = 'field_campaign_sponsor_nid';
+$handler->display->display_options['filters']['field_campaign_sponsor_nid']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  5 => 0,
+  6 => 0,
+);
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['path'] = 'admin/reports/ioby/redeemed-coupon-codes';
+
+/* Display: Attachment */
+$handler = $view->new_display('attachment', 'Attachment', 'attachment_1');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['defaults']['group_by'] = FALSE;
+$handler->display->display_options['group_by'] = TRUE;
+$handler->display->display_options['pager']['type'] = 'some';
+$handler->display->display_options['defaults']['style_plugin'] = FALSE;
+$handler->display->display_options['style_plugin'] = 'default';
+$handler->display->display_options['defaults']['style_options'] = FALSE;
+$handler->display->display_options['defaults']['row_plugin'] = FALSE;
+$handler->display->display_options['row_plugin'] = 'fields';
+$handler->display->display_options['defaults']['row_options'] = FALSE;
+$handler->display->display_options['defaults']['fields'] = FALSE;
+/* Field: Commerce Line item: Total */
+$handler->display->display_options['fields']['commerce_total']['id'] = 'commerce_total';
+$handler->display->display_options['fields']['commerce_total']['table'] = 'field_data_commerce_total';
+$handler->display->display_options['fields']['commerce_total']['field'] = 'commerce_total';
+$handler->display->display_options['fields']['commerce_total']['group_type'] = 'sum';
+$handler->display->display_options['fields']['commerce_total']['label'] = 'Total Discounts';
+$handler->display->display_options['fields']['commerce_total']['element_type'] = 'span';
+$handler->display->display_options['fields']['commerce_total']['element_label_type'] = 'span';
+$handler->display->display_options['fields']['commerce_total']['element_wrapper_type'] = 'h3';
+$handler->display->display_options['fields']['commerce_total']['click_sort_column'] = 'amount';
+$handler->display->display_options['fields']['commerce_total']['type'] = 'commerce_price_formatted_amount';
+$handler->display->display_options['fields']['commerce_total']['settings'] = array(
+  'calculation' => FALSE,
+);
+$handler->display->display_options['fields']['commerce_total']['group_column'] = 'amount';
+$handler->display->display_options['displays'] = array(
+  'page' => 'page',
+  'default' => 0,
+);
+$handler->display->display_options['attachment_position'] = 'both';
+$handler->display->display_options['inherit_exposed_filters'] = TRUE;

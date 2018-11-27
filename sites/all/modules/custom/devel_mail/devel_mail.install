@@ -1,0 +1,112 @@
+<?php
+/**
+ * @file
+ * Provides the installation routines for the devel_mail module
+ */
+
+/**
+ * Implementation of hook_schema().
+ */
+function devel_mail_schema() {
+  $schema['devel_mail_log'] = array(
+    'description' => 'Stores outgoing e-mail details for debugging purposes.',
+    'fields' => array(
+      'mail_log_id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique devel log message ID.',
+      ),
+      'message_id' => array(
+        'description' => 'The drupal_mail() id of the message.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'message_module' => array(
+        'description' => 'The module that sent-the email',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'message_key' => array(
+        'description' => 'A key to identify the e-mail sent.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'message_to' => array(
+        'description' => 'The to line of the message.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'message_from' => array(
+        'description' => 'The from line of the message.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'message_subject' => array(
+        'description' => 'The subject of the e-mail.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'message_body' => array(
+        'description' => 'The body of the e-mail.',
+        'type' => 'text',
+        'not null' => FALSE,
+        'size' => 'big'
+      ),
+      'message_headers' => array(
+        'descrtiption' => 'A searialized array of the message headers.',
+        'type' => 'blob',
+        'not null' => FALSE,
+        'size' => 'big',
+        'serialize' => TRUE,
+      ),
+      'message_params' => array(
+        'descrtiption' => 'A searialized array of additional message parameters.',
+        'type' => 'blob',
+        'not null' => FALSE,
+        'size' => 'big',
+        'serialize' => TRUE,
+      ),
+      'message_language' => array(
+        'descrtiption' => 'A searialized object representing the language settings for the message.',
+        'type' => 'blob',
+        'not null' => FALSE,
+        'size' => 'big',
+        'serialize' => TRUE,
+      ),
+      'message' => array(
+        'descrtiption' => 'The full searialized message array.',
+        'type' => 'blob',
+        'not null' => FALSE,
+        'size' => 'big',
+        'serialize' => TRUE,
+      ),
+      'message_sent' => array(
+        'description' => 'The Unix timestamp when the e-mail was sent (saved).',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'indexes' => array(
+      'message_module' => array('message_module'),
+      'message_key' => array('message_key'),
+      'message_from' => array('message_from'),
+    ),
+    'primary key' => array('mail_log_id'),
+  );
+
+  return $schema;
+}

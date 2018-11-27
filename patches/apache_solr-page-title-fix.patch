@@ -1,0 +1,20 @@
+diff --git a/sites/all/modules/contrib/apachesolr/apachesolr_search.module b/sites/all/modules/contrib/apachesolr/apachesolr_search.module
+index a94c0a9..7e1778a 100644
+--- a/sites/all/modules/contrib/apachesolr/apachesolr_search.module
++++ b/sites/all/modules/contrib/apachesolr/apachesolr_search.module
+@@ -359,12 +359,12 @@ function apachesolr_search_get_user_title($search_page_id = NULL, $value = NULL,
+  * @return String
+  */
+ function apachesolr_search_get_value_title($search_page_id = NULL, $value = NULL, $terms = NULL) {
+-  $page_title = 'Search results';
+-  if ((!empty($value) || !empty($terms)) && isset($search_page_id)) {
++//  $page_title = 'Search results';
++//  if ((!empty($value) || !empty($terms)) && isset($search_page_id)) {
+     $search_page = apachesolr_search_page_load($search_page_id);
+     $page_title = str_replace('%value', '@value', $search_page['page_title']);
+     $page_title = str_replace('%terms', '@terms', $page_title);
+-  }
++//  }
+   return t($page_title, array(
+     '@value' => $value,
+     '@terms' => $terms,

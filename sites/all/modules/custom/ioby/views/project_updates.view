@@ -1,0 +1,146 @@
+<?php
+
+$view = new view();
+$view->name = 'project_updates';
+$view->description = 'View to show project updates.';
+$view->tag = 'default';
+$view->base_table = 'node';
+$view->human_name = 'Project Updates';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Project Updates';
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'some';
+$handler->display->display_options['pager']['options']['items_per_page'] = '10';
+$handler->display->display_options['style_plugin'] = 'default';
+$handler->display->display_options['row_plugin'] = 'node';
+$handler->display->display_options['row_options']['view_mode'] = 'full';
+$handler->display->display_options['row_options']['links'] = FALSE;
+/* No results behavior: Global: Text area */
+$handler->display->display_options['empty']['area']['id'] = 'area';
+$handler->display->display_options['empty']['area']['table'] = 'views';
+$handler->display->display_options['empty']['area']['field'] = 'area';
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['label'] = '';
+$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['strip_tags'] = TRUE;
+$handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
+/* Sort criterion: Content: Post date */
+$handler->display->display_options['sorts']['created']['id'] = 'created';
+$handler->display->display_options['sorts']['created']['table'] = 'node';
+$handler->display->display_options['sorts']['created']['field'] = 'created';
+$handler->display->display_options['sorts']['created']['order'] = 'DESC';
+/* Contextual filter: Content: Project (project_group) */
+$handler->display->display_options['arguments']['project_group_target_id']['id'] = 'project_group_target_id';
+$handler->display->display_options['arguments']['project_group_target_id']['table'] = 'og_membership';
+$handler->display->display_options['arguments']['project_group_target_id']['field'] = 'project_group_target_id';
+$handler->display->display_options['arguments']['project_group_target_id']['default_action'] = 'empty';
+$handler->display->display_options['arguments']['project_group_target_id']['default_argument_type'] = 'fixed';
+$handler->display->display_options['arguments']['project_group_target_id']['summary']['number_of_records'] = '0';
+$handler->display->display_options['arguments']['project_group_target_id']['summary']['format'] = 'default_summary';
+$handler->display->display_options['arguments']['project_group_target_id']['summary_options']['items_per_page'] = '25';
+/* Filter criterion: Content: Published */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'node';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['value'] = 1;
+$handler->display->display_options['filters']['status']['group'] = 0;
+$handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'project_blog' => 'project_blog',
+);
+$handler->display->display_options['filters']['type']['group'] = '0';
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['defaults']['empty'] = FALSE;
+/* No results behavior: Global: Text area */
+$handler->display->display_options['empty']['area']['id'] = 'area';
+$handler->display->display_options['empty']['area']['table'] = 'views';
+$handler->display->display_options['empty']['area']['field'] = 'area';
+$handler->display->display_options['empty']['area']['content'] = 'Sorry, but this project doesn\'t have any updates yet.';
+$handler->display->display_options['empty']['area']['format'] = 'filtered_text';
+$handler->display->display_options['path'] = 'project/%/updates';
+
+/* Display: Block */
+$handler = $view->new_display('block', 'Block', 'block');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['defaults']['pager'] = FALSE;
+$handler->display->display_options['pager']['type'] = 'some';
+$handler->display->display_options['pager']['options']['items_per_page'] = '0';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['defaults']['style_plugin'] = FALSE;
+$handler->display->display_options['style_plugin'] = 'default';
+$handler->display->display_options['defaults']['style_options'] = FALSE;
+$handler->display->display_options['defaults']['row_plugin'] = FALSE;
+$handler->display->display_options['row_plugin'] = 'fields';
+$handler->display->display_options['defaults']['row_options'] = FALSE;
+$handler->display->display_options['defaults']['fields'] = FALSE;
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['label'] = '';
+$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+/* Field: Content: Body */
+$handler->display->display_options['fields']['body']['id'] = 'body';
+$handler->display->display_options['fields']['body']['table'] = 'field_data_body';
+$handler->display->display_options['fields']['body']['field'] = 'body';
+$handler->display->display_options['fields']['body']['label'] = '';
+$handler->display->display_options['fields']['body']['element_label_colon'] = FALSE;
+$handler->display->display_options['block_description'] = 'Project Updates';
+
+/* Display: Context */
+$handler = $view->new_display('ctools_context', 'Context', 'ctools_context_1');
+$handler->display->display_options['defaults']['title'] = FALSE;
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['defaults']['pager'] = FALSE;
+$handler->display->display_options['pager']['type'] = 'some';
+$handler->display->display_options['pager']['options']['items_per_page'] = '1';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['style_plugin'] = 'ctools_context';
+$handler->display->display_options['row_plugin'] = 'fields';
+$handler->display->display_options['defaults']['empty'] = FALSE;
+/* No results behavior: Global: Text area */
+$handler->display->display_options['empty']['area']['id'] = 'area';
+$handler->display->display_options['empty']['area']['table'] = 'views';
+$handler->display->display_options['empty']['area']['field'] = 'area';
+$handler->display->display_options['empty']['area']['content'] = 'No updates yet.';
+$handler->display->display_options['empty']['area']['format'] = 'raw';
+
+/* Display: Feed */
+$handler = $view->new_display('feed', 'Feed', 'feed_1');
+$handler->display->display_options['defaults']['title'] = FALSE;
+$handler->display->display_options['title'] = 'Project Updates';
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['defaults']['link_display'] = FALSE;
+$handler->display->display_options['link_display'] = 'feed_1';
+$handler->display->display_options['pager']['type'] = 'some';
+$handler->display->display_options['style_plugin'] = 'rss';
+$handler->display->display_options['row_plugin'] = 'node_rss';
+$handler->display->display_options['path'] = 'project/%/updates/feed';
+$handler->display->display_options['displays'] = array(
+  'page' => 'page',
+  'default' => 0,
+  'block' => 0,
+  'ctools_context_1' => 0,
+);
+$handler->display->display_options['sitename_title'] = 0;

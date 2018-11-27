@@ -1,0 +1,209 @@
+<?php
+
+$view = new view();
+$view->name = 'project_status_totals';
+$view->description = 'View to display an aggregate of project statuses.';
+$view->tag = 'ioby, reports';
+$view->base_table = 'node';
+$view->human_name = 'Project Statuses with Totals';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Project Statuses with Totals';
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['group_by'] = TRUE;
+$handler->display->display_options['access']['type'] = 'role';
+$handler->display->display_options['access']['role'] = array(
+  3 => '3',
+  4 => '4',
+);
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'none';
+$handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['style_options']['columns'] = array(
+  'field_project_status' => 'field_project_status',
+  'field_project_status_1' => 'field_project_status_1',
+  'total' => 'total',
+  'field_project_cost' => 'field_project_cost',
+);
+$handler->display->display_options['style_options']['default'] = '-1';
+$handler->display->display_options['style_options']['info'] = array(
+  'field_project_status' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_project_status_1' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'total' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_project_cost' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+);
+/* Field: Content: Project Status */
+$handler->display->display_options['fields']['field_project_status']['id'] = 'field_project_status';
+$handler->display->display_options['fields']['field_project_status']['table'] = 'field_data_field_project_status';
+$handler->display->display_options['fields']['field_project_status']['field'] = 'field_project_status';
+/* Field: COUNT(Content: Project Status) */
+$handler->display->display_options['fields']['field_project_status_1']['id'] = 'field_project_status_1';
+$handler->display->display_options['fields']['field_project_status_1']['table'] = 'field_data_field_project_status';
+$handler->display->display_options['fields']['field_project_status_1']['field'] = 'field_project_status';
+$handler->display->display_options['fields']['field_project_status_1']['group_type'] = 'count';
+$handler->display->display_options['fields']['field_project_status_1']['label'] = 'Total # Projects';
+/* Field: SUM(Ioby Project: Project Total) */
+$handler->display->display_options['fields']['total']['id'] = 'total';
+$handler->display->display_options['fields']['total']['table'] = 'iobyproject_totals_cache';
+$handler->display->display_options['fields']['total']['field'] = 'total';
+$handler->display->display_options['fields']['total']['group_type'] = 'sum';
+$handler->display->display_options['fields']['total']['label'] = 'Raised So Far';
+$handler->display->display_options['fields']['total']['set_precision'] = TRUE;
+$handler->display->display_options['fields']['total']['precision'] = '2';
+$handler->display->display_options['fields']['total']['prefix'] = '$';
+/* Field: SUM(Content: Project Cost) */
+$handler->display->display_options['fields']['field_project_cost']['id'] = 'field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['table'] = 'field_data_field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['field'] = 'field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['group_type'] = 'sum';
+$handler->display->display_options['fields']['field_project_cost']['label'] = 'Budget Total';
+$handler->display->display_options['fields']['field_project_cost']['settings'] = array(
+  'thousand_separator' => ',',
+  'decimal_separator' => '.',
+  'scale' => '2',
+  'prefix_suffix' => 1,
+);
+$handler->display->display_options['fields']['field_project_cost']['group_columns'] = array(
+  'value' => 'value',
+);
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'project_2' => 'project_2',
+);
+/* Filter criterion: Content: Published */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'node';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['value'] = '1';
+
+/* Display: Page */
+$handler = $view->new_display('page', 'Page', 'page');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['path'] = 'admin/reports/ioby/project-status-totals';
+
+/* Display: Attachment */
+$handler = $view->new_display('attachment', 'Attachment', 'attachment_1');
+$handler->display->display_options['defaults']['title'] = FALSE;
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['pager']['type'] = 'some';
+$handler->display->display_options['defaults']['style_plugin'] = FALSE;
+$handler->display->display_options['style_plugin'] = 'table';
+$handler->display->display_options['style_options']['row_class_special'] = FALSE;
+$handler->display->display_options['style_options']['columns'] = array(
+  'nothing' => 'nothing',
+  'field_project_status' => 'field_project_status',
+  'total' => 'total',
+  'field_project_cost' => 'field_project_cost',
+);
+$handler->display->display_options['style_options']['default'] = '-1';
+$handler->display->display_options['style_options']['info'] = array(
+  'nothing' => array(
+    'align' => '',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_project_status' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'total' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+  'field_project_cost' => array(
+    'sortable' => 0,
+    'default_sort_order' => 'asc',
+    'align' => 'views-align-right',
+    'separator' => '',
+    'empty_column' => 0,
+  ),
+);
+$handler->display->display_options['defaults']['style_options'] = FALSE;
+$handler->display->display_options['defaults']['row_plugin'] = FALSE;
+$handler->display->display_options['defaults']['row_options'] = FALSE;
+$handler->display->display_options['defaults']['fields'] = FALSE;
+/* Field: Global: Custom text */
+$handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+$handler->display->display_options['fields']['nothing']['table'] = 'views';
+$handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+$handler->display->display_options['fields']['nothing']['label'] = '';
+$handler->display->display_options['fields']['nothing']['alter']['text'] = 'Grand Total';
+$handler->display->display_options['fields']['nothing']['element_type'] = 'h3';
+$handler->display->display_options['fields']['nothing']['element_label_colon'] = FALSE;
+/* Field: COUNT(Content: Project Status) */
+$handler->display->display_options['fields']['field_project_status']['id'] = 'field_project_status';
+$handler->display->display_options['fields']['field_project_status']['table'] = 'field_data_field_project_status';
+$handler->display->display_options['fields']['field_project_status']['field'] = 'field_project_status';
+$handler->display->display_options['fields']['field_project_status']['group_type'] = 'count';
+$handler->display->display_options['fields']['field_project_status']['label'] = '';
+$handler->display->display_options['fields']['field_project_status']['element_label_colon'] = FALSE;
+/* Field: SUM(Ioby Project: Project Total) */
+$handler->display->display_options['fields']['total']['id'] = 'total';
+$handler->display->display_options['fields']['total']['table'] = 'iobyproject_totals_cache';
+$handler->display->display_options['fields']['total']['field'] = 'total';
+$handler->display->display_options['fields']['total']['group_type'] = 'sum';
+$handler->display->display_options['fields']['total']['label'] = '';
+$handler->display->display_options['fields']['total']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['total']['set_precision'] = TRUE;
+$handler->display->display_options['fields']['total']['precision'] = '2';
+$handler->display->display_options['fields']['total']['prefix'] = '$';
+/* Field: SUM(Content: Project Cost) */
+$handler->display->display_options['fields']['field_project_cost']['id'] = 'field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['table'] = 'field_data_field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['field'] = 'field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['group_type'] = 'sum';
+$handler->display->display_options['fields']['field_project_cost']['label'] = '';
+$handler->display->display_options['fields']['field_project_cost']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['field_project_cost']['settings'] = array(
+  'thousand_separator' => ',',
+  'decimal_separator' => '.',
+  'scale' => '2',
+  'prefix_suffix' => 1,
+);
+$handler->display->display_options['fields']['field_project_cost']['group_columns'] = array(
+  'value' => 'value',
+);
+$handler->display->display_options['displays'] = array(
+  'page' => 'page',
+  'default' => 0,
+);
+$handler->display->display_options['attachment_position'] = 'after';

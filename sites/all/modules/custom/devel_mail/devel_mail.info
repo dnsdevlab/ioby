@@ -1,0 +1,12 @@
+name = Devel Mail
+description = "Provides development settings for sending e-mails."
+core = 7.x
+package = Development
+version = "7.x-1.x-dev"
+
+files[] = devel_mail.module
+files[] = devel_mail.install
+files[] = devel_mail.mail.inc
+
+dependencies[] = entity
+dependencies[] = views

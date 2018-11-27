@@ -1,0 +1,1536 @@
+<?php
+
+module_load_include('inc', 'node', 'node.pages');
+module_load_include('module', 'node', 'node');
+$w = module_load_include('inc', 'ioby', 'includes/ioby');
+
+/**
+ * Implements hook_permission().
+ */
+function ioby_permission() {
+  return array(
+    'view ioby reports' => array(
+      'title' => t('View Ioby Reports'),
+    ),
+    'configure ioby popups' => array(
+      'title' => t('Configure Popups'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function ioby_menu() {
+    $items = array();
+
+    // legacy urls for older style project flow, changed to redirects
+    $items['project/add'] = array(
+      'title' => 'none',
+      'page callback' => '_ioby_goto_301',
+      'page arguments' => array('project'),
+      'access callback' => TRUE,
+    );
+
+    $items['add/project'] = array(
+      'title' => 'none',
+      'page callback' => '_ioby_goto_301',
+      'page arguments' => array('project'),
+      'access callback' => TRUE,
+    );
+
+    $items['add/project/step/1'] = array(
+      'title' => 'none',
+      'page callback' => '_ioby_goto_301',
+      'page arguments' => array('project'),
+      'access callback' => TRUE,
+      // 'title' => 'Build Your Campaign',
+      // 'page callback' => 'drupal_get_form',
+      // 'page arguments' => array('ioby_project_reqs_form'),
+      // 'access callback' => TRUE,
+      // 'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['add/project/step/2'] = array(
+      'title' => 'none',
+      'page callback' => '_ioby_goto_301',
+      'page arguments' => array('project'),
+      'access callback' => TRUE,
+      // 'title' => 'Build Your Campaign',
+      // 'page callback' => 'ioby_node_add',
+      // 'page arguments' => array('project'),
+      // 'access callback' => TRUE,
+    );
+
+
+    $items['projects/get'] = array(
+      'title' => 'Display Projects',
+      'page callback' => 'ioby_projects_get',
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+    );
+
+    $items['admin/campaign/%'] = array(
+      'title' => 'Check Campaign Status',
+      'page callback' => 'ioby_campaign_status_check',
+      'page arguments' => array(2),
+      'access arguments' => array('administer site configuration'),
+    );
+
+    $items['admin/reports/ioby'] = array(
+      'title' => 'Ioby Reports',
+      'access arguments' => array('view ioby reports'),
+      'page callback' => 'ioby_reports',
+      'type' => MENU_NORMAL_ITEM,
+    );
+
+    $items['admin/config/ioby-popups'] = array(
+      'title' => 'Ioby Popups',
+      'access arguments' => array('configure ioby popups'),
+      'type' => MENU_NORMAL_ITEM,
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('iobypopup_settings'),
+    );
+
+    return $items;
+}
+
+/**
+ * redirect to a path using drupal_goto with a 301, rather than 302
+ * defaults to the homepage if no page argument (string or array with a string) is passed.
+ * @author Paul Reny
+ */
+function _ioby_goto_301($path) {
+  if (!empty($path) && is_array($path)) {
+    $path = $path[0];
+  }
+  drupal_goto(!empty($path) ? $path : '/', array(), 301);
+}
+
+/**
+ * Implements hook_menu_alter()
+ */
+function ioby_menu_alter(&$items) {
+  $items['cart']['title'] = 'Donation Cart';
+  $items['cart']['page callback'] = 'ioby_cart_view';
+
+  // Lock down user search to admins only
+  $items['search/user']['access callback'] = 'user_access';
+  $items['search/user']['access arguments'] = array('administer users');
+  $items['search/user/%menu_tail']['access callback'] = 'user_access';
+  $items['search/user/%menu_tail']['access arguments'] = array('administer users');
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function ioby_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'ioby'),
+    'template path' => drupal_get_path('module', 'ioby/views-templates'),
+  );
+}
+
+/**
+ * Implements hook_node_info().
+ */
+function ioby_node_info() {
+  $items = array(
+    'about_ioby_section' => array(
+      'name' => t('About ioby'),
+      'base' => 'node_content',
+      'description' => t('A page in the About ioby section'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+    'campaign' => array(
+      'name' => t('Campaign'),
+      'base' => 'node_content',
+      'description' => t('This is used in conjunction with the Sponsor'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => t('Please use a short title. This will also be the URL of your campaign'),
+    ),
+    'donation' => array(
+      'name' => t('Donation'),
+      'base' => 'node_content',
+      'description' => t('An IOBY Donation'),
+      'has_title' => '1',
+      'title_label' => t('Donation Name'),
+      'help' => '',
+    ),
+    'donation_match' => array(
+      'name' => t('Donation Match'),
+      'base' => 'node_content',
+      'description' => t('Automated Match created by Checkout Process'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+    'faq' => array(
+      'name' => t('FAQ'),
+      'base' => 'node_content',
+      'description' => t('A question and answer for the help section.'),
+      'has_title' => '1',
+      'title_label' => t('Question'),
+      'help' => '',
+    ),
+    'project_2' => array(
+      'name' => t('Project'),
+      'base' => 'node_content',
+      'description' => t('Main Project'),
+      'has_title' => '1',
+      'title_label' => t('Project Name'),
+      'help' => '',
+    ),
+    'project_blog' => array(
+      'name' => t('Project update'),
+      'base' => 'node_content',
+      'description' => t('This is an update entry that is bound to a node.'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+    'slide' => array(
+      'name' => t('Slide'),
+      'base' => 'node_content',
+      'description' => t('Slide for the front page rotator'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+    'sponsorship' => array(
+      'name' => t('Sponsorship'),
+      'base' => 'node_content',
+      'description' => t('Sponsors to Campaigns'),
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
+    'testimonial' => array(
+      'name' => t('Testimonial'),
+      'base' => 'node_content',
+      'description' => t('Content type for testimonials, which appear persistently in the footer as well in other possible places.'),
+      'has_title' => '1',
+      'title_label' => t('Internal Title'),
+      'help' => '',
+    ),
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function ioby_form_coupon_fund_node_form_alter(&$form, &$form_state, $form_id) {
+  // Try to prevent most options from being set on coupon fund nodes
+  unset($form['options'], $form['comment_settings'], $form['revision_information']);
+}
+
+/**
+ * Implements hook_form_alter()
+ */
+function ioby_form_alter(&$form, &$form_state, $form_id) {
+  global $user;
+
+  // if ($form_id == 'user_register_form') {
+  //   $form['#submit'][] = 'custom_ioby_user_form_submit';
+  // }
+  switch ($form_id) {
+    case 'project_node_form':
+      if (!$user->uid) {
+        drupal_goto('project');
+        exit;
+      }
+      if (!in_array('admin', array_values($user->roles))) {
+        $form['additional_settings']['#access'] = FALSE;
+        // $form['field_project_start_date']['#access'] = FALSE;
+        //$form['field_project_product']['#access'] = FALSE;
+
+      }
+      break;
+    case 'user_profile_form':
+      // Remove display name
+      hide($form['account']['name']);
+
+      break;
+    case 'views_exposed_form':
+      $form['#attached']['css'] = array(
+        drupal_get_path('module', 'ioby') . '/exposedform.css',
+      );
+      if (isset($form['province'])) {
+        $states = ioby_find_project_states();
+        $form['province']['#type'] = 'select';
+        $form['province']['#options'] = $states;
+        $form['province']['#default_value'] = '';
+        unset($form['province']['#autocomplete_path']);
+      }
+      break;
+    case 'commerce_checkout_form_checkout':
+      unset($form['account']['login']['mail_confirm']['#description']);
+      break;
+  }
+}
+
+function custom_ioby_user_form_submit($form, &$form_state){
+    $form_state['redirect'] = 'project';
+}
+
+
+function ioby_commerce_checkout_pane_info_alter(&$checkout_panes) {
+  $checkout_panes['cart_contents']['title'] = t('Donations');
+  $checkout_panes['commerce_coupon']['title'] = t('Giving Code');
+}
+
+function ioby_form_commerce_checkout_form_checkout_alter(&$form, &$form_state) {
+  $form['commerce_coupon']['coupon_code']['#title'] = t('');
+  $form['commerce_coupon']['coupon_code']['#description'] = 'Have an ioby Giving Card? Please carefully enter your code here. For more information, please <a href="/giving" target="_blank">click here</a>. Please leave this box blank unless you are using an ioby Giving Card.';
+  $form['account']['#title'] = t('Profile');
+  //$form['buttons']['continue']['#value'] = 'Complete Order';
+
+}
+
+/**
+ * Implements hook_form_form_id_alter()
+ * Alter the commerce review form.
+ */
+function ioby_form_commerce_checkout_form_review_alter(&$form, &$form_state) {
+  // remove help message.
+  unset($form['help']);
+
+  if (isset($form['customer_profile_billing']['#fieldgroups']['group_donor_information'])) {
+    // Move the donor information into it's own fieldset and add functionality for popup descriptions
+    unset($form['customer_profile_billing']['#type']);
+    $form['customer_profile_billing']['commerce_customer_address']['#type'] = 'fieldset';
+    $form['customer_profile_billing']['commerce_customer_address']['#title'] = 'Billing Information';
+    $form['customer_profile_billing']['field_donor_display_name']['#attributes']['class'][] = 'container-inline';
+    $form['customer_profile_billing']['field_donor_display_name']['und'][0]['value']['#size'] = 30;
+    $form['customer_profile_billing']['#attached']['js'][] = drupal_get_path('module', 'ioby') . '/js/ioby_popups.js';
+
+    foreach ($form['customer_profile_billing']['#fieldgroups']['group_donor_information']->children as $field_key) {
+      $whats_this = variable_get('iobypopup_' . substr($field_key, 6));
+      if (isset($whats_this) && !empty($whats_this['value'])) {
+        $clean_field_key = drupal_clean_css_identifier($field_key);
+
+        $form['customer_profile_billing'][$field_key]['und']['#prefix'] = '<div class="container-inline">';
+        $form['customer_profile_billing'][$field_key]['und']['#suffix'] = ' <span><a class="whats-this" href="#' . $clean_field_key . '">what\'s this?</a></span></div><div style="display:none;"><div id="' . $clean_field_key . '" class="region-content"><p>' . check_markup($whats_this['value'], $whats_this['format']) . '</p></div></div>';
+      }
+    }
+  }
+
+  // change coupon title to giving code
+  $form['buttons']['continue']['#value'] = 'Complete Order';
+  $form['buttons']['thanks'] = array(
+    '#markup' => '<p class="terms description">By clicking "complete order" you are agreeing to our <a href="/terms" target="_blank">terms &amp; conditions</a> and <a href="/privacy" target="_blank">privacy policy</a>.<br>Please <a href="/contact" target="_blank">contact us</a> if you have any questions.</p>',
+  );
+
+  // change text to 'no payment' method.
+  if(isset($form['commerce_payment']['payment_method']['#options']['commerce_no_payment|commerce_payment_commerce_no_payment'])) {
+    $form['commerce_payment']['payment_method']['#options']['commerce_no_payment|commerce_payment_commerce_no_payment'] = 'No payment method necessary';
+  }
+}
+
+/**
+ * Implements hook_block_info()
+ */
+function ioby_block_info() {
+
+  $blocks = array();
+
+  $blocks['ioby_user_registration'] = array(
+    'info' => t('IOBY Custom User Registration'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['ioby_user_sign_in'] = array(
+    'info' => t('IOBY Custom User Login'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['ioby_project_add'] = array(
+    'info' => t('IOBY Project add Form'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['ioby_project_creation_indicator'] = array(
+     'info' => t('ioby project submission indicator'),
+     'cache' => DRUPAL_NO_CACHE,
+     'status' => TRUE
+  );
+
+  $blocks['ioby_campaign_projects_map'] = array(
+     'info' => t('IOBY campaign projects map'),
+     'cache' => DRUPAL_NO_CACHE,
+  );
+
+  $blocks['ioby_project_step_one'] = array(
+    'info' => t('IOBY Project - Step 1'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view()
+ */
+function ioby_block_view($block_id = '') {
+
+  $block = array();
+
+  switch ($block_id) {
+    case 'ioby_user_registration' :
+      $form = drupal_get_form('user_register_form');
+      $form['account']['mail']['#title'] = 'E-mail';
+      $form['account']['mail']['#weight'] = -20;
+      $form['account']['mail']['#size'] = 20;
+      $form['account']['mail']['#description'] = NULL;
+      $block = array(
+        'subject' => t('New to ioby? Sign Up!'),
+        'content' => $form,
+      );
+      break;
+    case 'ioby_user_sign_in':
+      $form = drupal_get_form('ioby_user_login_form');
+      $block = array(
+        'subject' => t('Existing User? Log in!'),
+        'content' => $form,
+      );
+      break;
+    case 'ioby_project_creation_indicator':
+      $block = array(
+        'subject' => t(''),
+        'content' => ioby_pci_contents(),
+      );
+      break;
+    case 'ioby_campaign_projects_map':
+      $block = array(
+        'subject' => t(''),
+        'content' => ioby_campaign_projectmap(),
+      );
+      break;
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_preprocess_search_result().
+ */
+function ioby_preprocess_search_result(&$variables) {
+  if (isset($variables['result']['type']) && $variables['result']['type'] == 'Blog entry') {
+    $blog_url = db_select('feeds_item', 'f')->fields('f', array('url'))->condition('f.entity_id', $variables['result']['node']->nid, '=')->execute()->fetchField();
+
+    if ($blog_url) {
+      $blog_url = str_replace(array('http://www.ioby.org', 'https://www.ioby.org'), '', $blog_url);
+      $variables['url'] = $blog_url;
+      $variables['result']['link'] = $blog_url;
+    }
+  }
+}
+
+function ioby_user_login_form($form, &$form_state) {
+  $form['name'] = array(
+    '#type'     => 'textfield',
+    '#size'     => 20,
+    '#title'    => 'E-mail or username',
+    '#required' => 1,
+  );
+  $form['pass'] = array(
+    '#type'     => 'password',
+    '#size'     => 20,
+    '#title'    => 'Password',
+    '#required' => 1,
+  );
+  $form['submit'] = array(
+    '#type'  => 'submit',
+    '#value' => 'Log in',
+  );
+  $form['#validate'] = array(
+    'user_login_name_validate',
+    'user_login_authenticate_validate',
+    'user_login_final_validate'
+  );
+
+  return $form;
+}
+
+function ioby_user_login_form_validate($form, &$form_state) {
+  drupal_set_message(t('welcome'));
+}
+
+function ioby_user_login_form_submit($form, &$form_state) {
+  global $user;
+  $user = user_load($form_state['uid']);
+  $form_state['redirect'] = 'project'; // pretty sure this is unused, but updating to match the new /project url just in case
+
+  user_login_finalize($form_state);
+}
+
+/**
+ * Form builder; the user registration form.
+ *
+ * @ingroup forms
+ * @see user_account_form()
+ * @see user_account_form_validate()
+ * @see user_register_submit()
+ */
+// function ioby_user_register_form($form, &$form_state) {
+//   global $user;
+
+//   $admin = user_access('administer users');
+
+//   // If we aren't admin but already logged on, go to the user page instead.
+//   if (!$admin && $user->uid) {
+//     drupal_goto('user/' . $user->uid);
+//   }
+
+//   $form['#user'] = drupal_anonymous_user();
+//   $form['#user_category'] = 'register';
+
+//   $form['#attached']['library'][] = array('system', 'jquery.cookie');
+//   $form['#attributes']['class'][] = 'user-info-from-cookie';
+
+//   // Start with the default user account fields.
+//   user_account_form($form, $form_state);
+
+//   // Attach field widgets, and hide the ones where the 'user_register_form'
+//   // setting is not on.
+//   field_attach_form('user', $form['#user'], $form, $form_state);
+//   foreach (field_info_instances('user', 'user') as $field_name => $instance) {
+//     if (empty($instance['settings']['user_register_form'])) {
+//       $form[$field_name]['#access'] = FALSE;
+//     }
+//   }
+
+//   if ($admin) {
+//     // Redirect back to page which initiated the create request;
+//     // usually admin/people/create.
+//     $form_state['redirect'] = $_GET['q'];
+//   }
+
+//   $form['actions'] = array('#type' => 'actions');
+//   $form['actions']['submit'] = array(
+//     '#type' => 'submit',
+//     '#value' => t('Create new account'),
+//   );
+
+//   $form['#validate'][] = 'ioby_user_register_validate';
+//   // Add the final user registration form submit handler.
+//   $form['#submit'][] = 'ioby_user_register_submit';
+
+//   return $form;
+// }
+
+/**
+ * Validation function for the user registration form.
+ */
+// function ioby_user_register_validate($form, &$form_state) {
+//   entity_form_field_validate('user', $form, $form_state);
+// }
+
+
+/**
+ * Form Builder: Step 1 of project creation.
+*/
+function ioby_project_reqs_form() {
+  global $user;
+
+  if (!$user->uid) {
+    drupal_set_message(t('you must log in to do that'));
+    drupal_goto('project');
+    exit;
+  }
+
+  variable_set('ioby_project_meets', 0);
+
+  $form = array();
+  $form['description'] = array(
+    '#markup' => variable_get('ioby_project_step_one'),
+  );
+
+  $form['project_meets'] = array(
+    '#type' => 'submit',
+    '#value' => t('I\'m ready to create my campaign page!'),
+    '#submit' => array('ioby_project_start'),
+  );
+
+  $form['wait'] = array(
+    '#type' => 'submit',
+    '#value' => t('I\'ll wait for a call!'),
+    '#submit' => array('ioby_project_wait'),
+  );
+
+  return $form;
+}
+
+function ioby_project_start(){
+  drupal_goto("node/add/project-2");
+}
+
+function ioby_project_wait(){
+  drupal_goto("/");
+}
+
+
+function ioby_node_add($type) {
+  global $user;
+
+  // not logged in? go to step 0;
+  if (!$user->uid) {
+    drupal_goto('project');
+    exit;
+  }
+
+  // OK You're cool.. make a form!
+  /* custom form
+  $types = node_type_get_types();
+  $node = (object) array('uid' => $user->uid, 'name' => (isset($user->name) ? $user->name : ''), 'type' => $type, 'language' => LANGUAGE_NONE);
+  drupal_set_title(t('Create @name', array('@name' => $types[$type]->name)), PASS_THROUGH);
+  $output = drupal_get_form('ioby_project_add_form', $node);
+*/
+  $output = node_add('project_2'); // failsafe...
+  drupal_set_title(t('Build Your Campaign'));
+  return $output;
+}
+
+/**
+ * Form Builder: Create and display customized project node //dead
+*/
+function ioby_project_add_form($form, &$form_state, $node) {
+  global $user;
+
+
+  if (!isset($form_state['node'])) {
+    if (!isset($node->title)) {
+      $node->title = NULL;
+    }
+    node_object_prepare($node);
+    $form_state['node'] = $node;
+  }
+  else {
+    $node = $form_state['node'];
+  }
+
+  // Some special stuff when previewing a node.
+  if (isset($form_state['node_preview'])) {
+    $form['#prefix'] = $form_state['node_preview'];
+    $node->in_preview = TRUE;
+  }
+  else {
+    unset($node->in_preview);
+  }
+
+
+  $form['#attributes']['class'][] = 'node-form node-project-form';
+
+  // Basic node information.
+  // These elements are just values so they are not even sent to the client.
+  foreach (array('nid', 'vid', 'uid', 'created', 'type', 'language') as $key) {
+    $form[$key] = array(
+      '#type' => 'value',
+      '#value' => isset($node->$key) ? $node->$key : NULL,
+    );
+  }
+
+  //CUSTOM FORM STUFFS
+  $form['group_project_basics'] = array(
+    '#type'  => 'fieldset',
+    '#title' => t('Basics'),
+    '#tree'  => TRUE,
+  );
+  $form['group_project_basics']['title'] = array(
+    '#type'     => 'textfield',
+    '#title'    => t('Project Name'),
+    '#required' => TRUE,
+  );
+  $form['group_project_basics']['body'] = array(
+    '#type'     => 'text_format',
+    '#format'   => 'filtered_text',
+    '#title'    => t('Summary'),
+    '#required' => TRUE,
+  );
+  $form['group_project_basics']['field_project_address'] = array(
+    '#type'     => 'textfield',
+    '#title'    => t('Street Address'),
+    '#required' => TRUE,
+  );
+  $form['group_project_basics']['field_project_zip'] = array(
+    '#type'     => 'textfield',
+    '#title'    => t('Zip Code'),
+    '#size'     => 10,
+    '#required' => TRUE,
+  );
+  $options1 = ioby_get_taxonomy(1);
+  $form['group_project_basics']['field_impact_areas'] = array(
+    '#type'     => 'select',
+    '#title'    => t('Impact Areas'),
+    '#options'  => $options1,
+    '#multiple' => TRUE,
+  );
+  $options2 = ioby_get_taxonomy(2);
+  $form['group_project_basics']['field_project_facet'] = array(
+    '#type'     => 'select',
+    '#title'    => t('Some other Facets'),
+    '#options'  => $options2,
+    '#multiple' => TRUE,
+  );
+  $form['group_project_basics']['field_project_photo'] = array(
+    '#type'            => 'managed_file',
+    '#title'           => t('Photo'),
+    '#description'     => t('Upload a photo'),
+    '#upload_location' => 'public://project_images/',
+  );
+
+  $form['group_project_details'] = array(
+    '#type'  => 'fieldset',
+    '#title' => t('Project Details'),
+    '#tree'  => TRUE,
+  );
+  $form['group_project_details']['field_project_overview']= array(
+    '#type'     => 'text_format',
+    '#format'   => 'filtered_text',
+    '#title'    => t('Overview: Introduce your Project'),
+    '#required' => TRUE,
+  );
+  $form['group_project_details']['field_project_issue']= array(
+    '#type'     => 'text_format',
+    '#format'   => 'filtered_text',
+    '#title'    => t('The environmental problem your project addresses'),
+    '#required' => TRUE,
+  );
+  $form['group_project_details']['field_project_plan']= array(
+    '#type'     => 'text_format',
+    '#format'   => 'filtered_text',
+    '#title'    => t('Your plan for how this project wil lbe implemented.'),
+    '#required' => TRUE,
+  );
+  $form['group_project_details']['field_project_other']= array(
+    '#type'     => 'text_format',
+    '#format'   => 'filtered_text',
+    '#title'    => t('Anything else we should know about your project?'),
+    '#required' => TRUE,
+  );
+
+  $form['group_project_funding'] = array(
+    '#type'  => 'fieldset',
+    '#title' => t('Funding & Support'),
+    '#tree'  => TRUE,
+  );
+  $form['group_project_funding']['field_project_target_funding'] = array(
+    '#type'   => 'textfield',
+    '#title'  => t('Dollar amount you need to raise'),
+    '#prefix' => '$',
+  );
+  $form['group_project_funding']['field_project_budget_explain'] = array(
+    '#type'   => 'text_format',
+    '#format' => 'filtered_text',
+    '#title'  => t('Project Budget Explaination'),
+  );
+  $form['group_project_funding']['field_project_volunteers'] = array(
+    '#type'          => 'radios',
+    '#title'         => t('Do you want to recruit volunteers via ioby.org?'),
+    '#default_value' => 1,
+    '#options'       => array(t('Yes'), t('No')),
+  );
+  $form['group_project_funding']['field_project_vol_reason'] = array(
+    '#type'   => 'text_format',
+    '#format' => 'filtered_text',
+    '#title'  => t('If so, explain who you\'re looking for and what they\'ll be doing'),
+  );
+
+  $form['group_extras'] = array(
+    '#type'  => 'fieldset',
+    '#title' => t('Extras'),
+    '#tree'  => TRUE,
+  );
+  $form['group_extras']['field_project_url'] = array(
+    '#type'  => 'textfield',
+    '#title' => t('website for this project (if you have one)'),
+  );
+
+  $form['group_contact_info'] = array(
+    '#type'  => 'fieldset',
+    '#title' => t('Funding & Support'),
+    '#tree'  => TRUE,
+  );
+  $form['group_contact_info']['field_project_contact_name'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Name'),
+    '#default_value' => $user->name,
+  );
+  // dpm($form);
+  $form['group_contact_info']['field_project_contact_email'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('email'),
+    '#default_value' => $user->mail,
+  );
+  $form['group_contact_info']['field_project_contact_phone'] = array(
+    '#type'  => 'textfield',
+    '#title' => t('phone'),
+  );
+  $form['group_contact_info']['field_project_contact_alt_phone'] = array(
+    '#type'  => 'textfield',
+    '#title' => t('alternate phone'),
+  );
+
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['preview'] = array(
+    '#access' => variable_get('node_preview_' . $node->type, DRUPAL_OPTIONAL) != DRUPAL_DISABLED,
+    '#type'   => 'submit',
+    '#value'  => t('Preview'),
+    '#weight' => 10,
+    '#submit' => array('ioby_form_build_preview'),
+  );
+  return $form;
+}
+
+function ioby_form_build_preview($form, &$form_state) {
+  $node = ioby_form_submit_build_node($form, $form_state);
+  $form_state['node'] = $node;
+  $form_state['node_preview'] = node_preview($node);
+  $form_state['rebuild'] = TRUE;
+}
+
+function ioby_form_submit_build_node($form, &$form_state) {
+  // stolen from node_form_submit_build_node();
+
+  $node = $form_state['node'];
+  entity_form_submit_build_entity('project', $node, $form, $form_state);
+
+  node_submit($node);
+  foreach (module_implements('node_submit') as $module) {
+    $function = $module . '_node_submit';
+    $function($node, $form, $form_state);
+  }
+  return $node;
+}
+
+function ioby_project_add_form_validate($form, &$form_state) {
+  // $form_state['node'] contains the actual entity being edited, but we must
+  // not update it with form values that have not yet been validated, so we
+  // create a pseudo-entity to use during validation.
+  $node = (object) $form_state['values'];
+  node_validate($node, $form, $form_state);
+  entity_form_field_validate('project', $form, $form_state);
+}
+
+function ioby_project_add_form_submit($form, &$form_state) {
+  $node = ioby_form_submit_build_node($form, $form_state);
+  $insert = empty($node->nid);
+  node_save($node);
+  $node_link = l(t('view'), 'node/' . $node->nid);
+  $watchdog_args = array('@type' => $node->type, '%title' => $node->title);
+  $t_args = array('@type' => node_type_get_name($node), '%title' => $node->title);
+
+  if ($insert) {
+    watchdog('content', '@type: added %title.', $watchdog_args, WATCHDOG_NOTICE, $node_link);
+    drupal_set_message(t('@type %title has been created.', $t_args));
+  }
+  else {
+    watchdog('content', '@type: updated %title.', $watchdog_args, WATCHDOG_NOTICE, $node_link);
+    drupal_set_message(t('@type %title has been updated.', $t_args));
+  }
+  if ($node->nid) {
+    $form_state['values']['nid'] = $node->nid;
+    $form_state['nid']           = $node->nid;
+    $form_state['redirect']      = 'node/' . $node->nid;
+  }
+  else {
+    // In the unlikely case something went wrong on save, the node will be
+    // rebuilt and node form redisplayed the same way as in preview.
+    drupal_set_message(t('The post could not be saved.'), 'error');
+    $form_state['rebuild'] = TRUE;
+  }
+  // Clear the page and block caches.
+  cache_clear_all();
+}
+
+/**
+ * Custom function to retrieve options tree
+ **/
+function ioby_get_taxonomy($vid) {
+  $out = array();
+  $in = taxonomy_get_tree($vid);
+  foreach ($in as $item) {
+    $out[$item->tid] = $item->name;
+  }
+  return $out;
+}
+
+function ioby_block_configure($delta = '') {
+
+  $form = array();
+  if ($delta == 'ioby_project_creation_indicator') {
+
+    $form['ioby_pci_s1'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Step 1 label'),
+      '#size' => 40,
+      '#description' => t('How "Step 1" is identified.'),
+      '#default_value' => variable_get('ioby_pci_s1',  t('Step 1: Review Criteria')),
+    );
+
+    $form['ioby_pci_s2'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Step 2 label'),
+      '#size' => 40,
+      '#description' => t('How "Step 2" is identified.'),
+      '#default_value' => variable_get('ioby_pci_s2',  t('Step 2: Project Info')),
+    );
+
+    $form['ioby_pci_s3'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Step 3 label'),
+      '#size' => 40,
+      '#description' => t('How "Step 3" is identified.'),
+      '#default_value' => variable_get('ioby_pci_s3',  t('Step 3: Review')),
+    );
+
+    $form['ioby_pci_s4'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Step 4 label'),
+      '#size' => 40,
+      '#description' => t('How "Step 4" is identified.'),
+      '#default_value' => variable_get('ioby_pci_s4',  t('Step 4: Confirm')),
+    );
+  }
+
+  if($delta == 'ioby_project_step_one') {
+    $form['ioby_project_step_one_content'] = array(
+      '#type' => 'text_format',
+      '#format' => 'filtered_text',
+      '#title' => 'Step 1 description',
+      '#description' => 'This is the content that will go into the first part of the project create form',
+      '#default_value' => variable_get('ioby_project_step_one', ''),
+    );
+  }
+
+  return $form;
+}
+
+
+function ioby_block_save($delta = '', $edit = array()) {
+  if ($delta == 'ioby_project_creation_indicator') {
+    // Have Drupal save the string to the database.
+    for ($i = 1; $i < 5; $i++) {
+      variable_set('ioby_pci_s' . $i, $edit['ioby_pci_s' . $i]);
+    }
+  }
+
+  if($delta == 'ioby_project_step_one') {
+    variable_set('ioby_project_step_one', $edit['ioby_project_step_one_content']['value']);
+  }
+  return;
+}
+
+
+function ioby_pci_contents() {
+
+  $arg = drupal_get_destination();
+
+  //build the array if we need to bother
+  if (arg(0) == 'add' && arg(2) == 'step' && arg(3)) {
+
+    $ret = '<ol class="ioby-step-indicator">';
+
+    for ($i = 1; $i < 5; $i++) {
+      $class = ($i == arg(3)) ? "current" : "";
+      $ret .= sprintf('<li class="%s">%s</li>', $class, variable_get("ioby_pci_s" . $i));
+    }
+
+  return array('#markup' => $ret . "</ol>");
+  }
+  elseif ( arg(0) == 'node' && drupal_get_path_alias($arg['destination']) == "add/project/step/4") {
+    $ret = '<ol class="ioby-step-indicator">';
+
+    for ($i = 1; $i < 5; $i++) {
+      $class = ($i == 4) ? "current" : "";
+      $ret .= sprintf('<li class="%s">%s</li>', $class, variable_get("ioby_pci_s" . $i));
+    }
+    return array('#markup' => $ret . "</ol>");
+
+  }
+}
+
+function ioby_projects_get($view) {
+  $view = strtolower($view);
+  switch ($view) {
+    case 'featured':
+      $view_name = 'featured';
+      break;
+    case 'most_recent':
+      $view_name = 'most_recent';
+      break;
+    case 'ending_soon':
+      $view_name = 'ending_soon';
+      break;
+    case 'updated':
+       $view_name = 'updated';
+      break;
+    default:
+      $view_name = 'featured';
+  }
+
+  $projects = views_embed_view('project_view', $view_name);
+  return drupal_json_output(array('projects' => $projects));
+  exit;
+}
+
+function ioby_commerce_checkout_pane_info() {
+  $checkout_panes = array();
+
+  $checkout_panes['sponsor_review_pane'] = array(
+    'title' => t('Sponsored By'),
+    'file' => 'includes/ioby.inc',
+    'base' => 'ioby_sponsor_review_pane',
+    'page' => 'review',
+  );
+
+  $checkout_panes['sponsor_info_pane'] = array(
+    'title' => t('Sponsored by'),
+    'file' => 'includes/ioby.inc',
+    'base' => 'ioby_sponsor_info_pane',
+    'page' => 'checkout',
+  );
+
+  $checkout_panes['sponsor_thanks_pane'] = array(
+    'title' => t('Thanks from our Sponsors'),
+    'file' => 'includes/ioby.inc',
+    'base' => 'ioby_sponsor_thanks_pane',
+    'page' => 'complete',
+  );
+
+  return $checkout_panes;
+}
+
+
+/**
+ * Redirects empty cart to proper page.
+ * Also clears out gratuity flag.
+ *
+ * @return $content
+ */
+function ioby_cart_empty($order){
+  // CLEAR OUT GRATUTIY FLAG
+  if (is_object($order) && array_key_exists('und', $order->field_order_gratuity) && $order->field_order_gratuity['und'][0]['value'] == 1) {
+    $order->field_order_gratuity['und'][0]['value'] = 0;
+    commerce_order_save($order);
+  }
+  // Display an appropriate message.
+  $content = theme('commerce_cart_empty_page');
+  return $content;
+}
+
+/**
+ * Redirects cart view to our liking
+ */
+function ioby_cart_view() {
+  global $user;
+
+  $iobypopup_gratuity_info = variable_get('iobypopup_gratuity_info');
+  $iobypopup_gratuity_remove = variable_get('iobypopup_gratuity_remove');
+
+  drupal_add_js(
+    array(
+      'iobypopup' => array(
+        'iobypopupGratuityInfo' => isset($iobypopup_gratuity_info['value']) ? check_markup($iobypopup_gratuity_info['value'], $iobypopup_gratuity_info['format']) : '',
+        'iobypopupGratuityRemove' => isset($iobypopup_gratuity_remove['value']) ? check_markup($iobypopup_gratuity_remove['value'], $iobypopup_gratuity_remove['format']) : '',
+      )
+    ),
+    'setting'
+  );
+
+  // First check for items in the shopping cart.
+  $order = commerce_cart_order_load($user->uid);
+
+  // If the cart is empty...
+  if (!$order || empty($order->commerce_line_items)) {
+
+    $content = ioby_cart_empty($order);
+    return $content;
+  }
+  else {
+    // Look for gratuity
+    $gratuity = FALSE;
+    $gratuity_line_item = FALSE;
+    foreach($order->commerce_line_items['und'] as $li) {
+
+      $line_item = commerce_line_item_load($li['line_item_id']);
+
+      // ignore coupon lines
+      if(preg_match('/coupon/', $line_item->type)) {
+        continue;
+      }
+      $product_id = $line_item->commerce_product['und'][0]['product_id'];
+
+      $product = commerce_product_load($product_id);
+      if($product->type == 'gratuity') {
+        $gratuity_line_item = $li;
+        $gratuity = $product;
+      }
+    }
+    // has gratuity been added already?
+    if($gratuity) {
+
+      if (($order->commerce_order_total['und'][0]['amount'] - $gratuity->commerce_price['und'][0]['amount'] == 0) && (count($order->commerce_line_items['und'][0]) == 1)) {
+        commerce_cart_order_product_line_item_delete($order, $gratuity_line_item['line_item_id']);
+        $content = ioby_cart_empty($order);
+        return $content;
+      }
+
+      $gratuity_override = !empty($gratuity->field_override['und'][0]['value']);
+
+      if(!$gratuity_override) {
+        $gratuity_amount = $gratuity->commerce_price['und'][0]['amount'];
+        $order_amount = $order->commerce_order_total['und'][0]['amount'];
+        $amount = $order_amount - $gratuity_amount;
+
+        // if everything has  been removed, skip adding the gratuity..
+        if($amount > 0) {
+          $amount = commerce_currency_amount_to_decimal($amount, 'USD');
+          $amount = $amount*.2;
+          $price =  commerce_currency_decimal_to_amount($amount, 'USD');
+
+          // If equal to or more than $10.00, cap at $10.00
+          if($price >= '1000'){
+            $price = '1000';
+          }
+        }
+
+        $gratuity->commerce_price['und'][0]['amount'] = $price;
+        commerce_product_save($gratuity);
+
+        commerce_cart_order_refresh($order);
+      }
+    }
+    // reload order for changes
+    commerce_cart_order_load($user->uid);
+    // no gratuity present.. check to see if it was deleted.
+    if (!array_key_exists('und', $order->field_order_gratuity) || $order->field_order_gratuity['und'][0]['value'] != 1) {
+
+      // get the amount
+
+      $amount = $order->commerce_order_total['und'][0]['amount'];
+      $amount =commerce_currency_amount_to_decimal($amount, 'USD');
+      $amount = $amount * .2;
+      $price = commerce_currency_decimal_to_amount($amount, 'USD');
+
+      // If equal to or more than $10.00, cap at $10.00
+      if($price >= '1000'){
+        $price = '1000';
+      }
+
+      // create gratuity..
+      $gratuity = commerce_product_new('gratuity');
+
+      $gratuity->sku = 'order_'.$order->order_number.'_date_'.time();
+      $gratuity->title = 'ioby gratuity from order';
+      $gratuity->uid = $user->uid;
+
+      $gratuity->commerce_price['und'][0]['amount'] = $price;
+      $gratuity->commerce_price['und'][0]['currency_code'] = 'USD';
+
+      commerce_product_save($gratuity);
+
+      if (!empty($gratuity->product_id)) {
+        // insert gratuity to cart
+        commerce_cart_product_add($user->uid, commerce_product_line_item_new($gratuity), 1);
+
+        // save the gratuity field
+        $order->field_order_gratuity['und'][0]['value'] = 1;
+        commerce_order_save($order);
+      }
+    }
+
+    // get order again..
+    $order = commerce_cart_order_load($user->uid);
+
+    // move along..
+    drupal_add_css(drupal_get_path('module', 'commerce_cart') . '/theme/commerce_cart.css');
+
+    // Add the form for editing the cart contents.
+    $content = commerce_embed_view('commerce_cart_form', 'default', array($order->order_id), 'cart');
+  }
+
+  return $content;
+}
+
+/**
+ * implements hook_mail();
+*/
+function ioby_mail($key, &$message, $params) {
+  switch ($key) {
+    case 'donation_matched':
+      $message['subject'] = $params['subject'];
+      $message['body'][] = $params['msg'];
+      break;
+  }
+}
+
+
+/**
+ * Generates project map for campaign pages
+ */
+function ioby_campaign_projectmap() {
+
+  //setting up array per /help/gmap/api and help/gmap/array
+  $map = array(
+    'id'          => 'campaign-projects-full-map',
+    'width'       => '100%',
+    'height'      => '500px',
+    'latitude'    => '38.959409',
+    'longitude'   => '-95.097656',
+    'zoom'        => 3,
+    'maptype'     => 'Map',
+    'controltype' => 'Large',
+    'mtc'         => 'standard',
+    'markername'  => 'lblue',
+    'rmtcallback' => url('projectinfo/popup'),
+  );
+
+  //get the view and populate the map
+  $campaign_id = arg(1);
+  $projects = views_get_view_result('campaign_tabs', 'page_1', $campaign_id);
+  $markers = array();
+  $nodes_mapped = array(); //only map a project once, even if it has multiple locations (first location is the one we want)
+
+  foreach ($projects as $proj) {
+    if (!in_array($proj->node_field_data_field_campaign_project_nid, $nodes_mapped)) {
+      $has_coordinates = (int)($proj->node_field_data_field_campaign_project__location_latitude + $proj->node_field_data_field_campaign_project__location_longitude);
+      if ($has_coordinates) {
+        $markers[] = array(
+          'markername' => 'lblue', //conditionalize later for project status
+          'latitude'   => $proj->node_field_data_field_campaign_project__location_latitude,
+          'longitude'  => $proj->node_field_data_field_campaign_project__location_longitude,
+          'rmt'        => $proj->node_field_data_field_campaign_project_nid,
+        );
+        $nodes_mapped[] = $proj->node_field_data_field_campaign_project_nid;
+      }
+    }
+  }
+
+  $map['markers'] = $markers;
+  $element = array('#type' => 'gmap', '#gmap_settings' => $map);
+  return array('#markup' => drupal_render($element));
+}
+
+
+// I may not need these anymore ~markie
+/**
+ * Implements hook_field_formatter_info().
+ */
+function ioby_field_formatter_info() {
+  return array(
+    'addressfield_name_only' => array(
+      'label' => t('Name Only'),
+      'field types' => array('addressfield'),
+    ),
+    'addressfield_address_only' => array(
+      'label' => t('Address Only'),
+      'field types' => array('addressfield'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function ioby_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $settings = $display['settings'];
+  $element = array();
+  switch ($display['type']) {
+    // Override check plain
+    case 'addressfield_name_only':
+      foreach ($items as $delta => $item) {
+        $name = $item['first_name'] . ' ' . $item['last_name'];
+        $element[$delta] = array(
+          '#markup' => '<div class="donor-name">'.$name."</div>",
+        );
+      }
+      break;
+    case 'addressfield_address_only':
+      if (!empty($settings['use_widget_handlers'])) {
+        $handlers = $instance['widget']['settings']['format_handlers'];
+      }
+      else {
+        $handlers = $settings['format_handlers'];
+      }
+      foreach ($items as $delta => $address) {
+        // Generate the address format.
+        $context = array(
+          'mode' => 'render',
+          'field' => $field,
+          'instance' => $instance,
+          'langcode' => $langcode,
+          'delta' => $delta,
+        );
+
+        unset($address['first_name'], $address['last_name']);
+
+        $element[$delta] = addressfield_generate($address, $handlers, $context);
+      }
+      break;
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_commerce_google_analytics_transaction_alter().
+ *
+ * @param array $transaction The GA transaction to track
+ * @param object $order The order to convert to a GA transaction
+ */
+function ioby_commerce_google_analytics_transaction_alter(&$transaction, $order) {
+  $profile = commerce_customer_profile_load($order->commerce_customer_billing->profile_id->value());
+  if (isset($profile->commerce_customer_address[LANGUAGE_NONE][0])) {
+    $address = $profile->commerce_customer_address[LANGUAGE_NONE][0];
+
+    if (isset($address['administrative_area'])) {
+      $transaction['state'] = $address['administrative_area'];
+    }
+  }
+}
+
+/**
+ * Implements hook_commerce_google_analytics_item().
+ *
+ * @param array $item The GA item to track
+ * @param object $line_item The line item to convert to a GA item
+ * @param array $transaction The GA transaction to track
+ * @param object $order The order to convert to a GA transaction
+ */
+function ioby_commerce_google_analytics_item_alter(&$item, $line_item, &$transaction, $order) {
+  // Use a unique but user-friendly SKU for Google Analytics
+  $ga_sku = t('Order: @order_id, Line Item: @line_item_id', array(
+    '@order_id' => $line_item->order_id->value(),
+    '@line_item_id' => $line_item->line_item_id->value(),
+  ));
+
+  // changed to preg_match to test, due to system variations.
+  if (preg_match('/coupon/', $line_item->type->value())) {
+    $item['sku'] = $ga_sku;
+    $item['name'] = $line_item->line_item_label->value();
+    $item['category'] = t('Coupon');
+  }
+  elseif (isset($line_item->commerce_product)) {
+    $product = $line_item->commerce_product;
+
+    // Handle project line items
+    if ($product->type->value() == 'project') {
+      $item['sku'] = $ga_sku;
+
+      if (isset($product->field_project_node)) {
+        $project = $product->field_project_node->value();
+        if (isset($project)) {
+          $item['name'] = t('(@nid) @title', array(
+            '@nid' => $project->nid,
+            '@title' => $project->title,
+          ));
+        }
+        else {
+          $item['name'] = $product->title->value();
+        }
+      }
+      $item['category'] = t('Project');
+    }
+    // Handle gratuity line items
+    elseif ($product->type->value() == 'gratuity') {
+      $item['sku'] = $ga_sku;
+      $item['name'] = t('Gratuity');
+      $item['category'] = t('Gratuity');
+    }
+  }
+}
+
+/**
+ * Gets states from existing projects and returns an options array
+ * @return array $states_out
+ */
+function ioby_find_project_states() {
+  $query = db_select('location', 'l')
+      ->fields('l', array('province'))
+      ->distinct();
+  $query->leftJoin('field_data_field_project_address', 'dpa', 'dpa.field_project_address_lid = l.lid');
+    //	->distinct()
+    //	->leftJoin('field_data_project_address', 'dpa', 'dpa.field_project_address_lid = l.lid');
+
+  $results = $query->execute();
+  $states = location_get_provinces();
+  $states_out = array('' =>'All');
+  while($state_used = $results->fetchAssoc()) {
+    $key = $state_used['province'];
+    if($key) {
+      $states_out[$key] = $states[$key];
+    }
+  }
+  ksort($states_out);
+  return $states_out;
+}
+
+function ioby_campaign_status_check($campaign_id = NULL) {
+  $out = array();
+  if(!$campaign_id) {
+    return FALSE;
+  }
+
+  $campaign_wrapper = entity_metadata_wrapper('node', node_load($campaign_id));
+  $title = '<h2>' . $campaign_wrapper->title->value() . '</h2>';
+  $sponsor_title = $campaign_wrapper->field_campaign_sponsor->title->value();
+  // Default message (this should probably be an admin setting with TOKENS)
+  $msg = '<p>' . $sponsor_title . ' is proud to sponsor this project!</p>';
+
+  // skip over completed campaigns.
+  if ($campaign_wrapper->field_campaign_complete->value()) {
+    return $msg . 'Campaign completed';
+  }
+
+  $campaign_amount = number_format($campaign_wrapper->field_campaign_amount->value(), 2);
+
+  $dm_query = new EntityFieldQuery();
+  $dm_entites = $dm_query->entityCondition('entity_type', 'node')
+                        ->entityCondition('bundle', 'donation_match')
+                        ->fieldCondition('field_donation_match_campaign', 'nid', $campaign_id)
+                        ->fieldCondition('field_donation_match_status', 'value', DONATION_MATCH_STATUS_COMPLETE)
+                        ->addTag('DANGEROUS_ACCESS_CHECK_OPT_OUT')
+                        ->execute();
+  $used = 0;
+  if(array_key_exists('node', $dm_entites)) {
+    $donation_matches = node_load_multiple(array_keys($dm_entites['node']));
+    foreach($donation_matches as $donation_match) {
+      $used += $donation_match->field_donation_match_amount[LANGUAGE_NONE][0]['value'];
+    }
+  }
+
+  return $title . $msg . ' $' . number_format($used, 2) . ' matched out of a total ' . $campaign_amount;
+}
+
+function ioby_reports() {
+  $report_links = array();
+  $views = views_get_all_views();
+  foreach ($views as $view) {
+    if (strpos($view->tag, 'reports') !== FALSE) {
+      //$report_links[$view->name] = array('title' => $view->human_name, 'href' => $view->display['page']->display_options['path']);
+      $report_links[] = l($view->human_name, $view->display['page']->display_options['path']) . '<br />' . $view->description;
+    }
+  }
+
+  return theme('item_list', array('items' => $report_links, 'title' => t('Reports'), 'type' => 'ul'));
+}
+
+/**
+ * Form callback to display for for configuring text for various popups.
+ */
+function iobypopup_settings() {
+  $form = array();
+
+  $empty_default = array(
+    'value' => '',
+    'format' => 'filtered_text'
+  );
+
+  $iobypopup_gratuity_info = variable_get('iobypopup_gratuity_info', $empty_default);
+  $form['iobypopup_gratuity_info'] = array(
+    '#type' => 'text_format',
+    '#title' => t('Gratuity Information Popup Text'),
+    '#format' => $iobypopup_gratuity_info['format'],
+    '#default_value' => $iobypopup_gratuity_info['value'],
+  );
+
+  $iobypopup_gratuity_remove = variable_get('iobypopup_gratuity_remove', $empty_default);
+  $form['iobypopup_gratuity_remove'] = array(
+    '#type' => 'text_format',
+    '#title' => t('Gratuity Removal Confirmation Popup Text'),
+    '#format' => $iobypopup_gratuity_remove['format'],
+    '#default_value' => $iobypopup_gratuity_remove['value'],
+  );
+
+  $iobypopup_hide_donor_info = variable_get('iobypopup_hide_donor_info', $empty_default);
+  $form['iobypopup_hide_donor_info'] = array(
+    '#type' => 'text_format',
+    '#title' => t('Hide Donor Info Checkbox Popup Text'),
+    '#format' => $iobypopup_hide_donor_info['format'],
+    '#default_value' => $iobypopup_hide_donor_info['value'],
+  );
+
+  $iobypopup_donor_display_name = variable_get('iobypopup_donor_display_name', $empty_default);
+  $form['iobypopup_donor_display_name'] = array(
+    '#type' => 'text_format',
+    '#title' => t('Donor Display Name Popup Text'),
+    '#format' => $iobypopup_donor_display_name['format'],
+    '#default_value' => $iobypopup_donor_display_name['value'],
+  );
+
+  $iobypopup_share_donor_email = variable_get('iobypopup_share_donor_email', $empty_default);
+  $form['iobypopup_share_donor_email'] = array(
+    '#type' => 'text_format',
+    '#title' => t('Share Donor Email Checkbox Popup Text'),
+    '#format' => $iobypopup_share_donor_email['format'],
+    '#default_value' => $iobypopup_share_donor_email['value'],
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Implements hook_user_presave().
+ * @author Russom Woldezghi
+ * @todo Add help text to full name field, what this code does.
+ */
+function ioby_user_presave(&$edit, $account, $category) {
+  // Check to see if first and last name field empty
+  if(!empty($edit->field_first_name) && !empty($edit->field_last_name) ){
+    $first_name = $edit['field_first_name']['und'][0]['value'];
+    $last_name = $edit['field_last_name']['und'][0]['value'];
+    // Full name, concatenated
+    if(empty($edit->field_user_fullname)){
+      $edit['field_user_fullname']['und'][0]['value'] = $first_name.' '.$last_name;
+    }
+  }
+}
+
+/**
+ * Implements hook_commerce_line_item_summary_link_info_alter
+ */
+function iobytheme_commerce_line_item_summary_link_info_alter(&$links) {
+  if (!empty($links['view_cart'])) {
+    $links['view_cart']['title'] = t('cart');
+  }
+}
+
+/**
+ * Implements hook_node_view_alter().
+ */
+function ioby_node_view_alter(&$build) {
+
+  // If full view mode and page content type
+ if ($build['#view_mode'] == 'full' && $build['#bundle'] == 'page') {
+  // return if not any of these nid's below
+  switch ($build['#node']->nid) {
+    case '34783':
+    case '39632':
+    // hide sharethis markup
+    unset($build['sharethis']);
+    return;
+   }
+  }
+}
+
+/**
+ * Implements hook_node_access()
+ * @param  $node
+ * @param  $op
+ * @param  $account
+ * @return NODE_ACCESS_IGNORE
+ */
+function ioby_node_access($node, $op, $account) {
+  global $user, $language;
+  // disallow anon access to /idea-start node
+  if (!empty($node) && is_object($node) && $node->nid == '34783') {
+    if (user_is_anonymous()) {
+      return NODE_ACCESS_DENY;
+    }
+  }
+  return NODE_ACCESS_IGNORE;
+}

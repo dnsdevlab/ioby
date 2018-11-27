@@ -1,0 +1,13 @@
+Index: sites/all/modules/contrib/maxlength/js/maxlength.js
+===================================================================
+--- sites/all/modules/contrib/maxlength/js/maxlength.js	(revision 26789)
++++ sites/all/modules/contrib/maxlength/js/maxlength.js	(working copy)
+@@ -109,7 +109,7 @@
+       counter.removeClass(options.cssExceeded);
+     }
+ 
+-    counter.html(options.counterText.replace('@limit', limit).replace('@remaining', available));
++    counter.html(options.counterText.replace('@limit', limit).replace('@remaining', available).replace('@count', count));
+   };
+ 
+   /**

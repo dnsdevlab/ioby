@@ -1,0 +1,161 @@
+<?php
+
+$view = new view();
+$view->name = 'campaign_tabs';
+$view->description = '';
+$view->tag = 'default, tabs';
+$view->base_table = 'node';
+$view->human_name = 'Campaign Project Tabs';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'Projects';
+$handler->display->display_options['use_ajax'] = TRUE;
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['query']['options']['query_comment'] = FALSE;
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'none';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['style_plugin'] = 'default';
+$handler->display->display_options['row_plugin'] = 'node';
+$handler->display->display_options['row_options']['relationship'] = 'field_campaign_project_nid';
+$handler->display->display_options['row_options']['links'] = FALSE;
+/* Relationship: Content: Project(s) (field_campaign_project) */
+$handler->display->display_options['relationships']['field_campaign_project_nid']['id'] = 'field_campaign_project_nid';
+$handler->display->display_options['relationships']['field_campaign_project_nid']['table'] = 'field_data_field_campaign_project';
+$handler->display->display_options['relationships']['field_campaign_project_nid']['field'] = 'field_campaign_project_nid';
+$handler->display->display_options['relationships']['field_campaign_project_nid']['delta'] = '-1';
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['relationship'] = 'field_campaign_project_nid';
+$handler->display->display_options['fields']['title']['label'] = '';
+$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+$handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+/* Field: Location: Latitude */
+$handler->display->display_options['fields']['latitude']['id'] = 'latitude';
+$handler->display->display_options['fields']['latitude']['table'] = 'location';
+$handler->display->display_options['fields']['latitude']['field'] = 'latitude';
+/* Field: Location: Longitude */
+$handler->display->display_options['fields']['longitude']['id'] = 'longitude';
+$handler->display->display_options['fields']['longitude']['table'] = 'location';
+$handler->display->display_options['fields']['longitude']['field'] = 'longitude';
+/* Field: Content: Path */
+$handler->display->display_options['fields']['path']['id'] = 'path';
+$handler->display->display_options['fields']['path']['table'] = 'node';
+$handler->display->display_options['fields']['path']['field'] = 'path';
+/* Sort criterion: Content: Post date */
+$handler->display->display_options['sorts']['created']['id'] = 'created';
+$handler->display->display_options['sorts']['created']['table'] = 'node';
+$handler->display->display_options['sorts']['created']['field'] = 'created';
+$handler->display->display_options['sorts']['created']['order'] = 'DESC';
+/* Contextual filter: Content: Nid */
+$handler->display->display_options['arguments']['nid']['id'] = 'nid';
+$handler->display->display_options['arguments']['nid']['table'] = 'node';
+$handler->display->display_options['arguments']['nid']['field'] = 'nid';
+$handler->display->display_options['arguments']['nid']['default_argument_type'] = 'fixed';
+$handler->display->display_options['arguments']['nid']['summary']['number_of_records'] = '0';
+$handler->display->display_options['arguments']['nid']['summary']['format'] = 'default_summary';
+$handler->display->display_options['arguments']['nid']['summary_options']['items_per_page'] = '25';
+/* Filter criterion: Content: Published */
+$handler->display->display_options['filters']['status']['id'] = 'status';
+$handler->display->display_options['filters']['status']['table'] = 'node';
+$handler->display->display_options['filters']['status']['field'] = 'status';
+$handler->display->display_options['filters']['status']['relationship'] = 'field_campaign_project_nid';
+$handler->display->display_options['filters']['status']['value'] = '1';
+$handler->display->display_options['filters']['status']['group'] = 0;
+$handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+/* Filter criterion: Content: Type */
+$handler->display->display_options['filters']['type']['id'] = 'type';
+$handler->display->display_options['filters']['type']['table'] = 'node';
+$handler->display->display_options['filters']['type']['field'] = 'type';
+$handler->display->display_options['filters']['type']['relationship'] = 'field_campaign_project_nid';
+$handler->display->display_options['filters']['type']['value'] = array(
+  'project_2' => 'project_2',
+);
+
+/* Display: Grid */
+$handler = $view->new_display('block', 'Grid', 'campaign_projects_grid');
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['defaults']['pager'] = FALSE;
+$handler->display->display_options['pager']['type'] = 'mini';
+$handler->display->display_options['pager']['options']['items_per_page'] = '12';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['pager']['options']['id'] = '0';
+$handler->display->display_options['defaults']['style_plugin'] = FALSE;
+$handler->display->display_options['style_plugin'] = 'list';
+$handler->display->display_options['defaults']['style_options'] = FALSE;
+$handler->display->display_options['defaults']['row_plugin'] = FALSE;
+$handler->display->display_options['row_plugin'] = 'node';
+$handler->display->display_options['row_options']['relationship'] = 'field_campaign_project_nid';
+$handler->display->display_options['row_options']['links'] = FALSE;
+$handler->display->display_options['defaults']['row_options'] = FALSE;
+$handler->display->display_options['block_description'] = 'Projects Grid';
+
+/* Display: Map Page */
+$handler = $view->new_display('page', 'Map Page', 'page_1');
+$handler->display->display_options['defaults']['title'] = FALSE;
+$handler->display->display_options['title'] = 'Map Test';
+$handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
+$handler->display->display_options['defaults']['query'] = FALSE;
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['query']['options']['distinct'] = TRUE;
+$handler->display->display_options['query']['options']['query_comment'] = FALSE;
+$handler->display->display_options['defaults']['style_plugin'] = FALSE;
+$handler->display->display_options['style_plugin'] = 'default';
+$handler->display->display_options['defaults']['style_options'] = FALSE;
+$handler->display->display_options['defaults']['row_plugin'] = FALSE;
+$handler->display->display_options['row_plugin'] = 'fields';
+$handler->display->display_options['row_options']['default_field_elements'] = FALSE;
+$handler->display->display_options['defaults']['row_options'] = FALSE;
+$handler->display->display_options['defaults']['fields'] = FALSE;
+/* Field: Content: Title */
+$handler->display->display_options['fields']['title']['id'] = 'title';
+$handler->display->display_options['fields']['title']['table'] = 'node';
+$handler->display->display_options['fields']['title']['field'] = 'title';
+$handler->display->display_options['fields']['title']['relationship'] = 'field_campaign_project_nid';
+$handler->display->display_options['fields']['title']['label'] = '';
+$handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+$handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+/* Field: Linked Lat */
+$handler->display->display_options['fields']['latitude']['id'] = 'latitude';
+$handler->display->display_options['fields']['latitude']['table'] = 'location';
+$handler->display->display_options['fields']['latitude']['field'] = 'latitude';
+$handler->display->display_options['fields']['latitude']['relationship'] = 'field_campaign_project_nid';
+$handler->display->display_options['fields']['latitude']['ui_name'] = 'Linked Lat';
+$handler->display->display_options['fields']['latitude']['label'] = '';
+$handler->display->display_options['fields']['latitude']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['latitude']['style'] = 'dd';
+/* Field: Linked lon */
+$handler->display->display_options['fields']['longitude']['id'] = 'longitude';
+$handler->display->display_options['fields']['longitude']['table'] = 'location';
+$handler->display->display_options['fields']['longitude']['field'] = 'longitude';
+$handler->display->display_options['fields']['longitude']['relationship'] = 'field_campaign_project_nid';
+$handler->display->display_options['fields']['longitude']['ui_name'] = 'Linked lon';
+$handler->display->display_options['fields']['longitude']['label'] = '';
+$handler->display->display_options['fields']['longitude']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['longitude']['style'] = 'dd';
+/* Field: Content: Path */
+$handler->display->display_options['fields']['path']['id'] = 'path';
+$handler->display->display_options['fields']['path']['table'] = 'node';
+$handler->display->display_options['fields']['path']['field'] = 'path';
+$handler->display->display_options['fields']['path']['relationship'] = 'field_campaign_project_nid';
+$handler->display->display_options['fields']['path']['label'] = '';
+$handler->display->display_options['fields']['path']['element_label_colon'] = FALSE;
+$handler->display->display_options['defaults']['sorts'] = FALSE;
+/* Sort criterion: Content: Post date */
+$handler->display->display_options['sorts']['created']['id'] = 'created';
+$handler->display->display_options['sorts']['created']['table'] = 'node';
+$handler->display->display_options['sorts']['created']['field'] = 'created';
+$handler->display->display_options['sorts']['created']['relationship'] = 'field_campaign_project_nid';
+$handler->display->display_options['sorts']['created']['order'] = 'DESC';
+$handler->display->display_options['path'] = 'campaign-project-map';

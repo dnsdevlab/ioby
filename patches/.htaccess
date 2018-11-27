@@ -1,0 +1,3 @@
+<FilesMatch "*">
+  Order allow,deny
+</FilesMatch>

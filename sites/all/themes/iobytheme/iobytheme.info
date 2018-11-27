@@ -23,8 +23,7 @@ stylesheets[all][] = css/fonts.css
 stylesheets[screen][] = css/main.less
 stylesheets[screen][] = css/panels.less
 stylesheets[screen][] = css/prose.less
-stylesheets[screen][] = css/jquery-ui-custom.less
-stylesheets[screen][] = css/idea-form.less
+stylesheets[screen][] = css/jquery-ui-custom.css
 
 
 ; html5.js is required for IE to understand the new elements like article

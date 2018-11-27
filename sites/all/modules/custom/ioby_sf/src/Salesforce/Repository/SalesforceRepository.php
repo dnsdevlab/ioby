@@ -307,49 +307,6 @@ class SalesforceRepository
   }
 
   /**
-   * Gets Order objects for each Commerce order waiting to be synced.
-   *
-   * @return array
-   *    An array of Order objects.
-   */
-  public function getCommerceOrders() {
-    $records = db_select('ioby_sf_order_line_items', 'l')
-      ->distinct()
-      ->fields('l', array('commerce_order_id', 'created'))
-      ->condition('l.needs_update', intval(TRUE), '=')
-      ->range(0, $this->record_limit)
-      ->execute()->fetchAll();
-
-    $orders = array();
-    foreach ($records as $record) {
-      $orders[] = ModelLoader::loadOrderRowData($record);
-    }
-
-    return $orders;
-  }
-
-  /**
-   * Gets OrderLineItem objects for ine items that are ready to be synced.
-   *
-   * @return array
-   *    An array of OrderLineItem objects.
-   */
-  public function getOrderLineItems() {
-    $records = db_select('ioby_sf_order_line_items', 'l')
-      ->fields('l')
-      ->condition('l.needs_update', intval(TRUE), '=')
-      ->range(0, $this->record_limit)
-      ->execute()->fetchAll();
-
-    $orders = array();
-    foreach ($records as $record) {
-      $orders[] = ModelLoader::loadOrderLineItemRowData($record);
-    }
-
-    return $orders;
-  }
-
-  /**
    * @return Opportunity[]
    */
   public function getManualOpportunitiesForUpdate() {
@@ -415,7 +372,6 @@ class SalesforceRepository
       ->setProjectCity($campaign_row->project_city)
       ->setProjectState($campaign_row->project_state)
       ->setProjectZip($campaign_row->project_zip)
-      ->setProjectBorough($campaign_row->project_borough)
       ->setCreated($campaign_row->created)
       ->setChanged($campaign_row->changed)
       ->setNeedsUpdate($campaign_row->needs_update)
@@ -471,7 +427,6 @@ class SalesforceRepository
       ->setOtherCountry($contact_row->other_country)
       ->setOtherPhone($contact_row->other_phone)
       ->setAlternateEmail($contact_row->alternate_email)
-      ->setBirthDate($contact_row->birth_date)
       ->setSalesforceRecordId($contact_row->salesforce_record_id)
       ->setCreated($contact_row->created)
       ->setChanged($contact_row->changed)

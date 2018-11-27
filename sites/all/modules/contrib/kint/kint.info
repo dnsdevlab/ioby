@@ -1,9 +1,0 @@
-name = Kint
-description = Kint debug tool
-configure = admin/config/development/kint
-package = Development
-core = 7.x
-
-dependencies[] = libraries
-
-version = 7.x-dev

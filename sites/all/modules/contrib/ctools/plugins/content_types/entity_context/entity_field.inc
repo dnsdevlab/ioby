@@ -34,14 +34,6 @@ function ctools_entity_field_content_type_content_types() {
     return $types;
   }
 
-  $cache_key = 'ctools_entity_field_content_type_content_types';
-  if ($cache = cache_get($cache_key)) {
-    $types = $cache->data;
-    if (!empty($types)) {
-      return $types;
-    }
-  }
-
   // This will hold all the individual field content types.
   $context_types = array();
   $entities = entity_get_info();
@@ -89,8 +81,6 @@ function ctools_entity_field_content_type_content_types() {
     ));
     unset($context_types[$key]['types']);
   }
-
-  cache_set($cache_key, $types);
 
   return $types;
 }

@@ -36,7 +36,7 @@ $handler->display->display_options['style_options']['columns'] = array(
   'created' => 'created',
   'changed' => 'changed',
   'field_project_status' => 'field_project_status',
-  'field_project_cost' => 'field_project_cost',
+  'field_project_total_cost' => 'field_project_total_cost',
   'total' => 'total',
 );
 $handler->display->display_options['style_options']['default'] = 'created';
@@ -104,7 +104,7 @@ $handler->display->display_options['style_options']['info'] = array(
     'separator' => '',
     'empty_column' => 0,
   ),
-  'field_project_cost' => array(
+  'field_project_total_cost' => array(
     'sortable' => 1,
     'default_sort_order' => 'asc',
     'align' => 'views-align-right',
@@ -155,13 +155,13 @@ $handler->display->display_options['fields']['field_contact_first']['id'] = 'fie
 $handler->display->display_options['fields']['field_contact_first']['table'] = 'field_data_field_contact_first';
 $handler->display->display_options['fields']['field_contact_first']['field'] = 'field_contact_first';
 $handler->display->display_options['fields']['field_contact_first']['label'] = 'First Name';
-/* Field: Content: email */
+/* Field: Content: Preferred Email */
 $handler->display->display_options['fields']['field_project_contact_email']['id'] = 'field_project_contact_email';
 $handler->display->display_options['fields']['field_project_contact_email']['table'] = 'field_data_field_project_contact_email';
 $handler->display->display_options['fields']['field_project_contact_email']['field'] = 'field_project_contact_email';
 $handler->display->display_options['fields']['field_project_contact_email']['label'] = 'Email';
 $handler->display->display_options['fields']['field_project_contact_email']['type'] = 'email_plain';
-/* Field: Content: Phone */
+/* Field: Content: Your Phone Number */
 $handler->display->display_options['fields']['field_project_contact_phone']['id'] = 'field_project_contact_phone';
 $handler->display->display_options['fields']['field_project_contact_phone']['table'] = 'field_data_field_project_contact_phone';
 $handler->display->display_options['fields']['field_project_contact_phone']['field'] = 'field_project_contact_phone';
@@ -202,12 +202,12 @@ $handler->display->display_options['fields']['field_project_status']['id'] = 'fi
 $handler->display->display_options['fields']['field_project_status']['table'] = 'field_data_field_project_status';
 $handler->display->display_options['fields']['field_project_status']['field'] = 'field_project_status';
 $handler->display->display_options['fields']['field_project_status']['label'] = 'Status';
-/* Field: Content: Project Cost */
-$handler->display->display_options['fields']['field_project_cost']['id'] = 'field_project_cost';
-$handler->display->display_options['fields']['field_project_cost']['table'] = 'field_data_field_project_cost';
-$handler->display->display_options['fields']['field_project_cost']['field'] = 'field_project_cost';
-$handler->display->display_options['fields']['field_project_cost']['label'] = 'Budget total';
-$handler->display->display_options['fields']['field_project_cost']['settings'] = array(
+/* Field: Content: Total to Raise */
+$handler->display->display_options['fields']['field_project_total_cost']['id'] = 'field_project_total_cost';
+$handler->display->display_options['fields']['field_project_total_cost']['table'] = 'field_data_field_project_total_cost';
+$handler->display->display_options['fields']['field_project_total_cost']['field'] = 'field_project_total_cost';
+$handler->display->display_options['fields']['field_project_total_cost']['label'] = 'Budget total';
+$handler->display->display_options['fields']['field_project_total_cost']['settings'] = array(
   'thousand_separator' => ',',
   'decimal_separator' => '.',
   'scale' => '2',
@@ -317,7 +317,7 @@ $handler->display->display_options['filters']['field_contact_last_value']['expos
   5 => 0,
   6 => 0,
 );
-/* Filter criterion: Content: email (field_project_contact_email) */
+/* Filter criterion: Content: Preferred Email (field_project_contact_email) */
 $handler->display->display_options['filters']['field_project_contact_email_email']['id'] = 'field_project_contact_email_email';
 $handler->display->display_options['filters']['field_project_contact_email_email']['table'] = 'field_data_field_project_contact_email';
 $handler->display->display_options['filters']['field_project_contact_email_email']['field'] = 'field_project_contact_email_email';

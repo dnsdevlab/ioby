@@ -1,4 +1,4 @@
-/* Simple parser for CSS */
+﻿/* Simple parser for CSS */
 
 var CSSParser = Editor.Parser = (function() {
   var tokenizeCSS = (function() {

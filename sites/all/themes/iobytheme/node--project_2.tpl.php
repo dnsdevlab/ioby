@@ -148,12 +148,17 @@
       <?php print $project_gallery; ?>
       <dl class="specs">
         <dt>project leader</dt>
-        <dd><?php print $name ?></dd>
+        <dd>
+          <?php if (!empty($content['field_project_leader_name'])) : ?>
+            <?php print render($content['field_project_leader_name']); ?>
+          <?php else: ?>
+            <?php print $name ?>
+          <?php endif; ?>
+        </dd>
         <dt>location</dt>
         <dd>
           <?php
             print render($content['field_project_address']);
-            print render($content['field_project_boroughs']);
             print render($content['field_project_neighborhood']);
           ?>
         </dd>
@@ -182,7 +187,12 @@
 
   <div class="pane" id="budget">
     <h2>budget</h2>
-    <?php print render($content['field_project_budget']); ?>
+    <?php if (isset($node->project_form_version) && $node->project_form_version == 1 ): ?>
+      <?php print render($content['field_project_budget']); ?>
+    <?php else: ?>
+      <?php print render($content['field_budget_sandbox']); ?>
+    <?php endif; ?>
+
   </div>
 
   <div class="pane" id="updates">
@@ -248,17 +258,8 @@
     $volunteers = 0;
   }
 ?>
-
-<?php
-  // Fund status IOBY-66
-  // Show if node is underway or completed with funded logo
-  // Underway (starting project) and/or completed (completed projecet)
-  // are funded considered funded.
-  $project_status = iobyproject_funding($node->nid);
- ?>
-<article id="node-<?php print $node->nid; ?>" class="<?php print $project_status; ?> project-miniview <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+<article id="node-<?php print $node->nid; ?>" class="project-miniview <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <div class="main-info">
-
     <?php if(!empty($sponsors)> 0) : ?>
       <div class="sponsor-ribbon ribbon-small">
       <?php foreach ($sponsors as $sponsor_info) :?>
@@ -283,15 +284,13 @@
     </div>
     <div class="project-needs">
       NEEDS: <span class="project-amt">$<?php print number_format($amount_to_go);?></span>
-      of <?php print number_format($content['field_project_cost'][0]['#markup']);?>
+      of <?php print $content['field_project_total_cost'][0]['#markup'];?>
       <?php echo $volunteers != 1 ? '' : '+ <span class="needs-volunteers">Volunteers</span>';?>
     </div>
     <div class="project-meter">
       <div class="progress-bar" style="height:<?php echo $pct_done;?>%"></div>
     </div>
   </div>
-
-
 </article>
 <?php
 //this should be for project submission preview only
@@ -304,7 +303,6 @@ else: ?>
         <dd>
           <?php
             print render($content['field_project_address']);
-            print render($content['field_project_boroughs']);
             print render($content['field_project_neighborhood']);
           ?>
         </dd>
@@ -322,7 +320,7 @@ else: ?>
         ?></dd>
         <dt>Funds Needed</dt>
         <dd><?php
-          print str_replace("$$", "$",render($content['field_project_cost']));
+          print str_replace("$$", "$",render($content['field_project_total_cost']));
         ?></dd>
 
       </dl>

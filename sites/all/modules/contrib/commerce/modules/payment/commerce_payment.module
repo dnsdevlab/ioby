@@ -612,14 +612,12 @@ function commerce_payment_method_get_title($title = 'title', $method = NULL) {
     }
   }
 
-  // Otherwise create an array of all payment method titles.
-  $titles = array();
-
+  // Otherwise turn the array values into the specified title only.
   foreach ($payment_methods as $key => $value) {
-    $titles[$key] = $value[$title];
+    $payment_methods[$key] = $value[$title];
   }
 
-  return $titles;
+  return $payment_methods;
 }
 
 /**

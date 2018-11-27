@@ -12,6 +12,7 @@
 @plum: #780032;
 @grey: #696a6d;
 @smoke: #b3b3b3;
+@white: #fff;
 
 @interact: @orange;
 @active: @plum;
@@ -19,10 +20,10 @@
 @vlight: #f4f4f1;
 
 .rounded (@radius: 15px) {
+  border-radius: @radius;
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
   -khtml-border-radius: @radius;
-  border-radius: @radius;
 }
 
 .bottom-rounded (@radius: 15px) {
@@ -215,27 +216,27 @@ input, select {
 
 select {
   border: 1px solid #C7C8B7;
-  color: #780032;
+  color: #000;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-  background: rgba(255,255,255,0.75);;
-  border: solid 2px #fff;
-  -webkit-border-radius: 7px;
+    width: 10px;
+    height: 10px;
+    background: rgba(255,255,255,0.75);;
+    border: solid 2px #fff;
+    -webkit-border-radius: 7px;
 }
 
 
 
 ::-webkit-scrollbar-track-piece {
-  background-color: rgba(255,255,255,0.0);
-  -webkit-border-radius: 3px;
+    background-color: rgba(255,255,255,0.0);
+    -webkit-border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #3599CC;
-  -webkit-border-radius: 5px;
+    background-color: #3599CC;
+    -webkit-border-radius: 5px;
 }
 
 
@@ -349,32 +350,12 @@ header#pageheader {
 #rail {
   float:left;
   width: 340px;
-  padding-right: 0;
-  padding-left: 10px;
-  padding-top: 20px;
-
-  .stat_num {
-    font-size:300%;
-    font-weight:bold;
-    line-height:1em;
-  }
-
-  .stat_label {
-    .smallcaps;
-    margin-bottom: 15px;
-  }
-
-  h3 {
-    font-family: Kreon,"Arial Narrow",sans-serif;
-    margin: 0 0 30px 0;
-    font-weight: 900;
-  }
+  padding-right: 10px;
+  padding-top: 10px;
 }
 
-#rail section,
-#rail .region-sidebar > div {
+#rail section {
   background-color: @vlight;
-  padding: 20px;
   margin-bottom: 10px;
   &:before,
   &:after {
@@ -543,39 +524,14 @@ a.rss {
 
 .region-loginpop {
   position: absolute;
-  background: white;
-  top:28px;
-  right:-99px;
-  width:196px;
-  padding:10px 20px;
+  background: @beige;
+  top:20px;
+  right:3px;
+  width:180px;
+  padding:0 10px;
   display: none;
-  border:1px solid #ccc;
+  border:1px solid #fff;
   border-top:none;
-
-  input[type="text"],
-  input[type="password"] {
-    -moz-border-radius: 2px !important;
-    -webkit-border-radius: 2px !important;
-    border-radius: 2px !important;
-    line-height: 1.4;
-    padding: 5px 10px;
-    box-shadow: none;
-    background: none;
-    border: 1px solid #ece6dc;
-    width: 100%;
-  }
-
-  .tools li li a, ul.item-list li a {
-    color: #9F9F9F !important;
-  }
-
-  .form-actions.form-wrapper .form-submit {
-
-  }
-
-  label {
-    margin-bottom: 4px;
-  }
 }
 
 .region-loginpop li.first {
@@ -584,6 +540,7 @@ a.rss {
 
 .region-loginpop h2 {
   display: none;
+  text-align: left;
 }
 
 .tools a.activated {
@@ -602,6 +559,7 @@ a.rss {
 
 .tools li li a {
   text-transform: none;
+  color:#fff;
 }
 
 a#logo {
@@ -671,27 +629,6 @@ h6.locale {
   width: 120px;
 }
 
-.button.button-blue,
-a.button.button-blue,
-input.button.button-blue {
-  /* used with .button class to turn button blue, requires .button for sizing/positioning */
-  background: rgb(52, 170, 228); /* Old browsers */
-  background: -moz-linear-gradient(top,  rgb(52, 170, 228) 1%, rgb(48, 156, 209) 53%, rgb(47, 153, 205) 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgb(52, 170, 228)), color-stop(53%,rgb(48, 156, 209)), color-stop(100%,rgb(47, 153, 205))); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  rgb(52, 170, 228) 1%,rgb(48, 156, 209) 53%,rgb(47, 153, 205) 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  rgb(52, 170, 228) 1%,rgb(48, 156, 209) 53%,rgb(47, 153, 205) 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  rgb(52, 170, 228) 1%,rgb(48, 156, 209) 53%,rgb(47, 153, 205) 100%); /* IE10+ */
-  background: linear-gradient(to bottom,  rgb(52, 170, 228) 1%,rgb(48, 156, 209) 53%,rgb(47, 153, 205) 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34aae4', endColorstr='#2f99cd',GradientType=0 ); /* IE6-9 */
-  -webkit-transition: background-position .25s ease;
-  -moz-transition: background-position .25s ease;
-  -ms-transition: background-position .25s ease;
-  -o-transition: background-position .25s ease;
-  transition: background-position .25s ease;
-  background-size:100% 100px ;
-  border: 1px solid #3599cc;
-}
-
 #intro #greeting {
   width: 160px;
   background-color: #fff;
@@ -720,10 +657,10 @@ input.button.button-blue {
   .feature-overlay-right {
     background:transparent;
     filter: progid:DXImageTransform.Microsoft.gradient(
-            gradientType=1, startColor=0, endColorStr=#e9e9e2
+      gradientType=1, startColor=0, endColorStr=#e9e9e2
     );
     -ms-filter: progid:DXImageTransform.Microsoft.gradient(
-            gradientType=1, startColor=0, endColorStr=#e9e9e2
+      gradientType=1, startColor=0, endColorStr=#e9e9e2
     );
     background-image:-o-linear-gradient(right, @light, rgba(236,230,220,0));
     background-image:-moz-linear-gradient(right, @light, rgba(236,230,220,0));
@@ -741,10 +678,10 @@ input.button.button-blue {
   .feature-overlay-left {
     background:transparent;
     filter: progid:DXImageTransform.Microsoft.gradient(
-            gradientType=1, startColorStr=#e9e9e2, endColor=0
+      gradientType=1, startColorStr=#e9e9e2, endColor=0
     );
     -ms-filter: progid:DXImageTransform.Microsoft.gradient(
-            gradientType=1, startColorStr=#e9e9e2, endColor=0
+      gradientType=1, startColorStr=#e9e9e2, endColor=0
     );
     background-image:-o-linear-gradient(left, @light, rgba(236,230,220,0));
     background-image:-moz-linear-gradient(left, @light, rgba(236,230,220,0));
@@ -834,7 +771,7 @@ body {
 }
 
 h1,h2,h3,h4,h5,h6 {
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: Kreon,Arial Narrow,sans-serif;
   color: @dark;
   font-weight: normal;
 }
@@ -864,7 +801,7 @@ h3 {
   font-size: 23px;
   .lato;
   font-weight: bold;
-  margin:2em 0 1em;
+  margin:2em 2em 1em;
 }
 
 h4 {
@@ -875,15 +812,13 @@ h4 {
 }
 
 #comments h3 {
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: Kreon,Arial Narrow,sans-serif;
   color:@blue;
   font-size: 182%;
   margin: 0 0 0 0;
 }
 
-a,
-ul.nice-menu a,
-span.nolink {
+a {
   text-decoration: none;
   color: @orange;
   .fadecolor;
@@ -905,15 +840,15 @@ span.nolink {
     font-size: 21px;
     position: relative;
     top: 2px;
-    &:after {
-      content : "\203A"
-    }
+   &:after {
+     content : "\203A"
+   }
   }
 }
 
 
 #navigation {
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: Kreon,Arial Narrow,sans-serif;
   font-weight: 900;
   font-size: 17px;
   text-align: right;
@@ -924,84 +859,14 @@ span.nolink {
   text-align: right;
 }
 
-#navigation ul li {
-  text-align: left;
-}
 
-#navigation .menuparent ul {
-  text-align: left;
-}
-
-ul.nice-menu li {
-  border: none;
-  background-color: #fff;
-  &.over {
-    background: #fff;
-  }
-}
-
-ul.nice-menu-down .menuparent li {
-  border:none;
-  background:none;
-  width: auto;
-}
-
-ul.nice-menu-down li {
-  background-color: #fff;
-  &:hover {
-    background-color: #fff;
-  }
-}
-
-ul.nice-menu-down li.menuparent {
-  background-color: #fff;
-  &:hover {
-    background-color: #fff;
-  }
-  &.over {
-    -webkit-box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.50);
-    -moz-box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.50);
-    box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.50);
-    &:after {
-      height: 5px;
-      width: 100%;
-      background: white;
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      z-index: 99;
-    }
-  }
-}
-ul.nice-menu-down .menuparent ul {
-  -webkit-box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.50);
-  -moz-box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.50);
-  box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.50);
-  background-color: #fff;
-  text-align: left;
-}
-
-.nice-menu > li {
-  display:inline-block;
-  *display:inline;
-  *zoom:1;
-  padding: 2px 13px;
-  float: none;
-}
-
-.nice-menu li a,
-.nice-menu li span.nolink {
-  display: block;
-  padding: 5px;
-}
 
 /*a.button, input.button,
 #content input.form-submit[type='submit'] {
   .inblock;
   .rounded(20px);
   text-align: center;
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: Kreon,Arial Narrow,sans-serif;
   color: #fff;
   padding: 6px 15px;
   font-size: 140%;
@@ -1027,12 +892,12 @@ ul.nice-menu-down .menuparent ul {
 
 
 
-a.button,input.button,
-#content input.form-submit[type='submit'], #block-user-login input.form-submit[type='submit'], #modalContent input.form-submit[type='submit'], #edit-submit--4 {
+a.button, input.button,
+#content input.form-submit[type='submit'] {
   .inblock;
   .rounded(20px);
-  //  background-image:url(../img/button-bg.png);
-  //  background-repeat: repeat-x;
+//  background-image:url(../img/button-bg.png);
+//  background-repeat: repeat-x;
   background: rgb(236,151,38); /* Old browsers */
   background: -moz-linear-gradient(top,  rgb(236,151,38) 1%, rgb(210,116,29) 53%, rgb(202,97,24) 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgb(236,151,38)), color-stop(53%,rgb(210,116,29)), color-stop(100%,rgb(202,97,24))); /* Chrome,Safari4+ */
@@ -1042,7 +907,7 @@ a.button,input.button,
   background: linear-gradient(to bottom,  rgb(236,151,38) 1%,rgb(210,116,29) 53%,rgb(202,97,24) 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ec9726', endColorstr='#ca6118',GradientType=0 ); /* IE6-9 */
   text-align: center;
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: Kreon,Arial Narrow,sans-serif;
   color: #fff;
   padding: 10px 20px;
   font-size: 143%;
@@ -1064,30 +929,31 @@ a.button,input.button,
 
 }
 
-// #content .comment-form input[type=submit],
-// .page-node-edit #content .node-project_2-form input[type=submit]
-//
-// {
-//     border: 1px solid #eb8220;
-//     background: white;
-//     color: #eb8220;
-//     .boxsize;
-//     font-size: 120%;
-//     padding: 7px;
-//     margin:5px;
-//     cursor: pointer;
-//     text-transform: lowercase;
-//     &:hover {
-//       background: rgb(236,151,38);
-//       color: #fff;
-//     }
-//
-// }
+
+#content .comment-form input[type=submit],
+.page-node-edit #content .node-project_2-form input[type=submit]
+
+{
+    border: 1px solid #eb8220;
+    background: white;
+    color: #eb8220;
+    .boxsize;
+    font-size: 120%;
+    padding: 7px;
+    margin:5px;
+    cursor: pointer;
+    text-transform: lowercase;
+    &:hover {
+      background: rgb(236,151,38);
+      color: #fff;
+    }
+
+}
 
 #content input.form-submit[type='submit'], input.button {
-  //  border: 0;
-  margin-bottom: 30px;
-  //  padding: 3px 15px;
+//  border: 0;
+
+//  padding: 3px 15px;
 }
 
 
@@ -1116,7 +982,6 @@ a.button,input.button,
 }
 
 
-/* commenting this out as it breaks the button styles on the "remove" buttons when uploading photos
 #content #edit-field-project-photo td input[type=submit] {
   border: 0;
   padding: 0;
@@ -1130,10 +995,6 @@ a.button,input.button,
     color:#cc5f18;
   }
 }
-*/
-#content #edit-field-project-photo td input[type=submit] {
-  font-size: 110%;
-}
 
 #rail h2 {
   font-size: 185%;
@@ -1143,12 +1004,11 @@ a.button,input.button,
 }
 
 #rail p {
-  margin:0.8em 0;
+  margin:0.8em 0.7em;
 }
 
 input[type='text'],
-input[type='password'], textarea {
-  box-sizing: border-box;
+input[type='password'] {
   border:1px solid @beige;
   padding: 3px;
   margin-bottom: 2px;
@@ -1156,13 +1016,7 @@ input[type='password'], textarea {
   font-size: 110%;
   background-color: @vlight + #111111;
 }
-.description, .fieldset-description{
-  font-style: italic;
-  color: @dark + #222222;
-  line-height: inherit;
-  font-size: 1em !important;
-  margin: .75em 0 !important;
-}
+
 .description, .counter {
   font-style: italic;
   color: @dark + #222222;
@@ -1214,8 +1068,14 @@ label {
   margin-top: 4px;
 }
 
+.password-strength {
+  width: 12em;
+  margin-top: 0.5em;
+  margin-right: 40px;
+}
+
 .password-indicator {
-  height: 30px;
+  height: 15px;
   background: @light;
 
   .indicator {
@@ -1289,6 +1149,7 @@ tr.even, tr.odd {
  */
 
 #rail section {
+  padding: 10px;
 
   h2 {
 
@@ -1313,7 +1174,7 @@ div.horizontal-tabs {
 
 #content ul.tabs,
 div.horizontal-tabs ul.horizontal-tabs-list
-{
+ {
   border: none;
   list-style: none;
   padding:10px 0;
@@ -1445,7 +1306,7 @@ footer#footer {
 
 #bottom li.title {
   padding:8px 13px;
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: Kreon,Arial Narrow,sans-serif;
   color: @blue;
   font-size: 123%;
   vertical-align: top;
@@ -1471,7 +1332,7 @@ footer#footer {
 
   a {
     color:#fff;
-    font-family: Kreon,'Arial Narrow',sans-serif;
+    font-family: Kreon,Arial Narrow,sans-serif;
     font-size: 108%;
     font-weight: bold;
     text-transform: lowercase;
@@ -1515,7 +1376,7 @@ footer#footer {
   .views-field-field-user,
   .views-field-field-person-name {
     text-align: right;
-    font-family: Kreon,'Arial Narrow',sans-serif;
+    font-family: Kreon,Arial Narrow,sans-serif;
     font-weight: bold;
     font-size: 108%;
     color: @orange;
@@ -1535,7 +1396,7 @@ footer#footer {
   h2 {
     float:left;
     text-align: right;
-    width: 89px;
+    width: 120px;
     color: @beige;
     font-size: 131%;
     font-weight: bold;
@@ -1555,31 +1416,24 @@ footer#footer {
       width: 32px;
       display: block;
     }
-    .facebook{
-      background-position: -72px 0;
-    }
 
     .twitter {
-      background-position: -103px 0;
+      background-position: -32px 0;
     }
     .flickr {
-      background-position: -134px 0;
+      background-position: -64px 0;
     }
     .vimeo {
-      background-position: -168px 0;
-    }
-    .instagram{
-      background-position: -231px 0;
+      background-position: -96px 0;
     }
     .rss {
-      background-position: -198px 0;
+      background-position: -128px 0;
     }
-
   }
 }
 
 #footer #block-block-2  .content {
-  font-family:Kreon,'Arial Narrow',sans-serif;
+  font-family:Kreon,Arial Narrow,sans-serif;
   font-size: 162%;
   line-height: 125%;
   margin-top: 2px;
@@ -1757,51 +1611,6 @@ html.js input.form-autocomplete {
   font-weight: bold;
 }
 
-
-.page-add-project {
-  #project-2-node-form,
-  .node-preview, .preview-specs {
-    width: 660px;
-    margin:0 auto;
-    margin-bottom: 20px;
-  }
-
-  .preview {
-    background-color: transparent;
-
-    dt, dd {
-      padding: 5px 0;
-      float: left;
-      display: block;
-    }
-
-    dt {
-      clear: both;
-      font-weight: bold;
-      padding-right: 10px;
-      text-align: right;
-      width: 160px;
-    }
-
-  }
-
-  .vertical-tabs,
-  fieldset.group-extras,
-  #edit-field-project-status {
-    display: none;
-  }
-
-  &.page-add-project-step-2 {
-
-    .preview {
-      .node-teaser, h3:first-child {
-        display: none;
-      }
-    }
-  }
-
-}
-
 #ioby-project-reqs-form #edit-submit {
   display: block;
   margin:5px auto;
@@ -1841,9 +1650,6 @@ ol.ioby-step-indicator {
 
     &.current {
       color: @active;
-      & a {
-        color: @active;
-      }
     }
   }
 }
@@ -1962,10 +1768,20 @@ ol.ioby-step-indicator {
 */
 #rail ul#ioby-current-stats {
   list-style:none;
-  margin-left:0;
+  margin-left:0.9em;
 
   li {
     margin:0.8em 0;
+  }
+
+  .stat_num {
+    font-size:300%;
+    font-weight:bold;
+    line-height:1em;
+  }
+
+  .stat_label {
+    .smallcaps;
   }
 }
 
@@ -2069,15 +1885,15 @@ ol.ioby-step-indicator {
 }
 
 #edit-province-wrapper {
-  position: absolute;
-  top: 55px;
-  left: 230px;
+    position: absolute;
+    top: 55px;
+    left: 230px;
 }
 
 .views-widget-per-page {
-  position: absolute;
-  top: 110px;
-  left: 230px;
+    position: absolute;
+    top: 110px;
+    left: 230px;
 }
 
 form.node-donation-form #autocomplete {
@@ -2132,9 +1948,8 @@ form.node-donation-form #autocomplete {
     text-shadow: none;
     padding: 0 9px;
     line-height: 2;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
     border-radius: 10px;
+    -webkit-border-radius: 10px;
   }
   .field-name-field-campaign-logo {
     float:right;
@@ -2278,7 +2093,7 @@ ul li.leaf {
 
 
 .facetapi-active, .leaf {
-  color: rgb(69, 69, 69);
+    color: rgb(69, 69, 69);
 }
 
 
@@ -2297,94 +2112,651 @@ div#block-system-main .content .project-miniview.node-teaser .main-info .field-i
   width: auto;
 }
 
-#modalContent {
-  top: 50px !important;
-}
 
-.ioby-modal-header {
-  h3 {
-    text-align: center;
-    line-height: 1.25;
-    position: relative;
-    font-weight: normal;
-    font-size: 20px;
-    margin-bottom: 2em;
+
+
+
+
+/*IOBY FORM REDESIGN Variables*/
+@formpadding: 5px;
+@formbg: #f6f6f6;
+@formradius : 5px;
+@formbrd_color: #b2b2b2;
+@space_unit : 16px;
+@double_space: @space_unit * 2;
+@triple_space: @space_unit * 3;
+
+
+
+/**********************
+Namespace: .node-project_2-form,
+.page-node-edit.node-type-project-2
+**********************/
+.node-project_2-form,
+.page-node-edit.node-type-project-2 {
+
+
+  * {
+    box-sizing: border-box;
   }
-}
 
-div.ctools-modal-content {
-  padding: 20px 30px;
-  border-radius: 2px;
-  border: 0;
 
-  input[type="text"],
-  input[type="password"] {
-    -moz-border-radius: 2px !important;
-    -webkit-border-radius: 2px !important;
-    border-radius: 2px !important;
-    line-height: 1.4;
-    padding: 5px 10px;
-    box-shadow: none;
-    background: none;
-    border: 1px solid #ece6dc;
+  /*LAYOUT*/
+  .group-about-you .fieldset-wrapper > .form-wrapper {
+    width: 45%;
+    float: left;
+    margin-right: 5%;
+    &.field-name-field-contact-last,
+    &.field-name-field-project-contact-phone,
+    &.field-name-field-twitter-handle
+    {
+      float: right;
+      margin-right: 0;
+    }
+  }
+
+  .group-about-you .fieldset-wrapper > .field-type-location {
     width: 100%;
   }
-}
-ul.ioby-user-modal-tabs {
-  text-align: center;
-  margin: 0 auto;
 
-  li {
-    font-size: 20px;
+  .group-about-you, .group-project-background, .group-campaign-page {
+    .form-item-field-contact-address-und-0-city,
+    .form-item-field-project-address-und-0-city {
+      width: 45%;
+      float: left;
+      margin-right: 10%;
+
+    }
+
+    #location-dropdown-province-wrapper-field_contact_address-und-0,
+    .form-item-field-contact-address-und-0-postal-code,
+    #location-dropdown-province-wrapper-field_project_address-und-0,
+    .form-item-field-project-address-und-0-postal-code {
+      width: 19%;
+      float: left;
+    }
+
+    .field-widget-date-popup {
+      width: 45%;
+      .form-item, .date-padding {
+        float: none !important;
+      }
+    }
+
+    .fieldset-wrapper > .field-name-field-demo-age,
+    .fieldset-wrapper > .field-name-field-gender{
+      float: none !important;
+      clear: left;
+    }
+
   }
-}
 
-.left-wrapper, .right-wrapper {
-  float: left;
-  width: 50%;
-  display: inline-block;
-}
+  div.error {
+    background-image: none;
+  }
 
-.right-wrapper {
-  padding-left: 60px;
-  box-sizing: border-box;
-}
+  fieldset .fieldset-wrapper {
+    background: transparent;
+    padding: 0;
+  }
 
-.popups-close a {
-  margin-top: -8px;
+  .description {
+    font-style: normal;
+  }
 
-  img {
+  label {
+    font-size: 1.23em;
+    margin-bottom: .5em;
+  }
+
+  .form-type-textarea > label {
+    display: inline-block;
+  }
+
+  .resizable-textarea .grippie {
     display: none;
   }
 
-  &:after {
-    content: "×";
-    font-size: 32px;
-    position: relative;
-    color: #444;
+  .form-item {
+    margin-top: 0;
   }
-}
+  select {
+    background-color: @formbg;
+    background-image: url('../img/select_icon.png');
+    background-position: 98% center;
+    background-repeat: no-repeat;
+    padding: 5px;
+    line-height: 1;
+    border:  1px solid @formbrd_color;
+    border-radius: @formradius;
+    height: 32px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  select:after {
+    display: block;
+  }
 
-#project-blog-node-form #edit-actions {
-  text-align: right;
-}
 
-.or-divider {
-  position: relative;
-  margin: 30px 0 30px 0;
-  color: #222;
-
-  span {
-    position: absolute;
-    background: #fff;
+  input[type=text],
+  input[type=email] {
+    background-color: @formbg;
+    border-radius: @formradius;
+    border: 1px solid @formbrd_color;
     display: inline-block;
-    padding: 20px;
-    left: calc(~'50% - 24px');
-    bottom: -26px;
-    text-align: center;
+    padding: @formpadding;
+    height: 32px;
+    width: 100%;
   }
 
-  hr {
-    border-top-color: @beige;
+  select {
+    width: 90%;
+  }
+
+  .form-required {
+    color: @plum;
+  }
+
+  textarea {
+    background-color: @formbg;
+    border-radius: @formradius;
+    border: 1px solid @formbrd_color;
+    padding: @formpadding;
+  }
+
+  .field-group-fieldset > legend {
+    width: 100%;
+  }
+
+  .field-group-fieldset {
+    margin-bottom: 70px;
+  }
+
+  .fieldset-legend {
+    display: block;
+    font-size: 38px;
+    font-family: 'Kreon', serif;
+    line-height: 1;
+    text-transform: capitalize;
+    padding-left: 0 !important;
+    padding-bottom: 20px;
+    background: 0 !important;
+    border-bottom: 1px solid @formbrd_color;
+    margin-bottom: @double_space;
+    width: 100%;
+    > a {
+      color: #333;
+    }
+
+  }
+
+  .fieldset-description {
+    font-size: 1.5em;
+    line-height: 1.4;
+    margin-bottom: @triple_space;
+    opacity: 0.75;
+    padding-right: 10%;
+    position: relative;
+    &:after {
+      background-image: url('../img/iobyform_sprite.png');
+      background-repeat: no-repeat;
+      background-position: 0 -34px;
+      content: "\a0";
+      display: block;
+      height: 55px;
+      width: 55px;
+      position: absolute;
+      right: 0;
+      top: -9px;
+    }
+  }
+
+  .group-project-background .fieldset-description:after {
+    background-position: -61px -34px;
+
+  }
+
+  .group-campaign-page .fieldset-description:after {
+    background-position: -121px -34px;
+
+  }
+
+
+  //STYLING FOR CONDITIONAL INPUTS
+  .field-name-field-sponsor-email,
+  .field-name-field-group-tax-fisc-spon{
+    padding: 27px;
+    border: 1px solid #ccc;
+    width: 100% !important;
+    border-radius: 15px;
+    margin-right: 0;
+  }
+
+  //MAP
+  .field-name-field-hide-project-map {
+    padding-bottom: 1em;
+    border-bottom: 1px solid #ccc;
+  }
+
+  //HIDE LEGENDS
+  .location legend {
+    display: none;
+  }
+
+  .location .form-item label {
+    float: none;
+  }
+
+  //INPUT BACKGROUND IMAGES
+  .form-item-field-project-contact-email-und-0-email,
+  .field-name-field-project-contact-phone,
+  .field-name-field-deadline,
+  .field-name-field-project-start-date {
+    position: relative;
+    input[type=text] {
+      padding-left: 32px;
+    }
+    .form_icon {
+      display: inline-block;
+      background-image: url('../img/iobyform_sprite.png');
+      background-repeat: no-repeat;
+      background-position: -105px -11px;
+      width: 22px;
+      height: 16px;
+      position: absolute;
+      top: 33px;
+      left: 5px;
+    }
+  }
+
+ .field-name-field-project-contact-phone .form_icon {
+   background-position: -130px -10px;
+   height: 20px;
+   top: 37px;
+
+ }
+
+  .field-widget-twitter-username {
+    input[type=text] {
+      width: 92%;
+      margin-left: 3%;
+    }
+  }
+
+
+  .field-name-field-deadline .form_icon,
+  .field-name-field-project-start-date .form_icon {
+    background-position: -80px -10px;
+    height: 20px;
+    right: 0;
+    left: auto;
+    top: 44px;
+
+  }
+
+  .field-name-field-deadline .form_icon {
+    top: 58px;
+    right: -12px;
+
+  }
+
+  .field-widget-date-popup {
+    input[type=text] {
+      width: 100%;
+      margin-right: 0;
+      padding-left: 5px;
+    }
+  }
+
+  //TABLE STYLING - Drop Drag fields
+  table {
+    width: 100%;
+    background-color: #b7b7b7;
+
+  }
+
+  td {
+    padding: 16px 10px;
+  }
+
+  thead > tr {
+    width: 100%;
+    > th {
+      height: 20px;
+      color: @white;
+    }
+  }
+
+  tr.odd {
+    border-bottom-width: 0;
+  }
+
+  tr.even {
+    background: @white;
+  }
+
+  th:first-child {
+    width: 0;
+    overflow: hidden;
+    display: inline-block;
+    padding: 0;
+    clip: rect(0, 0, 0, 0);
+  }
+  th:nth-child(2) {
+    width: 70%;
+  }
+  th:nth-child(3) {
+    width: 20%;
+  }
+  th:last-child {
+    width: 10%;
+
+  }
+
+  .field-multiple-table td {
+    vertical-align: middle;
+    min-height: 60px;
+    &:first-child {
+      //padding: 0;
+    }
+    &:last-child {
+      text-align: center;
+    }
+  }
+
+  .field-name-field-budget-item-description .form-textarea {
+    height: 32px;
+  }
+
+  a.tabledrag-handle {
+    overflow: visible;
+    height: auto;
+    padding: 5px;
+    margin-left: -5px;
+    .handle {
+    background-image: url(../img/iobyform_sprite.png);
+    padding: 0;
+    height: 16px;
+    width: 16px;
+    background-position: -174px -10px;
+    margin: 0;
+  }
+}
+
+  &#project-2-node-form .field-multiple-table td > input.form-submit[type=submit] {
+    background: transparent ;
+    overflow: hidden;
+    padding: 0;
+    text-indent: 100%;
+    display: inline-block;
+    min-width: 0;
+    width: 20px;
+    height: 20px;
+    border: 0;
+    border-radius: 0;
+    background-image: url(../img/iobyform_sprite.png);
+    background-position: -1px -155px;
+    transition: none;
+    &:hover {
+      background-position: -1px -132px;
+    }
+
+
+
+
+
+
+  }
+
+  .field-name-field-budget-sandbox .description + .clearfix {
+    position: relative;
+    &:after {
+      content: "";
+      display: block;
+      background-image: url(../img/iobyform_sprite.png);
+      background-repeat: no-repeat;
+      background-position: -31px -152px;
+      width: 9px;
+      height: 9px;
+      visibility: visible;
+      position: absolute;
+      left: 18px;
+      top: 20px;
+    }
+  }
+
+
+
+  &#project-2-node-form .field-name-field-budget-sandbox input.form-submit,
+  &#project-2-node-form .image-widget input.form-submit {
+    background: transparent;
+    border: 1px solid @orange;
+    color: @orange;
+    font-size: 16px;
+    &:hover {
+      background: @orange;
+      color:@white;
+    }
+
+  }
+
+  &#project-2-node-form .field-name-field-budget-sandbox input.form-submit {
+    padding-left: 26px;
+  }
+
+  .group-campaign-page .field-type-mathfield {
+    /*width: 48%;*/
+    display: table;
+
+    &:nth-child(even) {
+      background: @vlight;
+    }
+
+    > div {
+      display: table-row;
+    }
+
+    .form-item {
+      padding: 0;
+      margin: 0;
+    }
+    label, span, input {
+      display: table-cell;
+      padding: 20px 15px;
+      opacity: 0.65;
+    }
+    label {
+      border-right: 2px solid @white;
+    }
+    .mathfield-display {
+      display: inline;
+      font-size: 15px;
+      font-weight: bold;
+      color:black;
+      padding: 0;
+    }
+    .description {
+      display: none;
+    }
+    .field-prefix {
+      text-align: right;
+    }
+  }
+
+  /*CHARACTER/WORD COUNTS*/
+  .wordcount__container {
+    text-align: right;
+    color: #ccc;
+  }
+
+
+
+  /*IOBY ACCORDION*/
+  .ioby-accordion{
+    label {
+      &:before {
+        margin-right: 10px;
+        content: "\a0";
+        display: inline-block;
+        height: 26px;
+        width: 26px;
+        margin-top: -10px;
+        position: relative;
+        top: -4px;
+        background-image: url('../img/iobyform_sprite.png');
+        background-position: -28px -100px;
+      }
+      &:hover:before {
+        background-position: -1px -100px;
+      }
+    }
+    .form-textarea-wrapper {
+      margin-top: 9px;
+    }
+    .form-item {
+      margin-top: 1em;
+      border-bottom: 1px solid #ccc;
+    }
+    .description {
+      display: none;
+    }
+    .is-hidden {
+      height: 0;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+
+    }
+  }
+
+  .ioby-accordion.is-open{
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+    .form-item{
+      border-bottom-color:transparent;
+    }
+    label:before,
+    label:hover:before {
+      background-position: -28px -125px;
+    }
+    .description {
+      display: block;
+
+    }
+  }
+
+
+
+  /******************
+  End Form Namespace
+  *********************/
+}
+
+
+/*TOOL TIPS*/
+.node-project_2-form,
+.page-node-edit.node-type-project-2  {
+  .tooltip_icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 12px;
+    background-image: url('../img/iobyform_sprite.png');
+    background-position: -61px -10px ;
+    -webkit-transition: opacity .25s ease-in;
+    -moz-transition: opacity .25s ease-in;
+    -ms-transition: opacity .25s ease-in;
+    -o-transition: opacity .25s ease-in;
+    transition: opacity .25s ease-in;
+    &:hover {
+      opacity: 0.7;
+    }
+
+  }
+
+}
+
+
+/*********/
+.page-node-add-project-2,
+.page-node-edit.node-type-project-2 {
+  .page-nav {
+    width: 225px;
+    float:left;
+    padding: 0 7px;
+    margin-top: 28px;
+    &.sticky {
+      position: fixed;
+      margin: 0;
+      top: 0;
+    }
+
+  }
+
+  .page-nav__item {
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #e5e5e5;
+    position: relative;
+    &:first-child{
+      //border-bottom-width: 0;
+    }
+  }
+
+ .page-nav__item > a {
+    display: inline-block;
+    padding-left: 50px;
+    color: @grey;
+
+    &:before {
+      background-image: url('../img/iobyform_sprite.png');
+      background-repeat: no-repeat;
+      background-position: -137px -96px;
+      content: "\a0";
+      display: block;
+      height: 25px;
+      width: 25px;
+      position: absolute;
+      top: 15px;
+      left: 3px;
+    }
+  }
+
+  .page-nav__item.active > a {
+    color: @blue;
+    &:before{
+      background-position: -163px -96px;
+    }
+
+
+  }
+
+  .background--section {
+    > a:before {
+      width: 30px;
+      height: 30px;
+      background-position: -139px -122px;
+      top: 10px;
+    }
+    &.active > a:before {
+      background-position: -169px -122px;
+    }
+  }
+
+  .campaign--section {
+
+    > a:before {
+      width: 29px;
+      height: 21px;
+      background-position: -139px -155px;
+      top: 10px;
+    }
+    &.active > a:before {
+      background-position: -169px -155px;
+    }
+  }
+
+  #content {
+    float: right;
+    width: 71%;
   }
 }

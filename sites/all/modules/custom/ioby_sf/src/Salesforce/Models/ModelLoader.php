@@ -33,25 +33,4 @@ class ModelLoader
 
     return $opportunity;
   }
-
-  public static function loadOrderRowData($order_row) {
-    $order = new Order();
-    $order->setCommerceOrderId(isset($order_row->commerce_order_id) ? $order_row->commerce_order_id : NULL)
-      ->setCreated(isset($order_row->created) ? $order_row->created : NULL);
-
-    return $order;
-  }
-
-  public static function loadOrderLineItemRowData($order_row) {
-    $order_line_item = new OrderLineItem();
-    $order_line_item->setSalesforceRecordId(isset($order_row->salesforce_record_id) ? $order_row->salesforce_record_id : NULL)
-      ->setOpportunitySalesforceRecordId(isset($order_row->opportunity_salesforce_record_id) ? $order_row->opportunity_salesforce_record_id : NULL)
-      ->setLineItemId(isset($order_row->line_item_id) ? $order_row->line_item_id : NULL)
-      ->setAmount(isset($order_row->amount) ? $order_row->amount : NULL)
-      ->setOpportunityType(isset($order_row->opportunity_type) ? $order_row->opportunity_type : NULL)
-      ->setCommerceOrderId(isset($order_row->commerce_order_id) ? $order_row->commerce_order_id : NULL)
-      ->setCreated(isset($order_row->created) ? $order_row->created : NULL);
-
-    return $order_line_item;
-  }
 }

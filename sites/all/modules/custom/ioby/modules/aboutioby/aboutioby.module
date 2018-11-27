@@ -79,12 +79,6 @@ function aboutioby_node_view($node, $view_mode, $langcode) {
       case 'tips':
         $menu_name = 'menu-tips-menu';
         break;
-      case 'campaign-essentials':
-        $menu_name = 'menu-campaign-essentials';
-        break;
-      case 'trick-out-my-trip-toolkit':
-        $menu_name = 'menu-trick-out-my-trip-toolkit';
-        break;
       default:
         return;
     }
@@ -134,15 +128,4 @@ function aboutioby_display_stats($vars) {
   }
   $content .= '</ul>';
   return $content;
-}
-
-/**
- * Implements hook_form_alter().
- * @author Russom Woldezghi
- */
-function aboutioby_form_alter(&$form, &$form_state, $form_id) {
-  // IOBY-48
-  if ($form_id === 'menu_edit_item') {
-    $form['expanded']['#default_value'] = '1';
-  }
 }

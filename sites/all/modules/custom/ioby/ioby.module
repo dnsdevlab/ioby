@@ -23,45 +23,28 @@ function ioby_permission() {
  */
 function ioby_menu() {
     $items = array();
-
-    // legacy urls for older style project flow, changed to redirects
+/* TODO: Get rid of these
     $items['project/add'] = array(
       'title' => 'none',
-      'page callback' => '_ioby_goto_301',
-      'page arguments' => array('project'),
-      'access callback' => TRUE,
-    );
-
-    $items['add/project'] = array(
-      'title' => 'none',
-      'page callback' => '_ioby_goto_301',
-      'page arguments' => array('project'),
+      'page callback' => 'drupal_goto',
+      'page arguments' => array('add/project'),
       'access callback' => TRUE,
     );
 
     $items['add/project/step/1'] = array(
-      'title' => 'none',
-      'page callback' => '_ioby_goto_301',
-      'page arguments' => array('project'),
+      'title' => 'Start a project',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('ioby_project_reqs_form'),
       'access callback' => TRUE,
-      // 'title' => 'Build Your Campaign',
-      // 'page callback' => 'drupal_get_form',
-      // 'page arguments' => array('ioby_project_reqs_form'),
-      // 'access callback' => TRUE,
-      // 'type' => MENU_NORMAL_ITEM,
+      'type' => MENU_NORMAL_ITEM,
     );
 
     $items['add/project/step/2'] = array(
-      'title' => 'none',
-      'page callback' => '_ioby_goto_301',
+      'title' => 'Start a project',
+      'page callback' => 'ioby_node_add',
       'page arguments' => array('project'),
       'access callback' => TRUE,
-      // 'title' => 'Build Your Campaign',
-      // 'page callback' => 'ioby_node_add',
-      // 'page arguments' => array('project'),
-      // 'access callback' => TRUE,
-    );
-
+    );*/
 
     $items['projects/get'] = array(
       'title' => 'Display Projects',
@@ -96,19 +79,7 @@ function ioby_menu() {
 }
 
 /**
- * redirect to a path using drupal_goto with a 301, rather than 302
- * defaults to the homepage if no page argument (string or array with a string) is passed.
- * @author Paul Reny
- */
-function _ioby_goto_301($path) {
-  if (!empty($path) && is_array($path)) {
-    $path = $path[0];
-  }
-  drupal_goto(!empty($path) ? $path : '/', array(), 301);
-}
-
-/**
- * Implements hook_menu_alter()
+ * Implements hook_menu_alter().
  */
 function ioby_menu_alter(&$items) {
   $items['cart']['title'] = 'Donation Cart';
@@ -230,70 +201,25 @@ function ioby_form_coupon_fund_node_form_alter(&$form, &$form_state, $form_id) {
 }
 
 /**
- * Implements hook_form_alter()
+ * Implements hook_commerce_checkout_pane_info_alter().
  */
-function ioby_form_alter(&$form, &$form_state, $form_id) {
-  global $user;
-
-  // if ($form_id == 'user_register_form') {
-  //   $form['#submit'][] = 'custom_ioby_user_form_submit';
-  // }
-  switch ($form_id) {
-    case 'project_node_form':
-      if (!$user->uid) {
-        drupal_goto('project');
-        exit;
-      }
-      if (!in_array('admin', array_values($user->roles))) {
-        $form['additional_settings']['#access'] = FALSE;
-        // $form['field_project_start_date']['#access'] = FALSE;
-        //$form['field_project_product']['#access'] = FALSE;
-
-      }
-      break;
-    case 'user_profile_form':
-      // Remove display name
-      hide($form['account']['name']);
-
-      break;
-    case 'views_exposed_form':
-      $form['#attached']['css'] = array(
-        drupal_get_path('module', 'ioby') . '/exposedform.css',
-      );
-      if (isset($form['province'])) {
-        $states = ioby_find_project_states();
-        $form['province']['#type'] = 'select';
-        $form['province']['#options'] = $states;
-        $form['province']['#default_value'] = '';
-        unset($form['province']['#autocomplete_path']);
-      }
-      break;
-    case 'commerce_checkout_form_checkout':
-      unset($form['account']['login']['mail_confirm']['#description']);
-      break;
-  }
-}
-
-function custom_ioby_user_form_submit($form, &$form_state){
-    $form_state['redirect'] = 'project';
-}
-
-
 function ioby_commerce_checkout_pane_info_alter(&$checkout_panes) {
   $checkout_panes['cart_contents']['title'] = t('Donations');
   $checkout_panes['commerce_coupon']['title'] = t('Giving Code');
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
 function ioby_form_commerce_checkout_form_checkout_alter(&$form, &$form_state) {
   $form['commerce_coupon']['coupon_code']['#title'] = t('');
   $form['commerce_coupon']['coupon_code']['#description'] = 'Have an ioby Giving Card? Please carefully enter your code here. For more information, please <a href="/giving" target="_blank">click here</a>. Please leave this box blank unless you are using an ioby Giving Card.';
   $form['account']['#title'] = t('Profile');
-  //$form['buttons']['continue']['#value'] = 'Complete Order';
-
 }
 
 /**
- * Implements hook_form_form_id_alter()
+ * Implements hook_form_FORM_ID_alter().
+ *
  * Alter the commerce review form.
  */
 function ioby_form_commerce_checkout_form_review_alter(&$form, &$form_state) {
@@ -333,10 +259,9 @@ function ioby_form_commerce_checkout_form_review_alter(&$form, &$form_state) {
 }
 
 /**
- * Implements hook_block_info()
+ * Implements hook_block_info().
  */
 function ioby_block_info() {
-
   $blocks = array();
 
   $blocks['ioby_user_registration'] = array(
@@ -365,7 +290,7 @@ function ioby_block_info() {
      'cache' => DRUPAL_NO_CACHE,
   );
 
-  $blocks['ioby_project_step_one'] = array(
+  $blocks['ioby_project_step_one'] = array( // TODO: Get rid of this if no longer needed
     'info' => t('IOBY Project - Step 1'),
     'cache' => DRUPAL_NO_CACHE,
   );
@@ -374,7 +299,7 @@ function ioby_block_info() {
 }
 
 /**
- * Implements hook_block_view()
+ * Implements hook_block_view().
  */
 function ioby_block_view($block_id = '') {
 
@@ -382,8 +307,11 @@ function ioby_block_view($block_id = '') {
 
   switch ($block_id) {
     case 'ioby_user_registration' :
-      $form = drupal_get_form('user_register_form');
-      $form['account']['mail']['#title'] = 'E-mail';
+      $form = drupal_get_form('ioby_user_register_form');
+      $form['account']['name']['#size'] = 20;
+      $form['account']['name']['#title'] = t('Desired Username');
+      $form['account']['name']['#description'] = NULL;
+
       $form['account']['mail']['#weight'] = -20;
       $form['account']['mail']['#size'] = 20;
       $form['account']['mail']['#description'] = NULL;
@@ -434,7 +362,7 @@ function ioby_user_login_form($form, &$form_state) {
   $form['name'] = array(
     '#type'     => 'textfield',
     '#size'     => 20,
-    '#title'    => 'E-mail or username',
+    '#title'    => 'Username',
     '#required' => 1,
   );
   $form['pass'] = array(
@@ -463,7 +391,7 @@ function ioby_user_login_form_validate($form, &$form_state) {
 function ioby_user_login_form_submit($form, &$form_state) {
   global $user;
   $user = user_load($form_state['uid']);
-  $form_state['redirect'] = 'project'; // pretty sure this is unused, but updating to match the new /project url just in case
+  $form_state['redirect'] = 'add/project/step/1';
 
   user_login_finalize($form_state);
 }
@@ -476,60 +404,110 @@ function ioby_user_login_form_submit($form, &$form_state) {
  * @see user_account_form_validate()
  * @see user_register_submit()
  */
-// function ioby_user_register_form($form, &$form_state) {
-//   global $user;
+function ioby_user_register_form($form, &$form_state) {
+  global $user;
 
-//   $admin = user_access('administer users');
+  $admin = user_access('administer users');
 
-//   // If we aren't admin but already logged on, go to the user page instead.
-//   if (!$admin && $user->uid) {
-//     drupal_goto('user/' . $user->uid);
-//   }
+  // If we aren't admin but already logged on, go to the user page instead.
+  if (!$admin && $user->uid) {
+    drupal_goto('user/' . $user->uid);
+  }
 
-//   $form['#user'] = drupal_anonymous_user();
-//   $form['#user_category'] = 'register';
+  $form['#user'] = drupal_anonymous_user();
+  $form['#user_category'] = 'register';
 
-//   $form['#attached']['library'][] = array('system', 'jquery.cookie');
-//   $form['#attributes']['class'][] = 'user-info-from-cookie';
+  $form['#attached']['library'][] = array('system', 'jquery.cookie');
+  $form['#attributes']['class'][] = 'user-info-from-cookie';
 
-//   // Start with the default user account fields.
-//   user_account_form($form, $form_state);
+  // Start with the default user account fields.
+  user_account_form($form, $form_state);
 
-//   // Attach field widgets, and hide the ones where the 'user_register_form'
-//   // setting is not on.
-//   field_attach_form('user', $form['#user'], $form, $form_state);
-//   foreach (field_info_instances('user', 'user') as $field_name => $instance) {
-//     if (empty($instance['settings']['user_register_form'])) {
-//       $form[$field_name]['#access'] = FALSE;
-//     }
-//   }
+  // Attach field widgets, and hide the ones where the 'user_register_form'
+  // setting is not on.
+  field_attach_form('user', $form['#user'], $form, $form_state);
+  foreach (field_info_instances('user', 'user') as $field_name => $instance) {
+    if (empty($instance['settings']['user_register_form'])) {
+      $form[$field_name]['#access'] = FALSE;
+    }
+  }
 
-//   if ($admin) {
-//     // Redirect back to page which initiated the create request;
-//     // usually admin/people/create.
-//     $form_state['redirect'] = $_GET['q'];
-//   }
+  if ($admin) {
+    // Redirect back to page which initiated the create request;
+    // usually admin/people/create.
+    $form_state['redirect'] = $_GET['q'];
+  }
 
-//   $form['actions'] = array('#type' => 'actions');
-//   $form['actions']['submit'] = array(
-//     '#type' => 'submit',
-//     '#value' => t('Create new account'),
-//   );
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Create new account'),
+  );
 
-//   $form['#validate'][] = 'ioby_user_register_validate';
-//   // Add the final user registration form submit handler.
-//   $form['#submit'][] = 'ioby_user_register_submit';
+  $form['#validate'][] = 'ioby_user_register_validate';
+  // Add the final user registration form submit handler.
+  $form['#submit'][] = 'ioby_user_register_submit';
 
-//   return $form;
-// }
+  return $form;
+}
 
 /**
  * Validation function for the user registration form.
  */
-// function ioby_user_register_validate($form, &$form_state) {
-//   entity_form_field_validate('user', $form, $form_state);
-// }
+function ioby_user_register_validate($form, &$form_state) {
+  entity_form_field_validate('user', $form, $form_state);
+}
 
+/**
+ * Submit handler for the user registration form.
+ */
+function ioby_user_register_submit($form, &$form_state) {
+  $admin = user_access('administer users');
+
+  if (!variable_get('user_email_verification', TRUE) || $admin) {
+    $pass = $form_state['values']['pass'];
+  }
+  else {
+    $pass = user_password();
+  }
+  $notify = !empty($form_state['values']['notify']);
+
+  // Remove unneeded values.
+  form_state_values_clean($form_state);
+
+  $form_state['values']['pass'] = $pass;
+  $form_state['values']['init'] = $form_state['values']['mail'];
+
+  $account = $form['#user'];
+
+  entity_form_submit_build_entity('user', $account, $form, $form_state);
+
+  // Populate $edit with the properties of $account, which have been edited on
+  // this form by taking over all values, which appear in the form values too.
+  $edit = array_intersect_key((array) $account, $form_state['values']);
+  $account = user_save($account, $edit);
+
+  // Terminate if an error occurred during user_save().
+  if (!$account) {
+    drupal_set_message(t("Error saving user account."), 'error');
+    $form_state['redirect'] = '';
+    return;
+  }
+  $form_state['user'] = $account;
+  $form_state['values']['uid'] = $account->uid;
+
+  watchdog('user', 'New user: %name (%email).', array('%name' => $form_state['values']['name'], '%email' => $form_state['values']['mail']), WATCHDOG_NOTICE, l(t('edit'), 'user/' . $account->uid . '/edit'));
+
+  // Add plain text password into user account to generate mail tokens.
+  $account->password = $pass;
+
+  // New administrative account without notification.
+  _user_mail_notify('register_no_approval_required', $account);
+  $form_state['uid'] = $account->uid;
+  user_login_submit(array(), $form_state);
+  drupal_set_message(t('Registration successful. You are now logged in.'));
+  $form_state['redirect'] = 'add/project/step/1';
+}
 
 /**
  * Form Builder: Step 1 of project creation.
@@ -539,7 +517,7 @@ function ioby_project_reqs_form() {
 
   if (!$user->uid) {
     drupal_set_message(t('you must log in to do that'));
-    drupal_goto('project');
+    drupal_goto('add/project');
     exit;
   }
 
@@ -551,316 +529,57 @@ function ioby_project_reqs_form() {
   );
 
   $form['project_meets'] = array(
-    '#type' => 'submit',
-    '#value' => t('I\'m ready to create my campaign page!'),
-    '#submit' => array('ioby_project_start'),
+    '#type' => 'checkbox',
+    '#title' => t('I\'m ready to get started!'),
   );
 
-  $form['wait'] = array(
+  $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('I\'ll wait for a call!'),
-    '#submit' => array('ioby_project_wait'),
+    '#value' => t('Continue to step 2'),
   );
-
   return $form;
 }
 
-function ioby_project_start(){
-  drupal_goto("node/add/project-2");
+/**
+ * Step 1 validation
+*/
+function ioby_project_reqs_form_submit($form, &$form_state) {
+  $confirm = $form_state['values']['project_meets'];
+  variable_set('ioby_project_meets', $confirm);
+  if ($confirm) {
+    drupal_goto('add/project/step/2');
+    exit;
+  }
+  drupal_set_message(t('please confirm criteria'));
 }
 
-function ioby_project_wait(){
-  drupal_goto("/");
-}
 
-
-function ioby_node_add($type) {
+function ioby_node_add($type) { // TODO: Get rid of this in new project form
   global $user;
 
   // not logged in? go to step 0;
   if (!$user->uid) {
-    drupal_goto('project');
+    drupal_goto('add/project');
     exit;
   }
 
-  // OK You're cool.. make a form!
-  /* custom form
-  $types = node_type_get_types();
-  $node = (object) array('uid' => $user->uid, 'name' => (isset($user->name) ? $user->name : ''), 'type' => $type, 'language' => LANGUAGE_NONE);
-  drupal_set_title(t('Create @name', array('@name' => $types[$type]->name)), PASS_THROUGH);
-  $output = drupal_get_form('ioby_project_add_form', $node);
-*/
+  // did you check the criteria? no? go back to step 1;
+  $confirm = variable_get('ioby_project_meets', 0);
+  if (!$confirm) {
+    drupal_set_message(t('please confirm your project meets these criteria'), 'error');
+    drupal_goto('add/project/step/1');
+    exit;
+  }
+
   $output = node_add('project_2'); // failsafe...
-  drupal_set_title(t('Build Your Campaign'));
+  drupal_set_title(t('Start a Project'));
   return $output;
 }
 
 /**
- * Form Builder: Create and display customized project node //dead
-*/
-function ioby_project_add_form($form, &$form_state, $node) {
-  global $user;
-
-
-  if (!isset($form_state['node'])) {
-    if (!isset($node->title)) {
-      $node->title = NULL;
-    }
-    node_object_prepare($node);
-    $form_state['node'] = $node;
-  }
-  else {
-    $node = $form_state['node'];
-  }
-
-  // Some special stuff when previewing a node.
-  if (isset($form_state['node_preview'])) {
-    $form['#prefix'] = $form_state['node_preview'];
-    $node->in_preview = TRUE;
-  }
-  else {
-    unset($node->in_preview);
-  }
-
-
-  $form['#attributes']['class'][] = 'node-form node-project-form';
-
-  // Basic node information.
-  // These elements are just values so they are not even sent to the client.
-  foreach (array('nid', 'vid', 'uid', 'created', 'type', 'language') as $key) {
-    $form[$key] = array(
-      '#type' => 'value',
-      '#value' => isset($node->$key) ? $node->$key : NULL,
-    );
-  }
-
-  //CUSTOM FORM STUFFS
-  $form['group_project_basics'] = array(
-    '#type'  => 'fieldset',
-    '#title' => t('Basics'),
-    '#tree'  => TRUE,
-  );
-  $form['group_project_basics']['title'] = array(
-    '#type'     => 'textfield',
-    '#title'    => t('Project Name'),
-    '#required' => TRUE,
-  );
-  $form['group_project_basics']['body'] = array(
-    '#type'     => 'text_format',
-    '#format'   => 'filtered_text',
-    '#title'    => t('Summary'),
-    '#required' => TRUE,
-  );
-  $form['group_project_basics']['field_project_address'] = array(
-    '#type'     => 'textfield',
-    '#title'    => t('Street Address'),
-    '#required' => TRUE,
-  );
-  $form['group_project_basics']['field_project_zip'] = array(
-    '#type'     => 'textfield',
-    '#title'    => t('Zip Code'),
-    '#size'     => 10,
-    '#required' => TRUE,
-  );
-  $options1 = ioby_get_taxonomy(1);
-  $form['group_project_basics']['field_impact_areas'] = array(
-    '#type'     => 'select',
-    '#title'    => t('Impact Areas'),
-    '#options'  => $options1,
-    '#multiple' => TRUE,
-  );
-  $options2 = ioby_get_taxonomy(2);
-  $form['group_project_basics']['field_project_facet'] = array(
-    '#type'     => 'select',
-    '#title'    => t('Some other Facets'),
-    '#options'  => $options2,
-    '#multiple' => TRUE,
-  );
-  $form['group_project_basics']['field_project_photo'] = array(
-    '#type'            => 'managed_file',
-    '#title'           => t('Photo'),
-    '#description'     => t('Upload a photo'),
-    '#upload_location' => 'public://project_images/',
-  );
-
-  $form['group_project_details'] = array(
-    '#type'  => 'fieldset',
-    '#title' => t('Project Details'),
-    '#tree'  => TRUE,
-  );
-  $form['group_project_details']['field_project_overview']= array(
-    '#type'     => 'text_format',
-    '#format'   => 'filtered_text',
-    '#title'    => t('Overview: Introduce your Project'),
-    '#required' => TRUE,
-  );
-  $form['group_project_details']['field_project_issue']= array(
-    '#type'     => 'text_format',
-    '#format'   => 'filtered_text',
-    '#title'    => t('The environmental problem your project addresses'),
-    '#required' => TRUE,
-  );
-  $form['group_project_details']['field_project_plan']= array(
-    '#type'     => 'text_format',
-    '#format'   => 'filtered_text',
-    '#title'    => t('Your plan for how this project wil lbe implemented.'),
-    '#required' => TRUE,
-  );
-  $form['group_project_details']['field_project_other']= array(
-    '#type'     => 'text_format',
-    '#format'   => 'filtered_text',
-    '#title'    => t('Anything else we should know about your project?'),
-    '#required' => TRUE,
-  );
-
-  $form['group_project_funding'] = array(
-    '#type'  => 'fieldset',
-    '#title' => t('Funding & Support'),
-    '#tree'  => TRUE,
-  );
-  $form['group_project_funding']['field_project_target_funding'] = array(
-    '#type'   => 'textfield',
-    '#title'  => t('Dollar amount you need to raise'),
-    '#prefix' => '$',
-  );
-  $form['group_project_funding']['field_project_budget_explain'] = array(
-    '#type'   => 'text_format',
-    '#format' => 'filtered_text',
-    '#title'  => t('Project Budget Explaination'),
-  );
-  $form['group_project_funding']['field_project_volunteers'] = array(
-    '#type'          => 'radios',
-    '#title'         => t('Do you want to recruit volunteers via ioby.org?'),
-    '#default_value' => 1,
-    '#options'       => array(t('Yes'), t('No')),
-  );
-  $form['group_project_funding']['field_project_vol_reason'] = array(
-    '#type'   => 'text_format',
-    '#format' => 'filtered_text',
-    '#title'  => t('If so, explain who you\'re looking for and what they\'ll be doing'),
-  );
-
-  $form['group_extras'] = array(
-    '#type'  => 'fieldset',
-    '#title' => t('Extras'),
-    '#tree'  => TRUE,
-  );
-  $form['group_extras']['field_project_url'] = array(
-    '#type'  => 'textfield',
-    '#title' => t('website for this project (if you have one)'),
-  );
-
-  $form['group_contact_info'] = array(
-    '#type'  => 'fieldset',
-    '#title' => t('Funding & Support'),
-    '#tree'  => TRUE,
-  );
-  $form['group_contact_info']['field_project_contact_name'] = array(
-    '#type'          => 'textfield',
-    '#title'         => t('Name'),
-    '#default_value' => $user->name,
-  );
-  // dpm($form);
-  $form['group_contact_info']['field_project_contact_email'] = array(
-    '#type'          => 'textfield',
-    '#title'         => t('email'),
-    '#default_value' => $user->mail,
-  );
-  $form['group_contact_info']['field_project_contact_phone'] = array(
-    '#type'  => 'textfield',
-    '#title' => t('phone'),
-  );
-  $form['group_contact_info']['field_project_contact_alt_phone'] = array(
-    '#type'  => 'textfield',
-    '#title' => t('alternate phone'),
-  );
-
-  $form['actions'] = array('#type' => 'actions');
-  $form['actions']['preview'] = array(
-    '#access' => variable_get('node_preview_' . $node->type, DRUPAL_OPTIONAL) != DRUPAL_DISABLED,
-    '#type'   => 'submit',
-    '#value'  => t('Preview'),
-    '#weight' => 10,
-    '#submit' => array('ioby_form_build_preview'),
-  );
-  return $form;
-}
-
-function ioby_form_build_preview($form, &$form_state) {
-  $node = ioby_form_submit_build_node($form, $form_state);
-  $form_state['node'] = $node;
-  $form_state['node_preview'] = node_preview($node);
-  $form_state['rebuild'] = TRUE;
-}
-
-function ioby_form_submit_build_node($form, &$form_state) {
-  // stolen from node_form_submit_build_node();
-
-  $node = $form_state['node'];
-  entity_form_submit_build_entity('project', $node, $form, $form_state);
-
-  node_submit($node);
-  foreach (module_implements('node_submit') as $module) {
-    $function = $module . '_node_submit';
-    $function($node, $form, $form_state);
-  }
-  return $node;
-}
-
-function ioby_project_add_form_validate($form, &$form_state) {
-  // $form_state['node'] contains the actual entity being edited, but we must
-  // not update it with form values that have not yet been validated, so we
-  // create a pseudo-entity to use during validation.
-  $node = (object) $form_state['values'];
-  node_validate($node, $form, $form_state);
-  entity_form_field_validate('project', $form, $form_state);
-}
-
-function ioby_project_add_form_submit($form, &$form_state) {
-  $node = ioby_form_submit_build_node($form, $form_state);
-  $insert = empty($node->nid);
-  node_save($node);
-  $node_link = l(t('view'), 'node/' . $node->nid);
-  $watchdog_args = array('@type' => $node->type, '%title' => $node->title);
-  $t_args = array('@type' => node_type_get_name($node), '%title' => $node->title);
-
-  if ($insert) {
-    watchdog('content', '@type: added %title.', $watchdog_args, WATCHDOG_NOTICE, $node_link);
-    drupal_set_message(t('@type %title has been created.', $t_args));
-  }
-  else {
-    watchdog('content', '@type: updated %title.', $watchdog_args, WATCHDOG_NOTICE, $node_link);
-    drupal_set_message(t('@type %title has been updated.', $t_args));
-  }
-  if ($node->nid) {
-    $form_state['values']['nid'] = $node->nid;
-    $form_state['nid']           = $node->nid;
-    $form_state['redirect']      = 'node/' . $node->nid;
-  }
-  else {
-    // In the unlikely case something went wrong on save, the node will be
-    // rebuilt and node form redisplayed the same way as in preview.
-    drupal_set_message(t('The post could not be saved.'), 'error');
-    $form_state['rebuild'] = TRUE;
-  }
-  // Clear the page and block caches.
-  cache_clear_all();
-}
-
-/**
- * Custom function to retrieve options tree
- **/
-function ioby_get_taxonomy($vid) {
-  $out = array();
-  $in = taxonomy_get_tree($vid);
-  foreach ($in as $item) {
-    $out[$item->tid] = $item->name;
-  }
-  return $out;
-}
-
+ * Implements hook_block_configure().
+ */
 function ioby_block_configure($delta = '') {
-
   $form = array();
   if ($delta == 'ioby_project_creation_indicator') {
 
@@ -897,7 +616,7 @@ function ioby_block_configure($delta = '') {
     );
   }
 
-  if($delta == 'ioby_project_step_one') {
+  if($delta == 'ioby_project_step_one') { // TODO: Get rid of this if no longer needed
     $form['ioby_project_step_one_content'] = array(
       '#type' => 'text_format',
       '#format' => 'filtered_text',
@@ -910,7 +629,9 @@ function ioby_block_configure($delta = '') {
   return $form;
 }
 
-
+/**
+ * Implements hook_block_save().
+ */
 function ioby_block_save($delta = '', $edit = array()) {
   if ($delta == 'ioby_project_creation_indicator') {
     // Have Drupal save the string to the database.
@@ -919,7 +640,7 @@ function ioby_block_save($delta = '', $edit = array()) {
     }
   }
 
-  if($delta == 'ioby_project_step_one') {
+  if($delta == 'ioby_project_step_one') { // TODO: Get rid of this if no longer needed
     variable_set('ioby_project_step_one', $edit['ioby_project_step_one_content']['value']);
   }
   return;
@@ -1093,10 +814,6 @@ function ioby_cart_view() {
           $amount = $amount*.2;
           $price =  commerce_currency_decimal_to_amount($amount, 'USD');
 
-          // If equal to or more than $10.00, cap at $10.00
-          if($price >= '1000'){
-            $price = '1000';
-          }
         }
 
         $gratuity->commerce_price['und'][0]['amount'] = $price;
@@ -1116,11 +833,6 @@ function ioby_cart_view() {
       $amount =commerce_currency_amount_to_decimal($amount, 'USD');
       $amount = $amount * .2;
       $price = commerce_currency_decimal_to_amount($amount, 'USD');
-
-      // If equal to or more than $10.00, cap at $10.00
-      if($price >= '1000'){
-        $price = '1000';
-      }
 
       // create gratuity..
       $gratuity = commerce_product_new('gratuity');
@@ -1158,7 +870,7 @@ function ioby_cart_view() {
 }
 
 /**
- * implements hook_mail();
+ * Implements hook_mail().
 */
 function ioby_mail($key, &$message, $params) {
   switch ($key) {
@@ -1471,66 +1183,4 @@ function iobypopup_settings() {
   );
 
   return system_settings_form($form);
-}
-
-/**
- * Implements hook_user_presave().
- * @author Russom Woldezghi
- * @todo Add help text to full name field, what this code does.
- */
-function ioby_user_presave(&$edit, $account, $category) {
-  // Check to see if first and last name field empty
-  if(!empty($edit->field_first_name) && !empty($edit->field_last_name) ){
-    $first_name = $edit['field_first_name']['und'][0]['value'];
-    $last_name = $edit['field_last_name']['und'][0]['value'];
-    // Full name, concatenated
-    if(empty($edit->field_user_fullname)){
-      $edit['field_user_fullname']['und'][0]['value'] = $first_name.' '.$last_name;
-    }
-  }
-}
-
-/**
- * Implements hook_commerce_line_item_summary_link_info_alter
- */
-function iobytheme_commerce_line_item_summary_link_info_alter(&$links) {
-  if (!empty($links['view_cart'])) {
-    $links['view_cart']['title'] = t('cart');
-  }
-}
-
-/**
- * Implements hook_node_view_alter().
- */
-function ioby_node_view_alter(&$build) {
-
-  // If full view mode and page content type
- if ($build['#view_mode'] == 'full' && $build['#bundle'] == 'page') {
-  // return if not any of these nid's below
-  switch ($build['#node']->nid) {
-    case '34783':
-    case '39632':
-    // hide sharethis markup
-    unset($build['sharethis']);
-    return;
-   }
-  }
-}
-
-/**
- * Implements hook_node_access()
- * @param  $node
- * @param  $op
- * @param  $account
- * @return NODE_ACCESS_IGNORE
- */
-function ioby_node_access($node, $op, $account) {
-  global $user, $language;
-  // disallow anon access to /idea-start node
-  if (!empty($node) && $node->nid == '34783') {
-    if (user_is_anonymous()) {
-      return NODE_ACCESS_DENY;
-    }
-  }
-  return NODE_ACCESS_IGNORE;
 }

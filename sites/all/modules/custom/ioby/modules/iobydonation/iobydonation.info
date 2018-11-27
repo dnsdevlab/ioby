@@ -7,6 +7,4 @@ dependencies[] = iobyproject
 dependencies[] = commerce_line_item
 files[] = includes/iobydonation_handler_field_edit_amount.inc
 files[] = includes/iobydonation_handler_field_match_total.inc
-files[] = includes/iobydonation_handler_filter_product_title.inc
-
 version = "7.x-1.0"

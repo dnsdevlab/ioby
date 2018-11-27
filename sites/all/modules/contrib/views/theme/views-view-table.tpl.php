@@ -27,7 +27,7 @@
     <thead>
       <tr>
         <?php foreach ($header as $field => $label): ?>
-          <th <?php if ($header_classes[$field]) { print 'class="'. $header_classes[$field] . '" '; } ?> scope="col">
+          <th <?php if ($header_classes[$field]) { print 'class="'. $header_classes[$field] . '" '; } ?>>
             <?php print $label; ?>
           </th>
         <?php endforeach; ?>

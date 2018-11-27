@@ -22,11 +22,6 @@ class Contact extends SalesforceObjectBase
   /**
    * @var string
    */
-  protected $birth_date;
-
-  /**
-   * @var string
-   */
   protected $mailing_street;
 
   /**
@@ -148,23 +143,6 @@ class Contact extends SalesforceObjectBase
    */
   public function getLastName() {
     return $this->last_name;
-  }
-
-  /**
-   * @param string $birth_date
-   *
-   * @return $this
-   */
-  public function setBirthDate($birth_date) {
-    $this->birth_date = $birth_date;
-    return $this;
-  }
-
-  /**
-   * @return string
-   */
-  public function getBirthDate() {
-    return $this->birth_date;
   }
 
   /**

@@ -29,7 +29,7 @@ $handler->display->display_options['style_options']['columns'] = array(
   'field_project_status' => 'field_project_status',
   'field_project_status_1' => 'field_project_status_1',
   'total' => 'total',
-  'field_project_cost' => 'field_project_cost',
+  'field_project_total_cost' => 'field_project_total_cost',
 );
 $handler->display->display_options['style_options']['default'] = '-1';
 $handler->display->display_options['style_options']['info'] = array(
@@ -54,7 +54,7 @@ $handler->display->display_options['style_options']['info'] = array(
     'separator' => '',
     'empty_column' => 0,
   ),
-  'field_project_cost' => array(
+  'field_project_total_cost' => array(
     'sortable' => 0,
     'default_sort_order' => 'asc',
     'align' => 'views-align-right',
@@ -81,19 +81,19 @@ $handler->display->display_options['fields']['total']['label'] = 'Raised So Far'
 $handler->display->display_options['fields']['total']['set_precision'] = TRUE;
 $handler->display->display_options['fields']['total']['precision'] = '2';
 $handler->display->display_options['fields']['total']['prefix'] = '$';
-/* Field: SUM(Content: Project Cost) */
-$handler->display->display_options['fields']['field_project_cost']['id'] = 'field_project_cost';
-$handler->display->display_options['fields']['field_project_cost']['table'] = 'field_data_field_project_cost';
-$handler->display->display_options['fields']['field_project_cost']['field'] = 'field_project_cost';
-$handler->display->display_options['fields']['field_project_cost']['group_type'] = 'sum';
-$handler->display->display_options['fields']['field_project_cost']['label'] = 'Budget Total';
-$handler->display->display_options['fields']['field_project_cost']['settings'] = array(
+/* Field: SUM(Content: Total to Raise) */
+$handler->display->display_options['fields']['field_project_total_cost']['id'] = 'field_project_total_cost';
+$handler->display->display_options['fields']['field_project_total_cost']['table'] = 'field_data_field_project_total_cost';
+$handler->display->display_options['fields']['field_project_total_cost']['field'] = 'field_project_total_cost';
+$handler->display->display_options['fields']['field_project_total_cost']['group_type'] = 'sum';
+$handler->display->display_options['fields']['field_project_total_cost']['label'] = 'Budget Total';
+$handler->display->display_options['fields']['field_project_total_cost']['settings'] = array(
   'thousand_separator' => ',',
   'decimal_separator' => '.',
   'scale' => '2',
   'prefix_suffix' => 1,
 );
-$handler->display->display_options['fields']['field_project_cost']['group_columns'] = array(
+$handler->display->display_options['fields']['field_project_total_cost']['group_columns'] = array(
   'value' => 'value',
 );
 /* Filter criterion: Content: Type */
@@ -126,7 +126,7 @@ $handler->display->display_options['style_options']['columns'] = array(
   'nothing' => 'nothing',
   'field_project_status' => 'field_project_status',
   'total' => 'total',
-  'field_project_cost' => 'field_project_cost',
+  'field_project_total_cost' => 'field_project_total_cost',
 );
 $handler->display->display_options['style_options']['default'] = '-1';
 $handler->display->display_options['style_options']['info'] = array(
@@ -149,7 +149,7 @@ $handler->display->display_options['style_options']['info'] = array(
     'separator' => '',
     'empty_column' => 0,
   ),
-  'field_project_cost' => array(
+  'field_project_total_cost' => array(
     'sortable' => 0,
     'default_sort_order' => 'asc',
     'align' => 'views-align-right',
@@ -186,20 +186,20 @@ $handler->display->display_options['fields']['total']['element_label_colon'] = F
 $handler->display->display_options['fields']['total']['set_precision'] = TRUE;
 $handler->display->display_options['fields']['total']['precision'] = '2';
 $handler->display->display_options['fields']['total']['prefix'] = '$';
-/* Field: SUM(Content: Project Cost) */
-$handler->display->display_options['fields']['field_project_cost']['id'] = 'field_project_cost';
-$handler->display->display_options['fields']['field_project_cost']['table'] = 'field_data_field_project_cost';
-$handler->display->display_options['fields']['field_project_cost']['field'] = 'field_project_cost';
-$handler->display->display_options['fields']['field_project_cost']['group_type'] = 'sum';
-$handler->display->display_options['fields']['field_project_cost']['label'] = '';
-$handler->display->display_options['fields']['field_project_cost']['element_label_colon'] = FALSE;
-$handler->display->display_options['fields']['field_project_cost']['settings'] = array(
+/* Field: SUM(Content: Total to Raise) */
+$handler->display->display_options['fields']['field_project_total_cost']['id'] = 'field_project_total_cost';
+$handler->display->display_options['fields']['field_project_total_cost']['table'] = 'field_data_field_project_total_cost';
+$handler->display->display_options['fields']['field_project_total_cost']['field'] = 'field_project_total_cost';
+$handler->display->display_options['fields']['field_project_total_cost']['group_type'] = 'sum';
+$handler->display->display_options['fields']['field_project_total_cost']['label'] = '';
+$handler->display->display_options['fields']['field_project_total_cost']['element_label_colon'] = FALSE;
+$handler->display->display_options['fields']['field_project_total_cost']['settings'] = array(
   'thousand_separator' => ',',
   'decimal_separator' => '.',
   'scale' => '2',
   'prefix_suffix' => 1,
 );
-$handler->display->display_options['fields']['field_project_cost']['group_columns'] = array(
+$handler->display->display_options['fields']['field_project_total_cost']['group_columns'] = array(
   'value' => 'value',
 );
 $handler->display->display_options['displays'] = array(

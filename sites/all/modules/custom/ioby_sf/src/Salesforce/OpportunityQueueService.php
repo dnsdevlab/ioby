@@ -47,7 +47,6 @@ class OpportunityQueueService
             'mailing_state' => $contact->getMailingState(),
             'mailing_zip' => $contact->getMailingZip(),
             'mailing_country' => $contact->getMailingCountry(),
-            'birth_date' => $contact->getBirthDate(),
             'needs_update' => intval(TRUE),
             'update_mailing_address' => intval(TRUE),
             'created' => REQUEST_TIME,

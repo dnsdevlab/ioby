@@ -2,7 +2,7 @@
 
 Drupal.behaviors.initColorboxInline = {
   attach: function (context, settings) {
-    if (!$.isFunction($.colorbox) || typeof settings.colorbox === 'undefined') {
+    if (!$.isFunction($.colorbox)) {
       return;
     }
     $.urlParam = function(name, url){

@@ -1,4 +1,4 @@
-/* Tokenizer for CSharp code */
+﻿/* Tokenizer for CSharp code */
 
 var tokenizeCSharp = (function() {
   // Advance the stream until the given character (not preceded by a

@@ -1291,7 +1291,7 @@ function commerce_order_calculate_total($order) {
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
 
   // First determine the currency to use for the order total.
-  $default_currency_code = $currency_code = commerce_default_currency();
+  $currency_code = commerce_default_currency();
   $currencies = array();
 
   // Populate an array of how many line items on the order use each currency.
@@ -1305,7 +1305,7 @@ function commerce_order_calculate_total($order) {
 
     $line_item_currency_code = $line_item_wrapper->commerce_total->currency_code->value();
 
-    if (!isset($currencies[$line_item_currency_code])) {
+    if (!in_array($line_item_currency_code, array_keys($currencies))) {
       $currencies[$line_item_currency_code] = 1;
     }
     else {
@@ -1320,9 +1320,9 @@ function commerce_order_calculate_total($order) {
   if (count($currencies) == 1) {
     $currency_code = key($currencies);
   }
-  elseif (isset($currencies[$default_currency_code])) {
+  elseif (in_array(commerce_default_currency(), array_keys($currencies))) {
     // Otherwise use the site default currency if it's in the order.
-    $currency_code = $default_currency_code;
+    $currency_code = commerce_default_currency();
   }
   elseif (count($currencies) > 1) {
     // Otherwise use the first currency on the order. We do this instead of
@@ -1347,15 +1347,13 @@ function commerce_order_calculate_total($order) {
   );
 
   $order_wrapper->commerce_order_total->data = commerce_price_component_add($base_price, 'base_price', $base_price, TRUE);
-  $order_total = $order_wrapper->commerce_order_total->value();
 
   // Then loop over each line item and add its total to the order total.
   $amount = 0;
 
   foreach ($order_wrapper->commerce_line_items as $delta => $line_item_wrapper) {
     // Convert the line item's total to the order's currency for totalling.
-    $line_item_total = $line_item_wrapper->commerce_total->value();
-    $component_total = commerce_price_component_total($line_item_total);
+    $component_total = commerce_price_component_total($line_item_wrapper->commerce_total->value());
 
     // Add the totals.
     $amount += commerce_currency_convert(
@@ -1365,12 +1363,14 @@ function commerce_order_calculate_total($order) {
     );
 
     // Combine the line item total's component prices into the order total.
-    $order_total['data'] = commerce_price_components_combine($order_total, $line_item_total);
+    $order_wrapper->commerce_order_total->data = commerce_price_components_combine(
+      $order_wrapper->commerce_order_total->value(),
+      $line_item_wrapper->commerce_total->value()
+    );
   }
 
-  // Update the order total price field with the final total amount and data.
+  // Update the order total price field with the final total amount.
   $order_wrapper->commerce_order_total->amount = round($amount);
-  $order_wrapper->commerce_order_total->data = $order_total['data'];
 }
 
 /**
@@ -1503,12 +1503,4 @@ function commerce_order_preprocess_views_view(&$vars) {
     );
     $vars['footer'] = '';
   }
-}
-
-/**
- * Element validate handler: strip whitespaces from order related e-mail fields.
- * @see commerce_order_account_pane_checkout_form()
- */
-function commerce_order_mail_validate($element, &$form_state, $form) {
-  form_set_value($element, trim($element['#value']), $form_state);
 }

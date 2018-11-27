@@ -1,4 +1,4 @@
-CKFinder.addPlugin( 'imageresize', {
+﻿CKFinder.addPlugin( 'imageresize', {
 	connectorInitialized : function( api, xml ) {
 		var node = xml.selectSingleNode( 'Connector/PluginsInfo/imageresize/@smallThumb' );
 		if ( node )

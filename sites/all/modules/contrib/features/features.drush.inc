@@ -2,42 +2,24 @@
 
 /**
  * @file
- * Features module drush integration.
+ *   Features module drush integration.
  */
 
 /**
  * Implements hook_drush_command().
  *
+ * @See drush_parse_command() for a list of recognized keys.
+ *
  * @return
  *   An associative array describing your command(s).
- *
- * @see drush_parse_command()
  */
 function features_drush_command() {
   $items = array();
 
-  // If Features is enabled display the configured default export path,
-  // otherwise just show the default.
-  if (defined('FEATURES_DEFAULT_EXPORT_PATH')) {
-    $path = variable_get('features_default_export_path', FEATURES_DEFAULT_EXPORT_PATH);
-  }
-  else {
-    $path = 'sites/all/modules';
-  }
-
   $items['features-list'] = array(
     'description' => "List all the available features for your site.",
-    'options' => array(
-      'status' => "Feature status, can be 'enabled', 'disabled'  or 'all'",
-    ),
     'drupal dependencies' => array('features'),
     'aliases' => array('fl', 'features'),
-    'outputformat' => array(
-      'default' => 'table',
-      'pipe-format' => 'list',
-      'field-labels' => array('name' => 'Name', 'feature' => 'Feature', 'status' => 'Status', 'version' => 'Version', 'state' => 'State'),
-      'output-data-type' => 'format-table',
-    ),
   );
   $items['features-export'] = array(
     'description' => "Export a feature from your site into a module.",
@@ -46,10 +28,9 @@ function features_drush_command() {
       'components' => 'Patterns of components to include, see features-components for the format of patterns.'
     ),
     'options' => array(
-      'destination' => "Destination path (from Drupal root) of the exported feature. Defaults to '" . $path . "'.",
+      'destination' => "Destination path (from Drupal root) of the exported feature. Defaults to 'sites/all/modules'",
       'version-set' => "Specify a version number for the feature.",
       'version-increment' => "Increment the feature's version number.",
-      'ignore-conflicts' => "Ignore conflicts and export all components.",
     ),
     'drupal dependencies' => array('features'),
     'aliases' => array('fe'),
@@ -78,9 +59,6 @@ function features_drush_command() {
       ),
       'not-exported' => array(
         'description' => 'Show only components that have not been exported.',
-      ),
-      'info-style' => array(
-        'description' => 'Export components in format suitable for using in an info file.',
       ),
     ),
     'aliases' => array('fc'),
@@ -136,24 +114,8 @@ function features_drush_command() {
     'arguments' => array(
       'feature' => 'The feature in question.',
     ),
-    'options' => array(
-      'ctypes' => 'Comma separated list of component types to limit the output to. Defaults to all types.',
-      'lines' => 'Generate diffs with <n> lines of context instead of the usual two.',
-    ),
     'drupal dependencies' => array('features', 'diff'),
     'aliases' => array('fd'),
-  );
-
-  $items['features-diff-all'] = array(
-    'description' => "Show the code difference for all enabled features not in their default state.",
-    'arguments' => array(
-      'feature_exclude' => 'A space-delimited list of features to exclude from being reverted.',
-    ),
-    'options' => array(
-      'force' => "Bypass the confirmations. This is useful if you want to output all of the diffs to a log file.",
-    ),
-    'drupal dependencies' => array('features', 'diff'),
-    'aliases' => array('fda'),
   );
 
   return $items;
@@ -163,20 +125,11 @@ function features_drush_command() {
  * Implements hook_drush_help().
  */
 function features_drush_help($section) {
-  // If Features is enabled display the configured default export path,
-  // otherwise just show the default.
-  if (defined('FEATURES_DEFAULT_EXPORT_PATH')) {
-    $path = variable_get('features_default_export_path', FEATURES_DEFAULT_EXPORT_PATH);
-  }
-  else {
-    $path = 'sites/all/modules';
-  }
-
   switch ($section) {
     case 'drush:features':
       return dt("List all the available features for your site.");
     case 'drush:features-export':
-      return dt("Export a feature from your site into a module. If called with no arguments, display a list of available components. If called with a single argument, attempt to create a feature including the given component with the same name. The option '--destination=foo' may be used to specify the path (from Drupal root) where the feature should be created. The default destination is '@path'. The option '--version-set=foo' may be used to specify a version number for the feature or the option '--version-increment' may also to increment the feature's version number.", array('@path' => $path));
+      return dt("Export a feature from your site into a module. If called with no arguments, display a list of available components. If called with a single argument, attempt to create a feature including the given component with the same name. The option '--destination=foo' may be used to specify the path (from Drupal root) where the feature should be created. The default destination is 'sites/all/modules'. The option '--version-set=foo' may be used to specify a version number for the feature or the option '--version-increment' may also to increment the feature's version number.");
     case 'drush:features-components':
       return dt("List feature components matching patterns. The listing may be limited to exported/not-exported components.
 
@@ -196,6 +149,8 @@ Lastly, a pattern without a colon is interpreted as having \":%\" appended, for 
       return dt("Revert a feature module on your site.");
     case 'drush:features-revert-all':
       return dt("Revert all enabled feature module on your site.");
+    case 'drush:features-revert':
+      return dt("Revert a feature module on your site.");
     case 'drush:features-diff':
       return dt("Show a diff of a feature module.");
     case 'drush:features-add':
@@ -207,19 +162,9 @@ Lastly, a pattern without a colon is interpreted as having \":%\" appended, for 
  * Get a list of all feature modules.
  */
 function drush_features_list() {
-  $status = drush_get_option('status') ? drush_get_option('status') : 'all';
-  if (!in_array($status, array('enabled', 'disabled', 'all'))) {
-    return drush_set_error('', dt('!status is not valid', array('!status' => $status)));
-  }
-
   module_load_include('inc', 'features', 'features.export');
-
-  // Sort the Features list before compiling the output.
-  $features = features_get_features(NULL, TRUE);
-  ksort($features);
-
-  $rows = array();
-  foreach ($features as $k => $m) {
+  $rows = array(array(dt('Name'), dt('Feature'), dt('Status'), dt('State')));
+  foreach (features_get_features(NULL, TRUE) as $k => $m) {
     switch (features_get_storage($m->name)) {
       case FEATURES_DEFAULT:
       case FEATURES_REBUILDABLE:
@@ -232,23 +177,14 @@ function drush_features_list() {
         $storage = dt('Needs review');
         break;
     }
-    if (
-      ($m->status == 0 && ($status == 'all' || $status == 'disabled')) ||
-      ($m->status == 1 && ($status == 'all' || $status == 'enabled'))
-    ) {
-      $rows[$k] = array(
-        'name' => $m->info['name'],
-        'feature' => $m->name,
-        'status' => $m->status ? dt('Enabled') : dt('Disabled'),
-        'version' => $m->info['version'],
-        'state' => $storage
-      );
-    }
+    $rows[] = array(
+      $m->info['name'],
+      $m->name,
+      $m->status ? dt('Enabled') : dt('Disabled'),
+      $storage
+    );
   }
-  if (version_compare(DRUSH_VERSION, '6.0', '<')) {
-    drush_print_table($rows, TRUE);
-  }
-  return $rows;
+  drush_print_table($rows, TRUE);
 }
 
 /**
@@ -257,7 +193,6 @@ function drush_features_list() {
 function drush_features_components() {
   $args = func_get_args();
   $components = _drush_features_component_list();
-  ksort($components);
   // If no args supplied, prompt with a list.
   if (empty($args)) {
     $types = array_keys($components);
@@ -278,13 +213,10 @@ function drush_features_components() {
   elseif (drush_get_option(array('not-exported', 'o'), NULL)) {
     $options['exported'] = FALSE;
   }
-  if (drush_get_option(array('info-style', 'is'), NULL)) {
-    $options['info style'] = TRUE;
-  }
 
   $filtered_components = _drush_features_component_filter($components, $args, $options);
   if ($filtered_components){
-    _drush_features_component_print($filtered_components, $options);
+    _drush_features_component_print($filtered_components);
   }
 }
 
@@ -318,7 +250,7 @@ function _drush_features_component_filter($all_components, $patterns = array(), 
   // First filter on exported state.
   foreach ($all_components as $source => $components) {
     foreach ($components as $name => $title) {
-      $exported = !empty($components_map[$source][$name]);
+      $exported = sizeof($components_map[$source][$name]) > 0;
       if ($exported) {
         if ($options['exported']) {
           $pool[$source][$name] = $title;
@@ -346,13 +278,7 @@ function _drush_features_component_filter($all_components, $patterns = array(), 
     // Rewrite * to %. Let users use both as wildcard.
     $pattern = strtr($pattern, array('*' => '%'));
     $sources = array();
-    if (strpos($pattern, ':') !== FALSE) {
-      list($source_pattern, $component_pattern) = explode(':', $pattern, 2);
-    }
-    else {
-      $source_pattern = $pattern;
-      $component_pattern = '';
-    }
+    list($source_pattern, $component_pattern) = explode(':', $pattern, 2);
     // If source is empty, use a pattern.
     if ($source_pattern == '') {
       $source_pattern = '%';
@@ -417,7 +343,7 @@ function _drush_features_component_filter($all_components, $patterns = array(), 
             return drush_set_error('', dt('Ambiguous component "!component", matches !matches', array('!component' => $component_pattern, '!matches' => join(', ', $matches))));
           }
         }
-        if (empty($selected[$source])) {
+        if (!is_array($selected[$source])) {
           $selected[$source] = array();
         }
         $selected[$source] += array_intersect_key($pool[$source], array_flip($matches));
@@ -438,7 +364,7 @@ function _drush_features_component_filter($all_components, $patterns = array(), 
   if ($options['provided by'] && $options['exported'] ) {
     foreach ($selected as $source => $components) {
       foreach ($components as $name => $title) {
-        $exported = !empty($components_map[$source][$name]);
+        $exported = sizeof($components_map[$source][$name]) > 0;
         if ($exported) {
           $provided_by[$source . ':' . $name] = join(', ', $components_map[$source][$name]);
         }
@@ -455,17 +381,11 @@ function _drush_features_component_filter($all_components, $patterns = array(), 
 /**
  * Prints a list of filtered components.
  */
-function _drush_features_component_print($filtered_components, $options = array()) {
+function _drush_features_component_print($filtered_components) {
   $rows = array(array(dt('Available sources')));
   foreach ($filtered_components['components'] as $source => $components) {
     foreach ($components as $name => $value) {
-      if (!empty($options['info style'])) {
-        // Output as .info file style.
-        $row = array('features[' . $source . '][] = "' . $name . '"');
-      }
-      else {
-        $row = array($source .':'. $name);
-      }
+      $row = array($source .':'. $name);
       if (isset($filtered_components['sources'][$source .':'. $name])) {
         $row[] = dt('Provided by') . ': ' . $filtered_components['sources'][$source .':'. $name];
       }
@@ -487,11 +407,9 @@ function drush_features_export() {
       return drush_set_error('', 'No components supplied.');
     }
     $components = _drush_features_component_list();
-    $options = array();
-
-    if (!drush_get_option('ignore-conflicts', FALSE)) {
-      $options['exported'] = FALSE;
-    }
+    $options = array(
+      'exported' => FALSE,
+    );
 
     $filtered_components = _drush_features_component_filter($components, $args, $options);
     $items = $filtered_components['components'];
@@ -502,25 +420,23 @@ function drush_features_export() {
 
     $items = array_map('array_keys', $items);
 
-    if (($feature = features_load_feature($module, TRUE)) && module_exists($module)) {
+    if (($feature = feature_load($module, TRUE)) && module_exists($module)) {
       module_load_include('inc', 'features', 'features.export');
       _features_populate($items, $feature->info, $feature->name);
-      _drush_features_export($feature->info, $feature->name, dirname($feature->filename));
+      _drush_features_export($feature->info['features'], $feature->info['dependencies'], $feature->name, dirname($feature->filename));
     }
     elseif ($feature) {
       _features_drush_set_error($module, 'FEATURES_FEATURE_NOT_ENABLED');
     }
     else {
       // Same logic as in _drush_features_export. Should be refactored.
-      $destination = drush_get_option(array('destination'), variable_get('features_default_export_path', FEATURES_DEFAULT_EXPORT_PATH));
+      $destination = drush_get_option(array('destination'), 'sites/all/modules');
       $directory = isset($directory) ? $directory : $destination . '/' . $module;
       drush_print(dt('Will create a new module in !dir', array('!dir' => $directory)));
       if (!drush_confirm(dt('Do you really want to continue?'))) {
         drush_die('Aborting.');
       }
-      $export = _drush_features_generate_export($items, $module);
-      _features_populate($items, $export[info], $export[name]);
-      _drush_features_export($export['info'], $module, $directory);
+      _drush_features_export($items, array(), $module);
     }
   }
   else {
@@ -535,8 +451,8 @@ function drush_features_export() {
  * This is DEPRECATED, but keeping it around for a bit longer for user migration
  */
 function drush_features_add() {
-  drush_print(dt('features-add is DEPRECATED.'));
-  drush_print(dt('Calling features-export instead.'));
+  drush_print(dt('features_add is DEPRECATED.'));
+  drush_print(dt('Calling features_export instead.'));
   drush_features_export();
 }
 
@@ -547,10 +463,10 @@ function drush_features_add() {
 function drush_features_update() {
   if ($args = func_get_args()) {
     foreach ($args as $module) {
-      if (($feature = features_load_feature($module, TRUE)) && module_exists($module)) {
-        _drush_features_export($feature->info, $feature->name, dirname($feature->filename));
+      if (($feature = feature_load($module, TRUE)) && module_exists($module)) {
+        _drush_features_export($feature->info['features'], $feature->info['dependencies'], $feature->name, dirname($feature->filename));
       }
-      elseif ($feature) {
+      else if ($feature) {
         _features_drush_set_error($module, 'FEATURES_FEATURE_NOT_ENABLED');
       }
       else {
@@ -580,40 +496,33 @@ function drush_features_update_all() {
       $features_to_update[] = $module->name;
     }
   }
-  $dt_args = array('!modules' => implode(', ', $features_to_update));
-  drush_print(dt('The following modules will be updated: !modules', $dt_args));
-  if (!drush_confirm(dt('Do you really want to continue?'))) {
-    return drush_user_abort('Aborting.');
+  drush_print(dt('The following modules will be updated: !modules', array('!modules' => implode(', ', $features_to_update))));
+  if (drush_confirm(dt('Do you really want to continue?'))) {
+    foreach ($features_to_update as $module_name) {
+      drush_invoke_process(drush_sitealias_get_record('@self'), 'features-update', array($module_name));
+    }
   }
-  // If we got here, set affirmative to TRUE, so that the user doesn't have to
-  // confirm each and every feature. Start off by storing the current value,
-  // so we can set it back afteward.
-  $skip_confirmation = drush_get_context('DRUSH_AFFIRMATIVE');
-  drush_set_context('DRUSH_AFFIRMATIVE', TRUE);
-  // Now update all the features.
-  drush_invoke('features-update', $features_to_update);
-  // Now set it back as it was, in case other commands are called after this.
-  drush_set_context('DRUSH_AFFIRMATIVE', $skip_confirmation);
+  else {
+    drush_die('Aborting.');
+  }
 }
 
 /**
  * Write a module to the site dir.
  *
- * @param $info
- *   The feature info associative array.
+ * @param $requests
+ *   An array of the context requested in this export.
  * @param $module_name
  *  Optional. The name for the exported module.
  */
-function _drush_features_export($info, $module_name = NULL, $directory = NULL) {
+function _drush_features_export($stub, $dependencies, $module_name = NULL, $directory = NULL) {
   $root = drush_get_option(array('r', 'root'), drush_locate_root());
-  $skip_confirmation = drush_get_context('DRUSH_AFFIRMATIVE');
   if ($root) {
-    $destination = drush_get_option(array('destination'), variable_get('features_default_export_path', FEATURES_DEFAULT_EXPORT_PATH));
+    $destination = drush_get_option(array('destination'), 'sites/all/modules');
     $directory = isset($directory) ? $directory : $destination . '/' . $module_name;
     if (is_dir($directory)) {
-      // If we aren't skipping confirmation and the directory already exists,
-      // prompt the user. This message most make sense for but fe and fu.
-      if (!$skip_confirmation && !drush_confirm(dt('Module located at !dir will be updated. Do you want to continue?', array('!dir' => $directory)))) {
+      drush_print(dt('Module appears to already exist in !dir', array('!dir' => $directory)));
+      if (!drush_confirm(dt('Do you really want to continue?'))) {
         drush_die('Aborting.');
       }
     }
@@ -621,40 +530,36 @@ function _drush_features_export($info, $module_name = NULL, $directory = NULL) {
       drush_op('mkdir', $directory);
     }
     if (is_dir($directory)) {
-      // Ensure that the export will be created in the English language.
-      // The export language must be set before flushing caches as that can
-      // result into translatables being statically cached.
-      $language = _features_export_language();
-
       drupal_flush_all_caches();
-      $export = _drush_features_generate_export($info, $module_name);
-      $files = features_export_render($export, $module_name, TRUE);
-
-      // Restore the language
-      _features_export_language($language);
-
-      // Copy any files if _files key is there.
-      if (!empty($files['_files'])) {
-        foreach ($files['_files'] as $file_name => $file_info) {
-          // See if files are in a sub directory.
-          if (strpos($file_name, '/')) {
-            $file_directory = $directory . '/' . substr($file_name, 0, strrpos($file_name, '/'));
-            if (!is_dir($file_directory)) {
-              drush_op('mkdir', $file_directory);
-            }
-          }
-          if (!empty($file_info['file_path'])) {
-            drush_op('file_unmanaged_copy', $file_info['file_path'], "{$directory}/{$file_name}", FILE_EXISTS_REPLACE);
-          }
-          elseif (!empty($file_info['file_content'])) {
-            drush_op('file_put_contents', "{$directory}/{$file_name}", $file_info['file_content']);
-          }
-          else {
-            drush_log(dt("Entry for @file_name.in !module is invalid. ", array('!module' => $module_name, '@file_name' => $file_name)), 'ok');
-          }
-        }
-        unset($files['_files']);
+      module_load_include('inc', 'features', 'features.export');
+      $export = features_populate($stub, $dependencies, $module_name);
+      if (!feature_load($module_name)) {
+        $export['name'] = $module_name;
       }
+      // Set the feature version if the --version-set or --version-increment option is passed.
+      if ($version = drush_get_option(array('version-set'))) {
+        preg_match('/^(?P<core>\d+\.x)-(?P<major>\d+)\.(?P<patch>\d+)-?(?P<extra>\w+)?$/', $version, $matches);
+        if (!isset($matches['core'], $matches['major'])) {
+          drush_die(dt('Please enter a valid version with core and major version number. Example: !example', array('!example' => '7.x-1.0')));
+        }
+        $export['version'] = $version;
+      }
+      else if ($version = drush_get_option(array('version-increment'))) {
+        // Determine current version and increment it.
+        $export_load = features_export_prepare($export, $module_name);
+        $version = $export_load['version'];
+        $version_explode = explode('.', $version);
+        $version_minor = array_pop($version_explode);
+        // Increment minor version number if numeric or not a dev release.
+        if (is_numeric($version_minor) || strpos($version_minor, 'dev') !== (strlen($version_minor) - 3)) {
+          ++$version_minor;
+        }
+        array_push($version_explode, $version_minor);
+        // Rebuild version string.
+        $version = implode('.', $version_explode);
+        $export['version'] = $version;
+      }
+      $files = features_export_render($export, $module_name, TRUE);
       foreach ($files as $extension => $file_contents) {
         if (!in_array($extension, array('module', 'info'))) {
           $extension .= '.inc';
@@ -673,59 +578,6 @@ function _drush_features_export($info, $module_name = NULL, $directory = NULL) {
 }
 
 /**
- * Helper function for _drush_feature_export.
- *
- * @param $info
- *   The feature info associative array.
- * @param $module_name
- *  Optional. The name for the exported module.
- */
-function _drush_features_generate_export(&$info, &$module_name) {
-  module_load_include('inc', 'features', 'features.export');
-  $export = features_populate($info, $module_name);
-  if (!features_load_feature($module_name)) {
-    $export['name'] = $module_name;
-  }
-  // Set the feature version if the --version-set or --version-increment option is passed.
-  if ($version = drush_get_option(array('version-set'))) {
-    preg_match('/^(?P<core>\d+\.x)-(?P<major>\d+)\.(?P<patch>\d+)-?(?P<extra>\w+)?$/', $version, $matches);
-    if (!isset($matches['core'], $matches['major'])) {
-      drush_die(dt('Please enter a valid version with core and major version number. Example: !example', array('!example' => '7.x-1.0')));
-    }
-    $export['version'] = $version;
-  }
-  elseif ($version = drush_get_option(array('version-increment'))) {
-    // Determine current version and increment it.
-    $export_load = features_export_prepare($export, $module_name);
-    $version = $export_load['version'];
-    $version_explode = explode('.', $version);
-    $version_minor = array_pop($version_explode);
-    // Increment minor version number if numeric or not a dev release.
-    if (is_numeric($version_minor) || strpos($version_minor, 'dev') !== (strlen($version_minor) - 3)) {
-      // Check for prefixed versions (alpha, beta, rc).
-      if (ctype_digit($version_minor)) {
-        ++$version_minor;
-      }
-      else {
-        // Split version number parts.
-        $pattern = '/([0-9]-[a-z]+([0-9]+))/';
-        $matches = array();
-        preg_match($pattern, $version_minor, $matches);
-        $number = array_pop($matches);
-        ++$number;
-        $pattern = '/[0-9]+$/';
-        $version_minor = preg_replace($pattern, $number, $version_minor);
-      }
-    }
-    array_push($version_explode, $version_minor);
-    // Rebuild version string.
-    $version = implode('.', $version_explode);
-    $export['version'] = $version;
-  }
-  return $export;
-}
-
-/**
  * Revert a feature to it's code definition.
  * Optionally accept a list of components to revert.
  */
@@ -736,16 +588,11 @@ function drush_features_revert() {
 
     // Determine if revert should be forced.
     $force = drush_get_option('force');
-    // Determine if -y was supplied. If so, we can filter out needless output
-    // from this command.
-    $skip_confirmation = drush_get_context('DRUSH_AFFIRMATIVE');
 
     // Parse list of arguments.
     $modules = array();
     foreach ($args as $arg) {
-      $arg = explode('.', $arg);
-      $module = array_shift($arg);
-      $component = array_shift($arg);
+      list($module, $component) = explode('.', $arg);
 
       if (isset($module)) {
         if (empty($component)) {
@@ -763,8 +610,7 @@ function drush_features_revert() {
 
     // Process modules.
     foreach ($modules as $module => $components_needed) {
-      $dt_args['@module'] = $module;
-      if (($feature = features_load_feature($module, TRUE)) && module_exists($module)) {
+      if (($feature = feature_load($module, TRUE)) && module_exists($module)) {
 
         $components = array();
         // Forcefully revert all components of a feature.
@@ -775,12 +621,11 @@ function drush_features_revert() {
             }
           }
         }
-        // Only revert components that are detected to be Overridden/Needs review/rebuildable.
+        // Only revert components that are detected to be Overridden/Needs review.
         else {
           $states = features_get_component_states(array($feature->name), FALSE);
           foreach ($states[$feature->name] as $component => $state) {
-            $revertable_states = array(FEATURES_OVERRIDDEN, FEATURES_NEEDS_REVIEW, FEATURES_REBUILDABLE);
-            if (in_array($state, $revertable_states) && features_hook($component, 'features_revert')) {
+            if (in_array($state, array(FEATURES_OVERRIDDEN, FEATURES_NEEDS_REVIEW)) && features_hook($component, 'features_revert')) {
               $components[] = $component;
             }
           }
@@ -794,24 +639,17 @@ function drush_features_revert() {
         }
         else {
           foreach ($components as $component) {
-            $dt_args['@component'] = $component;
-            $confirmation_message = 'Do you really want to revert @module.@component?';
-            if ($skip_confirmation || drush_confirm(dt($confirmation_message, $dt_args))) {
-              if (features_feature_is_locked($module, $component)) {
-                drush_log(dt('Skipping locked @module.@component.', $dt_args), 'ok');
-              }
-              else {
-                features_revert(array($module => array($component)));
-                drush_log(dt('Reverted @module.@component.', $dt_args), 'ok');
-              }
+            if (drush_confirm(dt('Do you really want to revert !component?', array('!component' => $component)))) {
+              features_revert(array($module => array($component)));
+              drush_log(dt('Reverted !component.', array('!component' => $component)), 'ok');
             }
             else {
-              drush_log(dt('Skipping @module.@component.', $dt_args), 'ok');
+              drush_log(dt('Skipping !component.', array('!component' => $component)), 'ok');
             }
           }
         }
       }
-      elseif ($feature) {
+      else if ($feature) {
         _features_drush_set_error($module, 'FEATURES_FEATURE_NOT_ENABLED');
       }
       else {
@@ -820,7 +658,7 @@ function drush_features_revert() {
     }
   }
   else {
-    drush_print_table(drush_features_list());
+    drush_features_list();
     return;
   }
 }
@@ -847,7 +685,6 @@ function drush_features_revert_all() {
         switch (features_get_storage($module->name)) {
           case FEATURES_OVERRIDDEN:
           case FEATURES_NEEDS_REVIEW:
-          case FEATURES_REBUILDABLE:
             $features_to_revert[] = $module->name;
             break;
         }
@@ -856,13 +693,15 @@ function drush_features_revert_all() {
   }
 
   if ($features_to_revert) {
-    $dt_args = array('!modules' => implode(', ', $features_to_revert));
-    drush_print(dt('The following modules will be reverted: !modules', $dt_args));
-    // Confirm that the user would like to continue. If not, simply abort.
-    if (!drush_confirm(dt('Do you really want to continue?'))) {
-      return drush_user_abort('Aborting.');
+    drush_print(dt('The following modules will be reverted: !modules', array('!modules' => implode(', ', $features_to_revert))));
+    if (drush_confirm(dt('Do you really want to continue?'))) {
+      foreach ($features_to_revert as $module) {
+        drush_invoke_process(drush_sitealias_get_record('@self'), 'features-revert', array($module), array('force' => $force, '#integrate' => TRUE));
+      }
     }
-    drush_invoke('features-revert', $features_to_revert);
+    else {
+      drush_die('Aborting.');
+    }
   }
   else {
     drush_log(dt('Current state already matches defaults, aborting.'), 'ok');
@@ -874,16 +713,11 @@ function drush_features_revert_all() {
  */
 function drush_features_diff() {
   if (!$args = func_get_args()) {
-    drush_print_table(drush_features_list());
+    drush_features_list();
     return;
   }
   $module = $args[0];
-  $filter_ctypes = drush_get_option("ctypes");
-  if ($filter_ctypes) {
-    $filter_ctypes = explode(',', $filter_ctypes);
-  }
-
-  $feature = features_load_feature($module);
+  $feature = feature_load($module);
   if (!module_exists($module)) {
     drush_log(dt('No such feature is enabled: ' . $module), 'error');
     return;
@@ -900,11 +734,11 @@ function drush_features_diff() {
     if (drush_confirm(dt('It seems that the Diff module is not available. Would you like to download and enable it?'))) {
       // Download it if it's not already here.
       $project_info = drush_get_projects();
-      if (empty($project_info['diff']) && !drush_invoke('dl', array('diff'))) {
+      if (empty($project_info['diff']) && !drush_invoke_process(drush_sitealias_get_record('@self'), 'dl', array('diff'), array('#integrate' => TRUE))) {
         return drush_set_error(dt('Diff module could not be downloaded.'));
       }
 
-      if (!drush_invoke('en', array('diff'))) {
+      if (!drush_invoke_process(drush_sitealias_get_record('@self'), 'en', array('diff'), array('#integrate' => TRUE))) {
         return drush_set_error(dt('Diff module could not be enabled.'));
       }
     }
@@ -915,12 +749,9 @@ function drush_features_diff() {
     module_load_include('inc', 'diff', 'diff.engine');
   }
 
-  $lines = (int) drush_get_option('lines');
-  $lines = $lines > 0 ? $lines : 2;
-
   $formatter = new DiffFormatter();
-  $formatter->leading_context_lines = $lines;
-  $formatter->trailing_context_lines = $lines;
+  $formatter->leading_context_lines = 2;
+  $formatter->trailing_context_lines = 2;
   $formatter->show_header = FALSE;
 
   if (drush_get_context('DRUSH_NOCOLOR')) {
@@ -937,13 +768,10 @@ function drush_features_diff() {
   drush_print(sprintf($green, dt('Overrides:  drush features-update will update the exported feature with the displayed overrides')));
   drush_print();
 
-  if ($filter_ctypes) {
-    $overrides = array_intersect_key($overrides, array_flip($filter_ctypes));
-  }
   foreach ($overrides as $component => $items) {
     $diff = new Diff(explode("\n", $items['default']), explode("\n", $items['normal']));
     drush_print();
-    drush_print(dt("Component type: !component", array('!component' => $component)));
+    drush_print(dt("Component: !component", array('!component' => $component)));
     $rows = explode("\n", $formatter->format($diff));
     foreach ($rows as $row) {
       if (strpos($row, '>') === 0) {
@@ -954,62 +782,6 @@ function drush_features_diff() {
       }
       else {
         drush_print($row);
-      }
-    }
-  }
-}
-
-/**
- * Diff all enabled features that are not in their default state.
- *
- * @param ...
- *   (Optional) A list of features to exclude from being reverted.
- */
-function drush_features_diff_all() {
-  module_load_include('inc', 'features', 'features.export');
-  $features_to_exclude = func_get_args();
-
-  $features_to_revert = array();
-  foreach (features_get_features(NULL, TRUE) as $module) {
-    if ($module->status && !in_array($module->name, $features_to_exclude)) {
-      switch (features_get_storage($module->name)) {
-        case FEATURES_OVERRIDDEN:
-        case FEATURES_NEEDS_REVIEW:
-        case FEATURES_REBUILDABLE:
-          $features_to_diff[] = $module->name;
-          break;
-      }
-    }
-  }
-
-  if ($features_to_diff) {
-
-    // Check if the user wants to apply the force option.
-    $force = drush_get_option('force');
-
-    if($force) {
-      foreach ($features_to_diff as $module) {
-
-        drush_print(dt('Diff for !module:', array('!module' => $module)));
-
-        drush_invoke_process(drush_sitealias_get_record('@self'), 'features-diff', array($module));
-      }
-    }
-    else {
-
-      drush_print(dt('A diff will be performed for the following modules: !modules',
-        array('!modules' => implode(', ', $features_to_diff))
-      ));
-
-      if (drush_confirm(dt('Do you want to continue?'))) {
-        foreach ($features_to_diff as $module) {
-          if (drush_confirm(dt('Diff !module?', array('!module' => $module)))) {
-            drush_invoke_process(drush_sitealias_get_record('@self'), 'features-diff', array($module));
-          }
-        }
-      }
-      else {
-        return drush_user_abort('Aborting.');
       }
     }
   }

@@ -1,0 +1,16 @@
+diff --git a/misc/states.js b/misc/states.js
+index 6d98da8..46ee024 100644
+--- a/misc/states.js
++++ b/misc/states.js
+@@ -493,7 +493,10 @@ $(document).bind('state:disabled', function(e) {
+ $(document).bind('state:required', function(e) {
+   if (e.trigger) {
+     if (e.value) {
+-      $(e.target).closest('.form-item, .form-wrapper').find('label').append('<span class="form-required">*</span>');
++      // Avoids duplicate required markers on initialization.
++      if (!$(e.target).closest('.form-item, .form-wrapper').find('label .form-required').length) {
++        $(e.target).closest('.form-item, .form-wrapper').find('label').append('<span class="form-required">*</span>');
++      }
+     }
+     else {
+       $(e.target).closest('.form-item, .form-wrapper').find('label .form-required').remove();

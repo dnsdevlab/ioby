@@ -88,11 +88,9 @@ function commerce_product_pricing_commerce_price_field_formatter_prepare_view($e
         }
 
         // Replace the data being displayed with data from a calculated price.
-        if (!empty($original)) {
-          $items[$product_id] = array();
-          $items[$product_id][0] = commerce_product_calculate_sell_price($product);
-          $items[$product_id][0]['original'] = $original;
-        }
+        $items[$product_id] = array();
+        $items[$product_id][0] = commerce_product_calculate_sell_price($product);
+        $items[$product_id][0]['original'] = $original;
       }
     }
   }

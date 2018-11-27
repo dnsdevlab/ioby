@@ -152,7 +152,8 @@ function iobydonation_mail_sender($order) {
 
   $order_wrapper = entity_metadata_wrapper('commerce_order', $order);
   $order_id = $order_wrapper->order_id->value();
-  $order_create = date('m/d/Y', $order_wrapper->created->value());
+  // $order_create = date('m/d/Y', $order_wrapper->created->value());
+  $order_changed = date('m/d/Y', $order_wrapper->changed->value());
   $order_total = $order_wrapper->commerce_order_total->amount->value();
   $order_total = commerce_currency_format($order_total, 'USD');
   $billing_info   = $order_wrapper->commerce_customer_billing;
@@ -233,7 +234,7 @@ function iobydonation_mail_sender($order) {
   Dear $donation_name,<br/>
   $intro<br/>
   <br/>
-  <b>Date</b>: $order_create<br/>
+  <b>Date</b>: $order_changed<br/>
   <b>Order</b>: $order_id<br/>
   <b>Confirmation #</b>: $payment_id<br/><br/>
   <b>Billing Information</b>:<br/>

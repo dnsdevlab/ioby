@@ -6,6 +6,12 @@
       //wysiwyg hiding
       $('.page-add-project-step-2 fieldset.filter-wrapper').remove();
 
+      // hiding lat and long field, project-2 form
+      $('.node-project_2-form .location .form-item-field-project-address-und-0-locpick-user-latitude').remove();
+      $('.node-project_2-form .location .form-item-field-project-address-und-0-locpick-user-longitude').remove();
+
+      $('.node-project_2-form .location .location-current-coordinates-fieldset').remove();
+
       //login form hiding
       $('a.login', context).click(function () {
         $(this).toggleClass('activated').siblings(".region").fadeToggle("fast");
@@ -216,8 +222,143 @@
         }
       });
 
+
+      /****************\
+      *  IDEA FORM JS  *
+      \****************/
+
+      // mimic basic form assembly validation, return true if there is a value in the field
+      function checkIfValidById(e) {
+        //requires wrapper, eg: '#{id}-D'
+        if ($('#' + e + '-D').length > 0) {
+          $('#' + e + '-D').find('.errMsg').remove();
+          // if empty add error message with id '#{id}-E'
+          if (!$('#' + e).val()) {
+            $('#' + e + '-D').append('<div id="' + e + '-E" class="errMsg"><span>This field is required.</span></div>');
+            return false;
+          } else {
+            return true;
+          }
+        }
+      }
+
+      // if there are tabs on the page
+      if ($('.idea-tabs .tabs a.tab').length > 0) {
+
+        // handle tab clicks at the top of the sections
+        $('.idea-tabs .tabs a.tab').click(function(e){
+
+          // special handling to check if step1 has empty fields
+          if (this == $('li.about-you a')[0]) {
+            $valid1 = checkIfValidById('tfa_10');
+            $valid2 = checkIfValidById('tfa_11');
+            $valid3 = checkIfValidById('tfa_14');
+            if ($valid1 && $valid2 && $valid3) {
+                $('.idea-tabs .tabs a.tab.active').removeClass('active');
+                $(this).addClass('active');
+                if (this.hasAttribute('href') && $(this).attr('href').length > 0) {
+                  href = $(this).attr('href');
+                  if (href.length > 0 && $('.idea-panel' + href).length > 0) {
+                    $('.wFormContainer .idea-panel.active').removeClass('active');
+                    $('.idea-panel' + href).addClass('active');
+                  }
+                }
+
+            // if empty step1 fields then disable the step2 tab
+            } else {
+              $('li.about-you-disabled').removeClass('hidden');
+              $('li.about-you').addClass('hidden');
+              $(window).scrollTop($("#step1").offset().top);
+            }
+
+          // normal handling for clicking on a different tab than we're currently on
+          } else if (!$(this).hasClass('active')) {
+            $('.idea-tabs .tabs a.tab.active').removeClass('active');
+            $(this).addClass('active');
+            if (this.hasAttribute('href') && $(this).attr('href').length > 0) {
+              href = $(this).attr('href');
+              if (href.length > 0 && $('.idea-panel' + href).length > 0) {
+                $('.wFormContainer .idea-panel.active').removeClass('active');
+                $('.idea-panel' + href).addClass('active');
+              }
+            }
+          }
+        });
+
+
+        // handle button clicks at the bottom of the form sections
+        $('.idea-tabs .panel-button').click(function(e){
+
+          // special handling for the #step1 next button
+          if (this == $('.button.panel-button.next-button')[0]) {
+            $valid1 = checkIfValidById('tfa_10');
+            $valid2 = checkIfValidById('tfa_11');
+            $valid3 = checkIfValidById('tfa_14');
+            if ($valid1 && $valid2 && $valid3) {
+              $('li.about-you-disabled').addClass('hidden');
+              $('li.about-you').removeClass('hidden');
+              $('.idea-tabs .tabs a.tab.active').removeClass('active');
+              if (this.hasAttribute('href') && $(this).attr('href').length > 0) {
+                href = $(this).attr('href');
+                if (href.length > 0 && $('.idea-panel' + href).length > 0) {
+                  $('.wFormContainer .idea-panel.active').removeClass('active');
+                  $('.idea-panel' + href).addClass('active');
+                  $('.idea-tabs a.tab[href=' + href + ']').addClass('active');
+                }
+              }
+
+            // if empty step1 fields then disable the #step2 tab
+            } else {
+              $('li.about-you-disabled').removeClass('hidden');
+              $('li.about-you').addClass('hidden');
+              $(window).scrollTop($("#step1").offset().top);
+            }
+
+          // normal behavior once the first step is passed
+          } else {
+            $('.idea-tabs .tabs a.tab.active').removeClass('active');
+            if (this.hasAttribute('href') && $(this).attr('href').length > 0) {
+              href = $(this).attr('href');
+              if (href.length > 0 && $('.idea-panel' + href).length > 0) {
+                $('.wFormContainer .idea-panel.active').removeClass('active');
+                $('.idea-panel' + href).addClass('active');
+                $('.idea-tabs a.tab[href=' + href + ']').addClass('active');
+              }
+            }
+          }
+        });
+
+        // pre-fill user data
+        if (first_name = $('#user_data').data('first-name')) {
+          $('.wFormContainer input#tfa_1').val(first_name);
+        }
+        if (last_name = $('#user_data').data('last-name')) {
+          $('.wFormContainer input#tfa_2').val(last_name);
+        }
+        if (email = $('#user_data').data('email')) {
+          $('.wFormContainer input#tfa_5').val(email);
+        }
+      }
+
+      // see html--form-assembly.tpl.php for the idea-tabs validation fail JS code
+
+      // leader-toolkit active state, with JS as it's coming from a block (this is bad, I know)
+      // ex: /leader-toolkit/Overview
+      if ($('#block-ioby-ioby-project-creation-indicator').length > 0) {
+        current_path = window.location.pathname.toLowerCase();
+        $('#block-ioby-ioby-project-creation-indicator .ioby-step-indicator li').each(function(e){
+          $li = $(this), $a = $(this).find('a');
+          if ($a.length > 0) {
+            a_lower = $a.attr('href').toLowerCase();
+            if (a_lower.indexOf(current_path) !== -1){
+              $li.addClass('current');
+            }
+          }
+        });
+      }
+
       // Analytics Events
-      
+
       function gaEventSend(elEv){
         // Send the event object to Google Analytics
         ga('send', 'event', elEv.category.toLowerCase(), elEv.action.toLowerCase(), elEv.label.toLowerCase());
@@ -239,7 +380,13 @@
         elEv.label = window.location.pathname;
         gaEventSend(elEv);
       });
-}
+
+      $('.block-multistep .active-step').parent('li').addClass('current');
+
+      $('#project-2-node-form .form-submit').addClass('button');
+
+      $('.or-after').after('<div class="or-divider"><span>Or</span><hr /></div>');
+  }
 };
 
 })(jQuery);

@@ -76,10 +76,10 @@
  * @see template_preprocess_node()
  * @see template_process()
  */
-   
+
   //redefine photo to use the thumbnail
   $content['field_project_photo'] = field_view_field('node',$node,'field_project_photo',array('label'=>'hidden','settings'=>array('image_style'=>'thumbnail')));
-  
+
   //get funding data
   $funding = iobyproject_amount_raised( $node->nid );
   $amt_raised = round($funding['amount_raised']);
@@ -90,19 +90,19 @@
     $amt_raised = $amt_needed;
   }
 
-  
-  
+  // IOBY-66 Status of project
+  $project_status = iobyproject_funding($node->nid);
   ?>
-<article id="node-<?php print $node->nid; ?>" class="project-microview <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+<article id="node-<?php print $node->nid; ?>" class="<?php print $project_status; ?> project-microview <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <div class="main-info">
     <div class="project-photo"><a href="<?php print $node_url; ?>"><?php print render($content['field_project_photo'][0]);?></a></div>
     <h3><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h3>
     <div class="project-meter">
-      <?php if ($amt_needed>0) 
+      <?php if ($amt_needed>0)
           $pct_done = floor(($amt_raised/$amt_needed) * 100);
             else
           $pct_done = 0; ?>
       <div class="progress-bar" style="height:<?php echo $pct_done;?>%"></div>
     </div>
-  </div>  
+  </div>
 </article>

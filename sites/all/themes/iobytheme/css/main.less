@@ -19,10 +19,10 @@
 @vlight: #f4f4f1;
 
 .rounded (@radius: 15px) {
-  border-radius: @radius;
   -webkit-border-radius: @radius;
   -moz-border-radius: @radius;
   -khtml-border-radius: @radius;
+  border-radius: @radius;
 }
 
 .bottom-rounded (@radius: 15px) {
@@ -219,23 +219,23 @@ select {
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-    background: rgba(255,255,255,0.75);;
-    border: solid 2px #fff;
-    -webkit-border-radius: 7px;
+  width: 10px;
+  height: 10px;
+  background: rgba(255,255,255,0.75);;
+  border: solid 2px #fff;
+  -webkit-border-radius: 7px;
 }
 
 
 
 ::-webkit-scrollbar-track-piece {
-    background-color: rgba(255,255,255,0.0);
-    -webkit-border-radius: 3px;
+  background-color: rgba(255,255,255,0.0);
+  -webkit-border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #3599CC;
-    -webkit-border-radius: 5px;
+  background-color: #3599CC;
+  -webkit-border-radius: 5px;
 }
 
 
@@ -349,12 +349,32 @@ header#pageheader {
 #rail {
   float:left;
   width: 340px;
-  padding-right: 10px;
-  padding-top: 10px;
+  padding-right: 0;
+  padding-left: 10px;
+  padding-top: 20px;
+
+  .stat_num {
+    font-size:300%;
+    font-weight:bold;
+    line-height:1em;
+  }
+
+  .stat_label {
+    .smallcaps;
+    margin-bottom: 15px;
+  }
+
+  h3 {
+    font-family: Kreon,"Arial Narrow",sans-serif;
+    margin: 0 0 30px 0;
+    font-weight: 900;
+  }
 }
 
-#rail section {
+#rail section,
+#rail .region-sidebar > div {
   background-color: @vlight;
+  padding: 20px;
   margin-bottom: 10px;
   &:before,
   &:after {
@@ -523,14 +543,39 @@ a.rss {
 
 .region-loginpop {
   position: absolute;
-  background: @beige;
-  top:20px;
-  right:3px;
-  width:180px;
-  padding:0 10px;
+  background: white;
+  top:28px;
+  right:-99px;
+  width:196px;
+  padding:10px 20px;
   display: none;
-  border:1px solid #fff;
+  border:1px solid #ccc;
   border-top:none;
+
+  input[type="text"],
+  input[type="password"] {
+    -moz-border-radius: 2px !important;
+    -webkit-border-radius: 2px !important;
+    border-radius: 2px !important;
+    line-height: 1.4;
+    padding: 5px 10px;
+    box-shadow: none;
+    background: none;
+    border: 1px solid #ece6dc;
+    width: 100%;
+  }
+
+  .tools li li a, ul.item-list li a {
+    color: #9F9F9F !important;
+  }
+
+  .form-actions.form-wrapper .form-submit {
+
+  }
+
+  label {
+    margin-bottom: 4px;
+  }
 }
 
 .region-loginpop li.first {
@@ -539,7 +584,6 @@ a.rss {
 
 .region-loginpop h2 {
   display: none;
-  text-align: left;
 }
 
 .tools a.activated {
@@ -558,7 +602,6 @@ a.rss {
 
 .tools li li a {
   text-transform: none;
-  color:#fff;
 }
 
 a#logo {
@@ -628,6 +671,27 @@ h6.locale {
   width: 120px;
 }
 
+.button.button-blue,
+a.button.button-blue,
+input.button.button-blue {
+  /* used with .button class to turn button blue, requires .button for sizing/positioning */
+  background: rgb(52, 170, 228); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgb(52, 170, 228) 1%, rgb(48, 156, 209) 53%, rgb(47, 153, 205) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgb(52, 170, 228)), color-stop(53%,rgb(48, 156, 209)), color-stop(100%,rgb(47, 153, 205))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgb(52, 170, 228) 1%,rgb(48, 156, 209) 53%,rgb(47, 153, 205) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgb(52, 170, 228) 1%,rgb(48, 156, 209) 53%,rgb(47, 153, 205) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgb(52, 170, 228) 1%,rgb(48, 156, 209) 53%,rgb(47, 153, 205) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgb(52, 170, 228) 1%,rgb(48, 156, 209) 53%,rgb(47, 153, 205) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#34aae4', endColorstr='#2f99cd',GradientType=0 ); /* IE6-9 */
+  -webkit-transition: background-position .25s ease;
+  -moz-transition: background-position .25s ease;
+  -ms-transition: background-position .25s ease;
+  -o-transition: background-position .25s ease;
+  transition: background-position .25s ease;
+  background-size:100% 100px ;
+  border: 1px solid #3599cc;
+}
+
 #intro #greeting {
   width: 160px;
   background-color: #fff;
@@ -656,10 +720,10 @@ h6.locale {
   .feature-overlay-right {
     background:transparent;
     filter: progid:DXImageTransform.Microsoft.gradient(
-      gradientType=1, startColor=0, endColorStr=#e9e9e2
+            gradientType=1, startColor=0, endColorStr=#e9e9e2
     );
     -ms-filter: progid:DXImageTransform.Microsoft.gradient(
-      gradientType=1, startColor=0, endColorStr=#e9e9e2
+            gradientType=1, startColor=0, endColorStr=#e9e9e2
     );
     background-image:-o-linear-gradient(right, @light, rgba(236,230,220,0));
     background-image:-moz-linear-gradient(right, @light, rgba(236,230,220,0));
@@ -677,10 +741,10 @@ h6.locale {
   .feature-overlay-left {
     background:transparent;
     filter: progid:DXImageTransform.Microsoft.gradient(
-      gradientType=1, startColorStr=#e9e9e2, endColor=0
+            gradientType=1, startColorStr=#e9e9e2, endColor=0
     );
     -ms-filter: progid:DXImageTransform.Microsoft.gradient(
-      gradientType=1, startColorStr=#e9e9e2, endColor=0
+            gradientType=1, startColorStr=#e9e9e2, endColor=0
     );
     background-image:-o-linear-gradient(left, @light, rgba(236,230,220,0));
     background-image:-moz-linear-gradient(left, @light, rgba(236,230,220,0));
@@ -770,7 +834,7 @@ body {
 }
 
 h1,h2,h3,h4,h5,h6 {
-  font-family: Kreon,Arial Narrow,sans-serif;
+  font-family: Kreon,'Arial Narrow',sans-serif;
   color: @dark;
   font-weight: normal;
 }
@@ -800,7 +864,7 @@ h3 {
   font-size: 23px;
   .lato;
   font-weight: bold;
-  margin:2em 2em 1em;
+  margin:2em 0 1em;
 }
 
 h4 {
@@ -811,13 +875,15 @@ h4 {
 }
 
 #comments h3 {
-  font-family: Kreon,Arial Narrow,sans-serif;
+  font-family: Kreon,'Arial Narrow',sans-serif;
   color:@blue;
   font-size: 182%;
   margin: 0 0 0 0;
 }
 
-a {
+a,
+ul.nice-menu a,
+span.nolink {
   text-decoration: none;
   color: @orange;
   .fadecolor;
@@ -839,15 +905,15 @@ a {
     font-size: 21px;
     position: relative;
     top: 2px;
-   &:after {
-     content : "\203A"
-   }
+    &:after {
+      content : "\203A"
+    }
   }
 }
 
 
 #navigation {
-  font-family: Kreon,Arial Narrow,sans-serif;
+  font-family: Kreon,'Arial Narrow',sans-serif;
   font-weight: 900;
   font-size: 17px;
   text-align: right;
@@ -858,14 +924,84 @@ a {
   text-align: right;
 }
 
+#navigation ul li {
+  text-align: left;
+}
 
+#navigation .menuparent ul {
+  text-align: left;
+}
+
+ul.nice-menu li {
+  border: none;
+  background-color: #fff;
+  &.over {
+    background: #fff;
+  }
+}
+
+ul.nice-menu-down .menuparent li {
+  border:none;
+  background:none;
+  width: auto;
+}
+
+ul.nice-menu-down li {
+  background-color: #fff;
+  &:hover {
+    background-color: #fff;
+  }
+}
+
+ul.nice-menu-down li.menuparent {
+  background-color: #fff;
+  &:hover {
+    background-color: #fff;
+  }
+  &.over {
+    -webkit-box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.50);
+    -moz-box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.50);
+    box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.50);
+    &:after {
+      height: 5px;
+      width: 100%;
+      background: white;
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: 99;
+    }
+  }
+}
+ul.nice-menu-down .menuparent ul {
+  -webkit-box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.50);
+  -moz-box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.50);
+  box-shadow: 1px 1px 4px 0px rgba(0,0,0,0.50);
+  background-color: #fff;
+  text-align: left;
+}
+
+.nice-menu > li {
+  display:inline-block;
+  *display:inline;
+  *zoom:1;
+  padding: 2px 13px;
+  float: none;
+}
+
+.nice-menu li a,
+.nice-menu li span.nolink {
+  display: block;
+  padding: 5px;
+}
 
 /*a.button, input.button,
 #content input.form-submit[type='submit'] {
   .inblock;
   .rounded(20px);
   text-align: center;
-  font-family: Kreon,Arial Narrow,sans-serif;
+  font-family: Kreon,'Arial Narrow',sans-serif;
   color: #fff;
   padding: 6px 15px;
   font-size: 140%;
@@ -891,12 +1027,12 @@ a {
 
 
 
-a.button, input.button,
-#content input.form-submit[type='submit'] {
+a.button,input.button,
+#content input.form-submit[type='submit'], #block-user-login input.form-submit[type='submit'], #modalContent input.form-submit[type='submit'], #edit-submit--4 {
   .inblock;
   .rounded(20px);
-//  background-image:url(../img/button-bg.png);
-//  background-repeat: repeat-x;
+  //  background-image:url(../img/button-bg.png);
+  //  background-repeat: repeat-x;
   background: rgb(236,151,38); /* Old browsers */
   background: -moz-linear-gradient(top,  rgb(236,151,38) 1%, rgb(210,116,29) 53%, rgb(202,97,24) 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgb(236,151,38)), color-stop(53%,rgb(210,116,29)), color-stop(100%,rgb(202,97,24))); /* Chrome,Safari4+ */
@@ -906,7 +1042,7 @@ a.button, input.button,
   background: linear-gradient(to bottom,  rgb(236,151,38) 1%,rgb(210,116,29) 53%,rgb(202,97,24) 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ec9726', endColorstr='#ca6118',GradientType=0 ); /* IE6-9 */
   text-align: center;
-  font-family: Kreon,Arial Narrow,sans-serif;
+  font-family: Kreon,'Arial Narrow',sans-serif;
   color: #fff;
   padding: 10px 20px;
   font-size: 143%;
@@ -928,31 +1064,30 @@ a.button, input.button,
 
 }
 
-
-#content .comment-form input[type=submit],
-.page-node-edit #content .node-project_2-form input[type=submit]
-
-{
-    border: 1px solid #eb8220;
-    background: white;
-    color: #eb8220;
-    .boxsize;
-    font-size: 120%;
-    padding: 7px;
-    margin:5px;
-    cursor: pointer;
-    text-transform: lowercase;
-    &:hover {
-      background: rgb(236,151,38);
-      color: #fff;
-    }
-
-}
+// #content .comment-form input[type=submit],
+// .page-node-edit #content .node-project_2-form input[type=submit]
+//
+// {
+//     border: 1px solid #eb8220;
+//     background: white;
+//     color: #eb8220;
+//     .boxsize;
+//     font-size: 120%;
+//     padding: 7px;
+//     margin:5px;
+//     cursor: pointer;
+//     text-transform: lowercase;
+//     &:hover {
+//       background: rgb(236,151,38);
+//       color: #fff;
+//     }
+//
+// }
 
 #content input.form-submit[type='submit'], input.button {
-//  border: 0;
-
-//  padding: 3px 15px;
+  //  border: 0;
+  margin-bottom: 30px;
+  //  padding: 3px 15px;
 }
 
 
@@ -981,6 +1116,7 @@ a.button, input.button,
 }
 
 
+/* commenting this out as it breaks the button styles on the "remove" buttons when uploading photos
 #content #edit-field-project-photo td input[type=submit] {
   border: 0;
   padding: 0;
@@ -994,6 +1130,10 @@ a.button, input.button,
     color:#cc5f18;
   }
 }
+*/
+#content #edit-field-project-photo td input[type=submit] {
+  font-size: 110%;
+}
 
 #rail h2 {
   font-size: 185%;
@@ -1003,11 +1143,12 @@ a.button, input.button,
 }
 
 #rail p {
-  margin:0.8em 0.7em;
+  margin:0.8em 0;
 }
 
 input[type='text'],
-input[type='password'] {
+input[type='password'], textarea {
+  box-sizing: border-box;
   border:1px solid @beige;
   padding: 3px;
   margin-bottom: 2px;
@@ -1015,7 +1156,13 @@ input[type='password'] {
   font-size: 110%;
   background-color: @vlight + #111111;
 }
-
+.description, .fieldset-description{
+  font-style: italic;
+  color: @dark + #222222;
+  line-height: inherit;
+  font-size: 1em !important;
+  margin: .75em 0 !important;
+}
 .description, .counter {
   font-style: italic;
   color: @dark + #222222;
@@ -1067,14 +1214,8 @@ label {
   margin-top: 4px;
 }
 
-.password-strength {
-  width: 12em;
-  margin-top: 0.5em;
-  margin-right: 40px;
-}
-
 .password-indicator {
-  height: 15px;
+  height: 30px;
   background: @light;
 
   .indicator {
@@ -1148,7 +1289,6 @@ tr.even, tr.odd {
  */
 
 #rail section {
-  padding: 10px;
 
   h2 {
 
@@ -1173,7 +1313,7 @@ div.horizontal-tabs {
 
 #content ul.tabs,
 div.horizontal-tabs ul.horizontal-tabs-list
- {
+{
   border: none;
   list-style: none;
   padding:10px 0;
@@ -1305,7 +1445,7 @@ footer#footer {
 
 #bottom li.title {
   padding:8px 13px;
-  font-family: Kreon,Arial Narrow,sans-serif;
+  font-family: Kreon,'Arial Narrow',sans-serif;
   color: @blue;
   font-size: 123%;
   vertical-align: top;
@@ -1331,7 +1471,7 @@ footer#footer {
 
   a {
     color:#fff;
-    font-family: Kreon,Arial Narrow,sans-serif;
+    font-family: Kreon,'Arial Narrow',sans-serif;
     font-size: 108%;
     font-weight: bold;
     text-transform: lowercase;
@@ -1375,7 +1515,7 @@ footer#footer {
   .views-field-field-user,
   .views-field-field-person-name {
     text-align: right;
-    font-family: Kreon,Arial Narrow,sans-serif;
+    font-family: Kreon,'Arial Narrow',sans-serif;
     font-weight: bold;
     font-size: 108%;
     color: @orange;
@@ -1395,7 +1535,7 @@ footer#footer {
   h2 {
     float:left;
     text-align: right;
-    width: 120px;
+    width: 89px;
     color: @beige;
     font-size: 131%;
     font-weight: bold;
@@ -1415,24 +1555,31 @@ footer#footer {
       width: 32px;
       display: block;
     }
+    .facebook{
+      background-position: -72px 0;
+    }
 
     .twitter {
-      background-position: -32px 0;
+      background-position: -103px 0;
     }
     .flickr {
-      background-position: -64px 0;
+      background-position: -134px 0;
     }
     .vimeo {
-      background-position: -96px 0;
+      background-position: -168px 0;
+    }
+    .instagram{
+      background-position: -231px 0;
     }
     .rss {
-      background-position: -128px 0;
+      background-position: -198px 0;
     }
+
   }
 }
 
 #footer #block-block-2  .content {
-  font-family:Kreon,Arial Narrow,sans-serif;
+  font-family:Kreon,'Arial Narrow',sans-serif;
   font-size: 162%;
   line-height: 125%;
   margin-top: 2px;
@@ -1694,6 +1841,9 @@ ol.ioby-step-indicator {
 
     &.current {
       color: @active;
+      & a {
+        color: @active;
+      }
     }
   }
 }
@@ -1812,20 +1962,10 @@ ol.ioby-step-indicator {
 */
 #rail ul#ioby-current-stats {
   list-style:none;
-  margin-left:0.9em;
+  margin-left:0;
 
   li {
     margin:0.8em 0;
-  }
-
-  .stat_num {
-    font-size:300%;
-    font-weight:bold;
-    line-height:1em;
-  }
-
-  .stat_label {
-    .smallcaps;
   }
 }
 
@@ -1929,15 +2069,15 @@ ol.ioby-step-indicator {
 }
 
 #edit-province-wrapper {
-    position: absolute;
-    top: 55px;
-    left: 230px;
+  position: absolute;
+  top: 55px;
+  left: 230px;
 }
 
 .views-widget-per-page {
-    position: absolute;
-    top: 110px;
-    left: 230px;
+  position: absolute;
+  top: 110px;
+  left: 230px;
 }
 
 form.node-donation-form #autocomplete {
@@ -1992,8 +2132,9 @@ form.node-donation-form #autocomplete {
     text-shadow: none;
     padding: 0 9px;
     line-height: 2;
-    border-radius: 10px;
+    -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
+    border-radius: 10px;
   }
   .field-name-field-campaign-logo {
     float:right;
@@ -2137,7 +2278,7 @@ ul li.leaf {
 
 
 .facetapi-active, .leaf {
-    color: rgb(69, 69, 69);
+  color: rgb(69, 69, 69);
 }
 
 
@@ -2154,4 +2295,96 @@ div#block-system-main .content .project-miniview.node-teaser .main-info .field-i
 
 .vertical-tabs .form-type-textfield input {
   width: auto;
+}
+
+#modalContent {
+  top: 50px !important;
+}
+
+.ioby-modal-header {
+  h3 {
+    text-align: center;
+    line-height: 1.25;
+    position: relative;
+    font-weight: normal;
+    font-size: 20px;
+    margin-bottom: 2em;
+  }
+}
+
+div.ctools-modal-content {
+  padding: 20px 30px;
+  border-radius: 2px;
+  border: 0;
+
+  input[type="text"],
+  input[type="password"] {
+    -moz-border-radius: 2px !important;
+    -webkit-border-radius: 2px !important;
+    border-radius: 2px !important;
+    line-height: 1.4;
+    padding: 5px 10px;
+    box-shadow: none;
+    background: none;
+    border: 1px solid #ece6dc;
+    width: 100%;
+  }
+}
+ul.ioby-user-modal-tabs {
+  text-align: center;
+  margin: 0 auto;
+
+  li {
+    font-size: 20px;
+  }
+}
+
+.left-wrapper, .right-wrapper {
+  float: left;
+  width: 50%;
+  display: inline-block;
+}
+
+.right-wrapper {
+  padding-left: 60px;
+  box-sizing: border-box;
+}
+
+.popups-close a {
+  margin-top: -8px;
+
+  img {
+    display: none;
+  }
+
+  &:after {
+    content: "×";
+    font-size: 32px;
+    position: relative;
+    color: #444;
+  }
+}
+
+#project-blog-node-form #edit-actions {
+  text-align: right;
+}
+
+.or-divider {
+  position: relative;
+  margin: 30px 0 30px 0;
+  color: #222;
+
+  span {
+    position: absolute;
+    background: #fff;
+    display: inline-block;
+    padding: 20px;
+    left: calc(~'50% - 24px');
+    bottom: -26px;
+    text-align: center;
+  }
+
+  hr {
+    border-top-color: @beige;
+  }
 }

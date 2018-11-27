@@ -8,6 +8,7 @@ use Drupal\ioby_sf\Salesforce\SalesforceSyncService;
 use Drupal\ioby_sf\Salesforce\FundQueueService;
 use Drupal\xautoload\Adapter\LocalDirectoryAdapter;
 use Drupal\ioby_sf\Salesforce\Repository\SalesforceRepository;
+use Drupal\ioby_sf\Salesforce\Repository\CampaignRepository;
 
 define('IOBY_NODE_TYPE_PROJECT', 'project_2');
 define('IOBY_NODE_TYPE_DONATION', 'donation');
@@ -19,6 +20,7 @@ define('IOBY_SF_WSDL_SANDBOX', dirname(__FILE__) . '/ioby.sandbox.wsdl.xml');
 
 // We only want orders after 11/07/2011 when the order system was cleaned up
 define('IOBY_SF_ORDERS_START', 1320642000);
+define('IOBY_PROJECT_CUTOFF_DATE', 1462075200); // May 1, 2016
 
 /**
  * Implements hook_cron().
@@ -63,7 +65,13 @@ function ioby_sf_menu() {
     'file' => 'ioby_sf.admin.inc',
     'type' => MENU_NORMAL_ITEM,
     'access arguments' => array('execute salesforce sync'),
-
+  );
+  $items['admin/ioby_sf/salesforce-id-lookup'] = array(
+    'title' => 'Ioby Salesforce ID Autocomplete',
+    'page callback' => 'ioby_sf_id_lookup_autocomplete',
+    'access arguments' => array('set salesforce id'),
+    'file' => 'ioby_sf.admin.inc',
+    'type' => MENU_CALLBACK,
   );
 
   return $items;
@@ -96,32 +104,63 @@ function ioby_sf_node_load($nodes, $types) {
   }
 
   if (!empty($project_nids)) {
-    $projects = db_select('ioby_sf_potential_projects', 'p')
-      ->fields('p')
-      ->condition('p.nid', $project_nids, 'IN')
+    $projects = db_select('ioby_sf_campaigns', 'c')
+      ->fields('c')
+      ->condition('c.project_nid', $project_nids, 'IN')
       ->execute()
       ->fetchAll();
 
-    foreach ($projects as $project) {
-      $nodes[$project->nid]->salesforce_record_id = $project->salesforce_record_id;
-      $nodes[$project->nid]->create_new_sf_object = $project->create_new_sf_object;
-      $nodes[$project->nid]->connected_to_sf = $project->connected_to_sf;
+    if (!empty($projects)) {
+      // Load data and indicate that the node is connected to Salesforce (synced).
+      foreach ($projects as $project) {
+        if (!empty($project->salesforce_record_id)) {
+          $nodes[$project->project_nid]->salesforce_record_id = $project->salesforce_record_id;
+          $nodes[$project->project_nid]->connected_to_sf = intval(TRUE);
+          $nodes[$project->project_nid]->create_new_sf_object = intval(FALSE);
+        }
+      }
+    }
+    else {
+      // We might not have synced to Salesforce yet. Try the potential_projects
+      // table.
+      $projects = db_select('ioby_sf_potential_projects', 'p')
+        ->fields('p')
+        ->condition('p.nid', $project_nids, 'IN')
+        ->execute()
+        ->fetchAll();
+
+      if (!empty($projects)) {
+        // Load data and indicate that we have not yet synced to Salesforce.
+        foreach ($projects as $project) {
+          if (!empty($project->salesforce_record_id)) {
+            $nodes[$project->nid]->salesforce_record_id = $project->salesforce_record_id;
+            $nodes[$project->nid]->connected_to_sf = intval(TRUE);
+            $nodes[$project->nid]->create_new_sf_object = intval(TRUE);
+          }
+        }
+      }
     }
   }
 }
 
 /**
  * Implements hook_node_insert().
+ *
+ * @author Paul Venuti
  */
 function ioby_sf_node_insert($node) {
   if ($node->type == IOBY_NODE_TYPE_PROJECT) {
-    db_insert('ioby_sf_potential_projects')
+    // Connect this node to the potential project. This flags it for syncing to
+    // Salesforce and prevents it from appearing in the autocomplete lookup.
+    db_update('ioby_sf_potential_projects')
       ->fields(
         array(
           'nid' => $node->nid,
-          'create_new_sf_object' => $node->create_new_sf_object,
+          'create_new_sf_object' => 1,
+          'connected_to_sf' => 0,
         )
       )
+      ->condition('salesforce_record_id', $node->salesforce_record_id)
       ->execute();
   }
 }
@@ -131,16 +170,16 @@ function ioby_sf_node_insert($node) {
  */
 function ioby_sf_node_update($node) {
   if ($node->type == IOBY_NODE_TYPE_PROJECT) {
-    db_update('ioby_sf_potential_projects')
-      ->fields(
-        array(
+    if (!empty($node->salesforce_record_id)) {
+      db_update('ioby_sf_potential_projects')
+        ->fields(array(
           'nid' => $node->nid,
           'salesforce_record_id' => !empty($node->salesforce_record_id) ? SalesforceRepository::getSalesforceIdWithChecksum($node->salesforce_record_id) : NULL,
-          'create_new_sf_object' => $node->create_new_sf_object,
-        )
-      )
-      ->condition('nid', $node->nid, '=')
-      ->execute();
+          'create_new_sf_object' => intval(TRUE),
+          ))
+        ->condition('salesforce_record_id', $node->salesforce_record_id, '=')
+        ->execute();
+    }
   }
 }
 
@@ -163,50 +202,139 @@ function ioby_sf_form_project_2_node_form_alter(&$form, &$form_state, $form_id) 
   if (isset($node->connected_to_sf) && $node->connected_to_sf) {
     $form['salesforce_record_id'] = array(
       '#type' => 'item',
-      '#markup' => "<strong>Salesforce Record Id: </strong>" . substr($form['#node']->salesforce_record_id, 0, 15),
+      '#markup' => "<strong>Salesforce Record ID: </strong>" . substr($form['#node']->salesforce_record_id, 0, 15),
       '#access' => user_access('set salesforce id'),
     );
+
+    // Set access for the removal option.
+    $form['field_remove_salesforce_id']['#access'] = user_access('set salesforce id');
   }
   else {
     $form['salesforce_record_id'] = array(
       '#type' => 'textfield',
-      '#title' => t('Salesforce Record ID'),
+      '#title' => t('Potential Project Lookup'),
+      '#description' => t('Please select a Potential Project by its name to associate it with this form.'),
       '#default_value' => isset($form['#node']->salesforce_record_id) ? $form['#node']->salesforce_record_id : NULL,
-      '#size' => 18,
+      '#size' => 60,
       '#maxlength' => 18,
+      '#autocomplete_path' => 'admin/ioby_sf/salesforce-id-lookup',
       '#access' => user_access('set salesforce id'),
     );
+
+    // Disable the removal option as it is not relevant.
+    $form['field_remove_salesforce_id']['#access'] = FALSE;
   }
 
   if (empty($node->salesforce_record_id)) {
     $form['create_new_sf_object'] = array(
       '#type' => 'checkbox',
-      '#title' => t('This project can be published without a Salesforce ID'),
+      '#title' => t('Do not associate an existing potential project with this project page'),
       '#default_value' => isset($form['#node']->create_new_sf_object) ? $form['#node']->create_new_sf_object : 0,
       '#access' => user_access('set salesforce id'),
     );
   }
 
   $form['#validate'][] = 'ioby_sf_project_validate';
+  $form['#submit'][] = 'ioby_sf_project_submit';
 }
 
 /**
  * Callback on project node form to validate our custom salesforce fields
  */
 function ioby_sf_project_validate($form, &$form_state) {
+  $values = &$form_state['values'];
+  $language = LANGUAGE_NONE;
+
   if (array_key_exists('salesforce_record_id', $form_state['input']) && array_key_exists('create_new_sf_object', $form_state['input'])) {
     if (empty($form_state['values']['salesforce_record_id']) && empty($form_state['values']['create_new_sf_object'])) {
-      form_set_error('salesforce_record_id', t('You must either enter a Salesforce Record ID or check the option to publish without a Salesforce Record ID.'));
-      form_set_error('create_new_sf_object', t('You must either enter a Salesforce Record ID or check the option to publish without a Salesforce Record ID.'));
+      form_set_error('salesforce_record_id', t('You must either associate a SalesForce potential project OR check the option to publish without an existing record connected to this project page. Please check your Project Administration tab in the admin project administration panel below.'));
+      form_set_error('create_new_sf_object');
     }
     elseif(!empty($form_state['values']['salesforce_record_id'])) {
-      $salesforce_service = ioby_sf_get_salesforce_service();
+      if (empty($form_state['values']['create_new_sf_object'])) {
+        $salesforce_service = ioby_sf_get_salesforce_service();
 
-      if (!$salesforce_service->campaignExists(SalesforceRepository::getSalesforceIdWithChecksum($form_state['values']['salesforce_record_id']))) {
-        form_set_error('salesforce_record_id', t('The Campaign for the Salesforce Record ID that you entered does not exist.'));
+        try {
+          if (!$salesforce_service->campaignExists(SalesforceRepository::getSalesforceIdWithChecksum($form_state['values']['salesforce_record_id']))) {
+            // Project doesn't exist.
+            form_set_error('salesforce_record_id', t('Your potential project association is invalid. Please use the project administration area below to look up and select a potential project to associate with this project page.'));
+          }
+          elseif (ioby_sf_project_is_no_longer_available($form_state['values']['salesforce_record_id'])) {
+            form_set_error('salesforce_record_id', t('The potential project you tried to associate with this project is no longer available. Please make a new selection.'));
+          }
+        }
+        catch (\Exception $e) {
+          // The ID was too short and an exception was thrown. Print the same
+          // message as above, but also put something in Watchdog.
+          form_set_error('salesforce_record_id', t('Your potential project association is invalid. Please use the project administration area below to look up and select a potential project to associate with this project page.'));
+          watchdog_exception('ioby_sf', $e);
+        }
+      }
+      else {
+        // You can't both provide an ID and say it can be published without one.
+        form_set_error('salesforce_record_id', t('You have associated an existing potential project AND a new project record in SalesForce to this campaign form. To associate the selected potential project, uncheck the box that allows the project page to publish without an associated potential project. If you\'d like to remove the associated potential project, remove the text from the look-up field.'));
+        form_set_error('create_new_sf_object');
       }
     }
   }
+}
+
+/**
+ * Make sure that the record is still unattached. This is in the (probably) rare
+ * case where two people create a Project associated with the same Potential
+ * Project at the same time.
+ *
+ * @return boolean
+ *
+ * @author Paul Venuti
+ */
+function ioby_sf_project_is_no_longer_available($record_id) {
+  $args = array(
+    ':id' => $record_id,
+  );
+  return db_query("SELECT nid FROM {ioby_sf_potential_projects} WHERE salesforce_record_id=:id AND nid IS NOT NULL", $args)->fetchField();
+}
+
+/**
+ * Reacts to the Project node form submission.
+ *
+ * @author Paul Venuti
+ */
+function ioby_sf_project_submit(&$form, &$form_state) {
+  $values = &$form_state['values'];
+  $language = LANGUAGE_NONE;
+  if (!empty($values['field_remove_salesforce_id'][$language][0]['value'])) {
+    // User has requested that we remove the Salesforce ID from this Project.
+    ioby_sf_remove_project_association($values['nid']);
+
+    // Reset the value of this field and clear out the salesforce id.
+    $values['field_remove_salesforce_id'][$language][0]['value'] = intval(FALSE);
+    $form_state['node']->salesforce_record_id = '';
+  }
+}
+
+/**
+ * Removes any associations this Project might have with a Salesforce record ID.
+ *
+ * @author Paul Venuti
+ */
+function ioby_sf_remove_project_association($nid) {
+  // Delete this entry from the campaigns table.
+  db_delete('ioby_sf_campaigns')
+    ->condition('project_nid', $nid)
+    ->execute();
+
+  // Free up the corresponding entry in the potential_projects table, if one
+  // exists.
+  db_update('ioby_sf_potential_projects')
+    ->fields(array(
+        'nid' => NULL,
+      ))
+    ->condition('nid', $nid)
+    ->execute();
+
+  // Tell the user that this has been done.
+  drupal_set_message(t('You\'ve successfully removed a project association with this campaign page in Drupal. Contact Product for manual removal in SalesForce.'), 'warning');
 }
 
 /**
@@ -216,11 +344,11 @@ function ioby_sf_field_extra_fields() {
   $extra['node'][IOBY_NODE_TYPE_PROJECT] = array(
     'form' => array(
       'salesforce_record_id' => array(
-        'label' => t('Salesforce Record ID'),
+        'label' => t('Potential Project Lookup'),
         'description' => t('Text Field (ioby_sf)'),
       ),
       'create_new_sf_object' => array(
-        'label' => t('This project can be published without a Salesforce ID'),
+        'label' => t('Do not associate an existing potential project with this project page'),
         'description' => t('Boolean (ioby_sf)')
       ),
     ),
@@ -362,7 +490,10 @@ function ioby_sf_push_account_objects() {
 }
 
 /**
- * Retrieves campaign objects that need to be pushed to Salesforce and pushes them.
+ * Retrieves campaign objects that need to be pushed to Salesforce and pushes
+ * them.
+ *
+ * Note: A Project node in Drupal = a Campaign in Salesforce.
  */
 function ioby_sf_push_campaign_objects() {
   $salesforce_service = ioby_sf_get_salesforce_service();
@@ -531,6 +662,42 @@ function ioby_sf_push_opportunities() {
   }
 }
 
+function ioby_sf_push_orders() {
+  $salesforce_service = ioby_sf_get_salesforce_service();
+  if (!isset($salesforce_service)) { return NULL; }
+
+  $repository = new SalesforceRepository();
+
+  try {
+    $orders = $repository->getCommerceOrders();
+    if (!empty($orders)) {
+      $salesforce_service->pushOrders($orders);
+    }
+  }
+  catch (\Exception $e) {
+    ioby_sf_handle_exceptions($e);
+  }
+}
+
+function ioby_sf_push_order_line_items() {
+  // Get the orders that still need an update
+
+  // After pushing them, set their needs update status to 0.
+  $salesforce_service = ioby_sf_get_salesforce_service();
+  if (!isset($salesforce_service)) { return NULL; }
+
+  $repository = new SalesforceRepository();
+
+  try {
+    $order_line_items = $repository->getOrderLineItems();
+    if (!empty($order_line_items)) {
+      $salesforce_service->pushOrderLineItems($order_line_items);
+    }
+  }
+  catch (\Exception $e) {
+    ioby_sf_handle_exceptions($e);
+  }
+}
 /**
  * Retrieves manual opportunity objects that were synced down in Drupal from Salesforce
  * and updates the Salesforce record with the Drupal Id for the opportunity.
@@ -558,6 +725,48 @@ function ioby_sf_pull_manual_donations() {
 
   try {
     $salesforce_service->pullNewManualOpportunities();
+  }
+  catch (\Exception $e) {
+    ioby_sf_handle_exceptions($e);
+  }
+}
+
+/**
+ * Finds Potential Projects that have been assigned a node id locally and
+ * adds that nid to the Potential Project object in Salesforce.
+ *
+ * @see ioby_sf_push_campaign_objects()
+ *
+ * @author Paul Venuti
+ */
+function ioby_sf_push_potential_project_objects() {
+  $salesforce_service = ioby_sf_get_salesforce_service();
+  if (!isset($salesforce_service)) { return NULL; }
+
+  $repository = new CampaignRepository();
+
+  try {
+    if ($potential_projects = $repository->getNewPotentialProjects()) {
+      $salesforce_service->pushPotentialProjects($potential_projects);
+    }
+  }
+  catch (\Exception $e) {
+    ioby_sf_handle_exceptions($e);
+  }
+}
+
+/**
+ * Connects to SF and pulls active potential projects, and removes ones from
+ * the database that no longer exist in Salesforce.
+ *
+ * @author Paul Venuti
+ */
+function ioby_sf_pull_potential_projects() {
+  $salesforce_service = ioby_sf_get_salesforce_service();
+  if (!isset($salesforce_service)) { return NULL; }
+
+  try {
+    $salesforce_service->pullPotentialProjects();
   }
   catch (\Exception $e) {
     ioby_sf_handle_exceptions($e);
@@ -657,6 +866,7 @@ function ioby_sf_process_everything() {
   ioby_sf_process_opportunities();
 
   // Push
+  ioby_sf_push_potential_project_objects();
   ioby_sf_push_account_objects();
   ioby_sf_push_campaign_objects();
   ioby_sf_push_fund_objects();
@@ -666,7 +876,12 @@ function ioby_sf_process_everything() {
   ioby_sf_push_project_participations();
   ioby_sf_push_campaign_members();
   ioby_sf_push_opportunities();
+  ioby_sf_push_orders();
+  ioby_sf_push_order_line_items();
+
+  // Pull
   ioby_sf_pull_manual_donations();
   ioby_sf_create_manual_donation_nodes();
   ioby_sf_push_manual_opportunities();
+  ioby_sf_pull_potential_projects();
 }

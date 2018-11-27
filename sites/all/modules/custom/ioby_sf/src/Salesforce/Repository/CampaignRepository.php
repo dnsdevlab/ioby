@@ -14,13 +14,14 @@ class CampaignRepository
    */
   public function getNewCampaigns() {
     // Get projects that don't exist in the campaigns table and don't have a manual
-    // Salesforce Record Id set (or flagged to create a new one)
+    // Salesforce Record Id set (or flagged to create a new one), so that we know
+    // to add them to the ioby_sf_campaigns table.
     $query = db_select('node', 'n')
       ->fields('n', array('nid'))
       ->condition('n.status', NODE_PUBLISHED, '=')
       ->condition('n.type', IOBY_NODE_TYPE_PROJECT, '=')
-      ->condition('pp.connected_to_sf', 0, '=')
-      ->condition(db_or()->isNotNull('pp.salesforce_record_id')->condition('create_new_sf_object', 1, '='))
+      ->condition('create_new_sf_object', 1, '=')
+      ->isNotNull('pp.nid')
       ->isNull('sfc.project_nid')
       ->orderBy('n.nid');
     $query->innerJoin('ioby_sf_potential_projects', 'pp', 'n.nid = pp.nid');
@@ -46,11 +47,13 @@ class CampaignRepository
    * @return Campaign[]
    */
   public function getModifiedCampaigns() {
+    // Use a cutoff date so we don't get basically every existing project.
     $query = db_select('node', 'n')
       ->fields('n', array('nid'))
       ->condition('n.status', NODE_PUBLISHED, '=')
       ->condition('n.type', IOBY_NODE_TYPE_PROJECT, '=')
       ->where('n.changed > sfc.changed')
+      ->where('n.changed > ' . IOBY_PROJECT_CUTOFF_DATE)
       ->isNotNull('sfc.project_nid')
       ->orderBy('n.nid');
     $query->innerJoin('ioby_sf_campaigns', 'sfc', 'n.nid = sfc.project_nid');
@@ -69,6 +72,39 @@ class CampaignRepository
     }
 
     return $campaigns;
+  }
+
+  /**
+   * Pulls Potential Projects that have been claimed by a Drupal Project, which
+   * is any row that has an nid attached and which has a 'create_new_sf_object'
+   * of 1. This means we should update the record in Salesforce in preparation
+   * for the upsert in ioby_sf_push_campaign_objects().
+   *
+   * @see ioby_sf_push_campaign_objects()
+   *
+   * @author Paul Venuti
+   */
+  public function getNewPotentialProjects() {
+    $query = db_select('node', 'n')
+      ->fields('n', array('nid'))
+      ->fields('pp', array('salesforce_record_id'))
+      ->condition('n.status', NODE_PUBLISHED, '=')
+      ->condition('n.type', IOBY_NODE_TYPE_PROJECT, '=')
+      ->condition('pp.create_new_sf_object', 1, '=')
+      ->isNotNull('pp.salesforce_record_id')
+      ->isNotNull('pp.nid')
+      ->isNotNull('sfc.project_nid')
+      ->orderBy('n.nid');
+    $query->innerJoin('ioby_sf_potential_projects', 'pp', 'n.nid = pp.nid');
+    $query->leftJoin('ioby_sf_campaigns', 'sfc', 'n.nid = sfc.project_nid');
+
+    $potential_projects = $query->execute()->fetchAll();
+
+    if (empty($potential_projects)) {
+      return array();
+    }
+
+    return $potential_projects;
   }
 
   /**

@@ -1,0 +1,45 @@
+diff --git a/msnf.module b/msnf.module
+index b6e8825..3fee954 100644
+--- a/msnf.module
++++ b/msnf.module
+@@ -1219,14 +1219,36 @@ function _msnf_form_attach_buttons(&$form, &$form_state) {
+       // Todo. If all further steps may be skipped ...
+     }
+   }
+-  if (isset($form['actions']['submit']) && $current_index != (count($steps) - 1)) {
+-    // Hide save button until we display the last step or all further steps may
+-    // be skipped.
+-    $form['actions']['submit']['#access'] = count(array_diff($remaining_steps, array_keys($skippable_steps))) == 0;
++  // If it's a new node.
++  if(!$form['nid']['#value'] && $current_index == 0){
++    // Hide 'next' button.
++    $form['actions']['next']['#access'] = FALSE;
++
++    // Set a custom submit handler that redirect users to node edit form.
++    $form['actions']['submit']['#submit'][] = '_msnf_form_submit';
+   }
+ }
+ 
+ /**
++ * Custom submit handler that redirect users to node edit form after node creation.
++ *
++ * @param <array> $form
++ *   Form to hide the fields from.
++ * @param <array> $form_state
++ *   Current form state.
++ */
++function _msnf_form_submit(&$form, &$form_state){
++  $steps = $form['#steps'];
++  $step_names = array_keys($steps);
++  $current_step = _msnf_form_step_get_current($form, $form_state);
++  $current_index = array_search($current_step->step_name, $step_names);
++  $next_step = $steps[$step_names[$current_index + 1]];
++
++  // Redirect user to node edit page.
++  drupal_goto('node/' . $form_state['values']['nid'] . '/edit', array('query' => array('step' => $next_step->step_name)));
++}
++
++/**
+  * Hide all fields that are not associated to the current step.
+  *
+  * @param <array> $form

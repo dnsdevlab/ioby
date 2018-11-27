@@ -248,8 +248,17 @@
     $volunteers = 0;
   }
 ?>
-<article id="node-<?php print $node->nid; ?>" class="project-miniview <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+
+<?php
+  // Fund status IOBY-66
+  // Show if node is underway or completed with funded logo
+  // Underway (starting project) and/or completed (completed projecet)
+  // are funded considered funded.
+  $project_status = iobyproject_funding($node->nid);
+ ?>
+<article id="node-<?php print $node->nid; ?>" class="<?php print $project_status; ?> project-miniview <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <div class="main-info">
+
     <?php if(!empty($sponsors)> 0) : ?>
       <div class="sponsor-ribbon ribbon-small">
       <?php foreach ($sponsors as $sponsor_info) :?>
@@ -281,6 +290,8 @@
       <div class="progress-bar" style="height:<?php echo $pct_done;?>%"></div>
     </div>
   </div>
+
+
 </article>
 <?php
 //this should be for project submission preview only

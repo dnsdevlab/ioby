@@ -1,0 +1,12 @@
+name = Commerce Devel
+description = Provide debugging and development information for Commerce modules
+package = Commerce (contrib)
+dependencies[] = devel
+core = 7.x
+
+; Information added by Drupal.org packaging script on 2016-03-19
+version = "7.x-1.0"
+core = "7.x"
+project = "commerce_devel"
+datestamp = "1458413041"
+

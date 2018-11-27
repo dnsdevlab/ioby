@@ -43,8 +43,8 @@ class OgFieldAccessTestCase extends DrupalWebTestCase {
     // Set global permissions.
     $anon_rid = array_search(OG_ANONYMOUS_ROLE, $og_roles);
     $permissions = array(
-      'view body field' => 0,
-      'update body field' => 0,
+      'view ' . $group_type->type . '-body field' => 0,
+      'update ' . $group_type->type . '-body field' => 0,
       // Allow non-members to edit the group, so we can test the node-edit page.
       'update group' => 1,
     );
@@ -69,7 +69,7 @@ class OgFieldAccessTestCase extends DrupalWebTestCase {
     $this->assertNoText($node->body[LANGUAGE_NONE][0]['value'], t('Non group member can not view field.'));
 
     // Change permissions and assert user can view the field.
-    $permissions['view body field'] = 1;
+    $permissions['view ' . $group_type->type . '-body field'] = 1;
     og_role_change_permissions($anon_rid, $permissions);
     $this->drupalGet('node/' . $node->nid);
     $this->assertText($node->body[LANGUAGE_NONE][0]['value'], t('Non group member can now view field.'));
@@ -80,14 +80,14 @@ class OgFieldAccessTestCase extends DrupalWebTestCase {
     $this->assertNoText($node->body[LANGUAGE_NONE][0]['value'], t('Non group member can not edit field.'));
 
     // Change permissions and assert user can view the field.
-    $permissions['update body field'] = 1;
+    $permissions['update ' . $group_type->type . '-body field'] = 1;
     og_role_change_permissions($anon_rid, $permissions);
     $this->drupalGet('node/' . $node->nid . '/edit');
     $langcode = LANGUAGE_NONE;
     $this->assertFieldByName("body[$langcode][0][value]", $node->body[LANGUAGE_NONE][0]['value'], t('Non group member can now edit field.'));
 
     // Assert field permissions on group content.
-    $permissions['view body field'] = 0;
+    $permissions['view ' . $group_type->type . '-body field'] = 0;
     og_role_change_permissions($anon_rid, $permissions);
 
     $settings = array();

@@ -123,23 +123,13 @@ class views_plugin_style extends views_plugin {
   function get_row_class($row_index) {
     if ($this->uses_row_class()) {
       $class = $this->options['row_class'];
-
       if ($this->uses_fields() && $this->view->field) {
-        $classes = array();
-
-        // Explode the value by whitespace, this allows the function to handle
-        // a single class name and multiple class names that are then tokenized.
-        foreach(explode(' ', $class) as $token_class) {
-          $classes[] = strip_tags($this->tokenize_value($token_class, $row_index));
-        }
-      }
-      else {
-        $classes = explode(' ', $class);
+        $class = strip_tags($this->tokenize_value($class, $row_index));
       }
 
-      // Convert whatever the result is to a nice clean class name
+      $classes = explode(' ', $class);
       foreach ($classes as &$class) {
-        $class = drupal_html_class($class);
+        $class = drupal_clean_css_identifier($class);
       }
       return implode(' ', $classes);
     }
@@ -192,7 +182,7 @@ class views_plugin_style extends views_plugin {
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
     // Only fields-based views can handle grouping.  Style plugins can also exclude
-    // themselves from being groupable by setting their "use grouping" definition
+    // themselves from being groupable by setting their "use grouping" definiton
     // key to FALSE.
     // @TODO: Document "uses grouping" in docs.php when docs.php is written.
     if ($this->uses_fields() && $this->definition['uses grouping']) {
@@ -201,7 +191,7 @@ class views_plugin_style extends views_plugin {
       $options += $field_labels;
       // If there are no fields, we can't group on them.
       if (count($options) > 1) {
-        // This is for backward compatibility, when there was just a single select form.
+        // This is for backward compability, when there was just a single select form.
         if (is_string($this->options['grouping'])) {
           $grouping = $this->options['grouping'];
           $this->options['grouping'] = array();
@@ -429,7 +419,7 @@ class views_plugin_style extends views_plugin {
    *   @endcode
    */
   function render_grouping($records, $groupings = array(), $group_rendered = NULL) {
-    // This is for backward compatibility, when $groupings was a string containing
+    // This is for backward compability, when $groupings was a string containing
     // the ID of a single field.
     if (is_string($groupings)) {
       $rendered = $group_rendered === NULL ? TRUE : $group_rendered;
@@ -496,7 +486,7 @@ class views_plugin_style extends views_plugin {
       );
     }
 
-    // If this parameter isn't explicitly set modify the output to be fully
+    // If this parameter isn't explicitely set modify the output to be fully
     // backward compatible to code before Views 7.x-3.0-rc2.
     // @TODO Remove this as soon as possible e.g. October 2020
     if ($group_rendered === NULL) {

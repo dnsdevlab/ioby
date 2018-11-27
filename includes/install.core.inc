@@ -809,13 +809,6 @@ function install_system_module(&$install_state) {
 
   variable_set('install_profile_modules', array_diff($modules, array('system')));
   $install_state['database_tables_exist'] = TRUE;
-
-  // Prevent the hook_requirements() check from telling us to convert the
-  // database to utf8mb4.
-  $connection = Database::getConnection();
-  if ($connection->utf8mb4IsConfigurable() && $connection->utf8mb4IsActive()) {
-    variable_set('drupal_all_databases_are_utf8mb4', TRUE);
-  }
 }
 
 /**
@@ -1597,9 +1590,7 @@ function install_finished(&$install_state) {
 }
 
 /**
- * Implements callback_batch_operation().
- *
- * Performs batch installation of modules.
+ * Batch callback for batch installation of modules.
  */
 function _install_module_batch($module, $module_name, &$context) {
   // Install and enable the module right away, so that the module will be
@@ -1612,8 +1603,6 @@ function _install_module_batch($module, $module_name, &$context) {
 }
 
 /**
- * Implements callback_batch_finished().
- *
  * 'Finished' callback for module installation batch.
  */
 function _install_profile_modules_finished($success, $results, $operations) {

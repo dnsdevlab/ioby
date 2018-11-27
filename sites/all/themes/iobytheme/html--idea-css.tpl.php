@@ -64,6 +64,7 @@
   <script type="text/javascript" src="//ioby.tfaforms.net/wForms/3.7/js/localization-en_US.js"></script>
 </head>
 <body class="<?php print $classes; ?>" <?php print $attributes;?>>
+
   <?php print $page_top; ?>
   <?php print $page; ?>
   <?php print $page_bottom; ?>

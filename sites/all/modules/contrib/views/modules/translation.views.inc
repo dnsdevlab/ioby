@@ -51,7 +51,7 @@ function translation_views_data_alter(&$data) {
     ),
   );
 
-  // All translations.
+  // The source translation.
   $data['node']['translation'] = array(
     'group' => t('Content translation'),
     'title' => t('Translations'),
@@ -62,7 +62,7 @@ function translation_views_data_alter(&$data) {
       'base' => 'node',
       'base field' => 'tnid',
       'relationship table' => 'node',
-      'relationship field' => 'tnid',
+      'relationship field' => 'nid',
       'handler' => 'views_handler_relationship_translation',
       'label' => t('Translations'),
     ),
@@ -78,7 +78,7 @@ function translation_views_data_alter(&$data) {
     ),
   );
 
-  // Child translation.
+  // The source translation.
   $data['node']['child_translation'] = array(
     'group' => t('Node translation'),
     'title' => t('Child translation'),

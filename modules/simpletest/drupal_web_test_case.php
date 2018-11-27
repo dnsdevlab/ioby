@@ -40,13 +40,6 @@ abstract class DrupalTestCase {
   protected $originalFileDirectory = NULL;
 
   /**
-   * URL to the verbose output file directory.
-   *
-   * @var string
-   */
-  protected $verboseDirectoryUrl;
-
-  /**
    * Time limit for the test.
    */
   protected $timeLimit = 500;
@@ -468,11 +461,8 @@ abstract class DrupalTestCase {
   protected function verbose($message) {
     if ($id = simpletest_verbose($message)) {
       $class_safe = str_replace('\\', '_', get_class($this));
-      $url = $this->verboseDirectoryUrl . '/' . $class_safe . '-' . $id . '.html';
-      // Not using l() to avoid invoking the theme system, so that unit tests
-      // can use verbose() as well.
-      $link = '<a href="' . $url . '" target="_blank">' . t('Verbose message') . '</a>';
-      $this->error($link, 'User notice');
+      $url = file_create_url($this->originalFileDirectory . '/simpletest/verbose/' . $class_safe . '-' . $id . '.html');
+      $this->error(l(t('Verbose message'), $url, array('attributes' => array('target' => '_blank'))), 'User notice');
     }
   }
 
@@ -729,17 +719,10 @@ class DrupalUnitTestCase extends DrupalTestCase {
    * method.
    */
   protected function setUp() {
-    global $conf, $language;
+    global $conf;
 
     // Store necessary current values before switching to the test environment.
     $this->originalFileDirectory = variable_get('file_public_path', conf_path() . '/files');
-    $this->verboseDirectoryUrl = file_create_url($this->originalFileDirectory . '/simpletest/verbose');
-
-    // Set up English language.
-    $this->originalLanguage = $language;
-    $this->originalLanguageDefault = variable_get('language_default');
-    unset($conf['language_default']);
-    $language = language_default();
 
     // Reset all statics so that test is performed with a clean environment.
     drupal_static_reset();
@@ -781,7 +764,7 @@ class DrupalUnitTestCase extends DrupalTestCase {
   }
 
   protected function tearDown() {
-    global $conf, $language;
+    global $conf;
 
     // Get back to the original connection.
     Database::removeConnection('default');
@@ -791,12 +774,6 @@ class DrupalUnitTestCase extends DrupalTestCase {
     // Restore modules if necessary.
     if (isset($this->originalModuleList)) {
       module_list(TRUE, FALSE, FALSE, $this->originalModuleList);
-    }
-
-    // Reset language.
-    $language = $this->originalLanguage;
-    if ($this->originalLanguageDefault) {
-      $GLOBALS['conf']['language_default'] = $this->originalLanguageDefault;
     }
   }
 }
@@ -875,13 +852,6 @@ class DrupalWebTestCase extends DrupalTestCase {
    * but we still need cookie handling, so we set the jar to NULL.
    */
   protected $cookieFile = NULL;
-
-  /**
-   * The cookies of the page currently loaded in the internal browser.
-   *
-   * @var array
-   */
-  protected $cookies = array();
 
   /**
    * Additional cURL options.
@@ -972,6 +942,7 @@ class DrupalWebTestCase extends DrupalTestCase {
   protected function drupalCreateNode($settings = array()) {
     // Populate defaults array.
     $settings += array(
+      'body'      => array(LANGUAGE_NONE => array(array())),
       'title'     => $this->randomName(8),
       'comment'   => 2,
       'changed'   => REQUEST_TIME,
@@ -984,12 +955,6 @@ class DrupalWebTestCase extends DrupalTestCase {
       'type'      => 'page',
       'revisions' => NULL,
       'language'  => LANGUAGE_NONE,
-    );
-
-    // Add the body after the language is defined so that it may be set
-    // properly.
-    $settings += array(
-      'body' => array($settings['language'] => array(array())),
     );
 
     // Use the original node's created time for existing nodes.
@@ -1050,7 +1015,9 @@ class DrupalWebTestCase extends DrupalTestCase {
       'description' => '',
       'help' => '',
       'title_label' => 'Title',
+      'body_label' => 'Body',
       'has_title' => 1,
+      'has_body' => 1,
     );
     // Imposed values for a custom type.
     $forced = array(
@@ -1100,7 +1067,7 @@ class DrupalWebTestCase extends DrupalTestCase {
       $lines = array(16, 256, 1024, 2048, 20480);
       $count = 0;
       foreach ($lines as $line) {
-        simpletest_generate_file('text-' . $count++, 64, $line, 'text');
+        simpletest_generate_file('text-' . $count++, 64, $line);
       }
 
       // Copy other test files from simpletest.
@@ -1397,14 +1364,12 @@ class DrupalWebTestCase extends DrupalTestCase {
    * @see DrupalWebTestCase::tearDown()
    */
   protected function prepareEnvironment() {
-    global $user, $language, $language_url, $conf;
+    global $user, $language, $conf;
 
     // Store necessary current values before switching to prefixed database.
     $this->originalLanguage = $language;
-    $this->originalLanguageUrl = $language_url;
     $this->originalLanguageDefault = variable_get('language_default');
     $this->originalFileDirectory = variable_get('file_public_path', conf_path() . '/files');
-    $this->verboseDirectoryUrl = file_create_url($this->originalFileDirectory . '/simpletest/verbose');
     $this->originalProfile = drupal_get_profile();
     $this->originalCleanUrl = variable_get('clean_url', 0);
     $this->originalUser = $user;
@@ -1412,7 +1377,7 @@ class DrupalWebTestCase extends DrupalTestCase {
     // Set to English to prevent exceptions from utf8_truncate() from t()
     // during install if the current language is not 'en'.
     // The following array/object conversion is copied from language_default().
-    $language_url = $language = (object) array('language' => 'en', 'name' => 'English', 'native' => 'English', 'direction' => 0, 'enabled' => 1, 'plurals' => 0, 'formula' => '', 'domain' => '', 'prefix' => '', 'weight' => 0, 'javascript' => '');
+    $language = (object) array('language' => 'en', 'name' => 'English', 'native' => 'English', 'direction' => 0, 'enabled' => 1, 'plurals' => 0, 'formula' => '', 'domain' => '', 'prefix' => '', 'weight' => 0, 'javascript' => '');
 
     // Save and clean the shutdown callbacks array because it is static cached
     // and will be changed by the test run. Otherwise it will contain callbacks
@@ -1470,7 +1435,7 @@ class DrupalWebTestCase extends DrupalTestCase {
    * @see DrupalWebTestCase::prepareEnvironment()
    */
   protected function setUp() {
-    global $user, $language, $language_url, $conf;
+    global $user, $language, $conf;
 
     // Create the database prefix for this test.
     $this->prepareDatabasePrefix();
@@ -1567,7 +1532,7 @@ class DrupalWebTestCase extends DrupalTestCase {
 
     // Set up English language.
     unset($conf['language_default']);
-    $language_url = $language = language_default();
+    $language = language_default();
 
     // Use the test mail class instead of the default mail handler class.
     variable_set('mail_system', array('default-system' => 'TestingMailSystem'));
@@ -1661,7 +1626,7 @@ class DrupalWebTestCase extends DrupalTestCase {
    * and reset the database prefix.
    */
   protected function tearDown() {
-    global $user, $language, $language_url;
+    global $user, $language;
 
     // In case a fatal error occurred that was not in the test process read the
     // log to pick up any fatal errors.
@@ -1726,15 +1691,12 @@ class DrupalWebTestCase extends DrupalTestCase {
 
     // Reset language.
     $language = $this->originalLanguage;
-    $language_url = $this->originalLanguageUrl;
     if ($this->originalLanguageDefault) {
       $GLOBALS['conf']['language_default'] = $this->originalLanguageDefault;
     }
 
-    // Close the CURL handler and reset the cookies array so test classes
-    // containing multiple tests are not polluted.
+    // Close the CURL handler.
     $this->curlClose();
-    $this->cookies = array();
   }
 
   /**
@@ -2259,7 +2221,6 @@ class DrupalWebTestCase extends DrupalTestCase {
 
     // Submit the POST request.
     $return = drupal_json_decode($this->drupalPost(NULL, $edit, array('path' => $ajax_path, 'triggering_element' => $triggering_element), $options, $headers, $form_html_id, $extra_post));
-    $this->assertIdentical($this->drupalGetHeader('X-Drupal-Ajax-Token'), '1', 'Ajax response header found.');
 
     // Change the page content by applying the returned commands.
     if (!empty($ajax_settings) && !empty($return)) {
@@ -2624,11 +2585,6 @@ class DrupalWebTestCase extends DrupalTestCase {
    *
    * @param $xpath
    *   The xpath string to use in the search.
-   * @param array $arguments
-   *   An array of arguments with keys in the form ':name' matching the
-   *   placeholders in the query. The values may be either strings or numeric
-   *   values.
-   *
    * @return
    *   The return value of the xpath search. For details on the xpath string
    *   format and return values see the SimpleXML documentation,
@@ -2800,7 +2756,7 @@ class DrupalWebTestCase extends DrupalTestCase {
         $path = substr($path, $length);
       }
       // Ensure that we have an absolute path.
-      if (empty($path) || $path[0] !== '/') {
+      if ($path[0] !== '/') {
         $path = '/' . $path;
       }
       // Finally, prepend the $base_url.

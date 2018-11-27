@@ -83,7 +83,3 @@ function iobyproject_update_7001() {
     db_create_table('iobyproject_funding_notifications', $schema['iobyproject_funding_notifications']);
   }
 }
-
-function iobyproject_update_7002(){
-  iobyproject_update_complete_steps();
-}

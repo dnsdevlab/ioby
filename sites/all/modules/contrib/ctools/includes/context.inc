@@ -216,7 +216,7 @@ class ctools_context_optional extends ctools_context_required {
     $context = new ctools_context('any');
     $context->title      = t('No context');
     $context->identifier = t('No context');
-    $contexts['empty'] = $context;
+    $contexts = array_merge(array('empty' => $context), $contexts);
   }
 
   function filter($contexts) {
@@ -1505,7 +1505,7 @@ function ctools_access($settings, $contexts = array()) {
       return TRUE;
     }
     else if (!$pass && $settings['logic'] == 'and') {
-      // Fail if 'and' and this rule failed.
+      // Fail if 'and' and htis rule failed.
       return FALSE;
     }
   }

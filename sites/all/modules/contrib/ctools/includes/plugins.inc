@@ -79,9 +79,7 @@ function ctools_plugin_api_info($owner, $api, $minimum_version, $current_version
       }
 
       // Only process if version is between minimum and current, inclusive.
-      if (($version == $minimum_version) || ($version == $current_version)
-        || (version_compare($version, $minimum_version, '>=')
-        && version_compare($version, $current_version, '<='))) {
+      if (version_compare($version, $minimum_version, '>=') && version_compare($version, $current_version, '<=')) {
         if (!isset($info['path'])) {
           $info['path'] = drupal_get_path('module', $module);
         }
@@ -112,7 +110,7 @@ function ctools_plugin_api_info($owner, $api, $minimum_version, $current_version
     }
 
     // Allow other modules to hook in.
-    drupal_alter($hook, $cache[$owner][$api], $owner, $api);
+    drupal_alter($hook, $cache[$owner][$api]);
   }
 
   return $cache[$owner][$api];
@@ -215,7 +213,7 @@ function ctools_plugin_api_get_hook($owner, $api) {
  */
 function ctools_get_plugins($module, $type, $id = NULL) {
   // Store local caches of plugins and plugin info so we don't have to do full
-  // lookups every time.
+  // lookups everytime.
   static $drupal_static_fast;
   if (!isset($drupal_static_fast)) {
     $drupal_static_fast['plugins'] = &drupal_static('ctools_plugins', array());

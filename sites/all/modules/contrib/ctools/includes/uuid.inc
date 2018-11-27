@@ -25,8 +25,7 @@ function _ctools_uuid_generate_com() {
  * Generates an universally unique identifier using the PECL extension.
  */
 function _ctools_uuid_generate_pecl() {
-  $uuid_type = UUID_TYPE_DEFAULT;
-  return uuid_create($uuid_type);
+  return uuid_create(UUID_TYPE_DEFAULT);
 }
 
 /**

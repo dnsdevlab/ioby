@@ -2,7 +2,6 @@
 
   Drupal.behaviors.iobytheme = {
     attach: function(context, settings) {
-      console.log("hi there");
       //wysiwyg hiding
       $('.page-add-project-step-2 fieldset.filter-wrapper').remove();
 
@@ -179,8 +178,7 @@
           $("#dialog").remove();
 
           //build a dialog and open it
-          //$(this).prepend('<div id="dialog" class="region-content content">' + Drupal.settings.iobypopup["iobypopupGratuityRemove"] + '</div>');
-          $(this).prepend('<div id="dialog" class="region-content content">' + Drupal.settings.iobypopup[".iobypopupGratuityRemove"] + '</div>');
+          $(this).prepend('<div id="dialog" class="region-content content">' + Drupal.settings.iobypopup.iobypopupGratuityRemove + '</div>');
           $("#dialog")
           .dialog({
             buttons: { "remove": function() {
@@ -206,8 +204,7 @@
       //gratuity "what's this?" popup
       if ($.isFunction($.colorbox) && Drupal.settings.iobypopup != undefined) {
         $(".page-cart .views-field-line-item-title:contains('gratuity')").once('linked')
-        //.prepend('<div style="display:none"><div id="gratuity-info-popup" class="region-content content">' + Drupal.settings.iobypopup["iobypopupGratuityInfo"] + '</div></div>')
-        .prepend('<div style="display:none"><div id="gratuity-info-popup" class="region-content content">' + Drupal.settings.iobypopup[".iobypopupGratuityInfo"] + '</div></div>')
+        .prepend('<div style="display:none"><div id="gratuity-info-popup" class="region-content content">' + Drupal.settings.iobypopup.iobypopupGratuityInfo + '</div></div>')
         .append(' <a href="#gratuity-info-popup" class="colorbox-load">what\'s this?</a>').children("a")
         .colorbox({
           innerWidth:500,
@@ -396,6 +393,16 @@
   }
 
 };
+$(function(){
+  // table fixes for actioncorps
+
+  if(window.location.href.indexOf("actioncorps") > -1) {
+    $("td").not(":has(p)").addClass("empty-td");
+  }
+  
+});
+
+
   $(function(){
     $('.hamburger').click(function() {
     $(this).toggleClass('is-active');

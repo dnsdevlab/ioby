@@ -332,7 +332,7 @@ header#pageheader {
   background-color: $light;
   padding:10px 0;
   @media (max-width: $small-break){
-    margin-top: 200px;
+    margin-top: 300px;
   }
   .mobileheader {
       img {
@@ -746,6 +746,13 @@ h6.locale {
   width: 570px;
   float: right;
   padding-top: 40px;
+  
+  @media (max-width: $small-break) {
+    & > p{
+      float: none !important;
+    }
+  }
+
   @include responsive;
 }
 
@@ -760,7 +767,7 @@ h6.locale {
     width: 350px;
     max-width: 350px;
     padding-left: 10px;
-  }
+  }  
 }
 
 #intro .button {
@@ -807,7 +814,9 @@ input.button.button-blue {
   float: right;
   @media (max-width: $small-break) {
     float: none;
-    margin-top: 200px;
+    margin-top: 120px;
+    position: relative;
+    top: -86px;
 
   }
 }
@@ -2885,17 +2894,89 @@ a.txt1 {
   }
 
   img {
+
     @media (max-width: $small-break) {
-      width: 100% !important;
-      max-width: 100% !important;
-      height: auto !important;
+      width: 100%;
+      max-width: 100%;
+      height: auto
+
+      /*
+      img[width]{
+        width: 100% !important;
+      }
+      img[height]{
+        height: auto !important;
+      }
+      img[style]{
+        width: 100% !important;
+        height: auto !important;
+      }
+      */
+    }
+
+    .gmap &{
+      @media (max-width: $small-break) {
+        width: auto;
+      }
     }
   }
 
 
 .project-miniview .project-photo img {
-@media (max-width: $small-break)  {
-  width: 50% !important;
-  max-width: auto !important;
+  @media (max-width: $small-break)  {
+    width: 100% !important;
+    max-width: none !important;
+    object-fit: cover;
+  }
+
+  @media (min-width: 550px) and (max-width: $small-break)  {
+    object-fit: cover;
+    height: 190px !important;
+  }
 }
+
+.project-miniview{
+      
+
+  @media (max-width: $small-break)  {
+    min-width: 0 !important;
+    max-width: none !important;
+    width: 50% !important;
+
+    .main-info{
+      height: 380px;
+    }
+  }
+
+  @media (min-width: $small-break) and (max-width: 960px)  {
+    width: 100% !important;
+  }
+
+  @media (max-width: 550px)  {
+    width: 100% !important;
+    min-height: 0 !important;
+
+    .main-info{
+      height: auto;
+    }
+  }
+}
+
+.view-campaign-tabs{
+  .project-miniview{
+    @media (max-width: 960px)  {
+      width: 100% !important;
+    }
+  }
+}
+
+.empty-td{
+  display: none;
+}
+#views-form-commerce-cart-form-default .empty-td{
+  display: table-cell;
+}
+
+.not-logged-in .funded-project{
+  position: relative;
 }

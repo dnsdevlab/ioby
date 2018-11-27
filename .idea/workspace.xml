@@ -4,12 +4,12 @@
     <list default="true" id="83c47ad8-0347-4c56-9969-43e2f6cba9cd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/modules/user/user.module" beforeDir="false" afterPath="$PROJECT_DIR$/modules/user/user.module" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/user/user.test" beforeDir="false" afterPath="$PROJECT_DIR$/modules/user/user.test" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sites/all/hacks/drupal-allow-plus-in-usernames-2790923-3.patch" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/hacks/hacks.php" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/hacks/hacks.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/modules/custom/ioby/modules/ioby_user_modal/ioby_user_modal.module" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/modules/custom/ioby/modules/ioby_user_modal/ioby_user_modal.module" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/themes/iobytheme/css/app.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/themes/iobytheme/css/app.min.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/themes/iobytheme/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/themes/iobytheme/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/themes/iobytheme/js/app.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/themes/iobytheme/js/app.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sites/all/themes/iobytheme/js/xjquery.ioby.jsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/themes/iobytheme/page.tpl.php" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/themes/iobytheme/page.tpl.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/themes/iobytheme/scss/forms.scss" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/themes/iobytheme/scss/forms.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sites/all/themes/iobytheme/scss/main.scss" beforeDir="false" afterPath="$PROJECT_DIR$/sites/all/themes/iobytheme/scss/main.scss" afterDir="false" />
@@ -141,12 +141,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1543345178395</updated>
-      <workItem from="1543345180740" duration="1763000" />
+      <workItem from="1543345180740" duration="1888000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1763000" />
+    <option name="totallyTimeSpent" value="1888000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />

@@ -232,34 +232,25 @@
 }
 
 // /idea-start
-//.page-node-34783,.page-node-46389,.node-type-project-2{
+.page-node-34783,.page-node-46389,.node-type-project-2{
     article{
         @media screen and (max-width: 960px){
-            .idea-tabs .tabs-bar .tabs ul li:first-child{ margin-left: 0 !important; }
-            .idea-tabs .tabs-bar .tabs ul li{ margin-right: 0 !important; width: 100%; float: none; display: block; }
-
             .idea-tabs,.tabs-bar,.tabs{
                 display: block;
                 margin: 0;
-                margin-bottom: 0 !important;
                 ul{
                     overflow: hidden;
                     margin: 0;
-                    height: auto !important;
                     li{
                         margin: 0 !important;
-                        margin-left: 0 !important;
-                        margin-right: 0 !important;
-                        display: block;
+                        display: inline-block;
                         width: 100%;
-                        text-align: center;
                         float: none;
                         height: auto !important;
                         padding-bottom: 12px;
 
                         &.hidden,&:after{
                             display: none;
-                            content: none !important;
                         }
 
                         a{
@@ -280,75 +271,4 @@
             }
         }
     }
-//}
-
-// bugfixes
-
-
-@media screen and (max-width: 960px){
-input[name=search_block_form],
-input[type=submit],
-button[type=submit]{
-    -webkit-appearance: none;
-}
-
-#pageheader p{
-    max-width: none;
-    min-width: 0;
-    width: 92%;
-}
-
-#edit-submit--2{
-    padding:4px 10px !important;
-    font-size: 12px !important;
-}
-
-#highlighted{
-    width: 70% !important;
-}
-.node-type-project-2 input[type=radio]{
-    width: auto !important;
-    margin-right: 8px;
-}
-
-.wForm{
-    #tfa_35-D{
-        width: 100%;
-        max-width: none;
-    }
-
-    .field-half,select,#tfa_25-D{
-        max-width: none;
-        width: 100%;
-    }
-
-    #tfa_0-A .primaryAction{
-        float: none;
-    }
-}
-
-#multistep-group_project_about_step{
-    .location.form-wrapper{
-        input,select{
-            margin-bottom: 16px !important;
-        }
-    }
-
-    .form-item-field-hide-project-map-und{
-        overflow: hidden;
-    }
-
-    label[for=edit-field-hide-project-map-und],
-    #edit-field-hide-project-map-und{
-        float: left;
-        width: auto !important;
-        margin-right: 5px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-}
-
-.iobyproject-message a{
-    display: block;
-}
 }

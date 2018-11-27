@@ -183,16 +183,8 @@
         margin: 0 !important;
         min-height: 443px;
 
-        &:empty{
-          min-height: 0 !important;
-        }
-
         & > p img{
           margin-top: -15px;
-        }
-
-        & > p[style]{
-          margin-top: .9em !important;
         }
 
         @media screen and(max-width: 680px){
@@ -203,7 +195,7 @@
         @media screen and(max-width: 460px){
           width: 50% !important;
           min-height: 431px;
-        }      
+        }
       }
 
       img{
@@ -215,8 +207,4 @@
       }
     }
   }
-}
-
-#node-276 td{
-  min-height: 0px;
 }

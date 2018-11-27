@@ -746,7 +746,7 @@ h6.locale {
   width: 570px;
   float: right;
   padding-top: 40px;
-  
+
   @media (max-width: $small-break) {
     & > p{
       float: none !important;
@@ -767,7 +767,7 @@ h6.locale {
     width: 350px;
     max-width: 350px;
     padding-left: 10px;
-  }  
+  }
 }
 
 #intro .button {
@@ -1662,7 +1662,7 @@ body.front #content ul.tabs li.last {
  */
 
 footer#footer {
-  background:$dark url(../img/colorstripe.png) repeat-x center 35px;
+  background:$dark url(../img/colorstripe.png) repeat-x;
   text-align: left;
 
   a:hover {
@@ -1695,7 +1695,7 @@ footer#footer {
 }
 
 #footer .section {
-  margin-top:25px;
+  padding-top:25px;
 }
 
 #footer nav {

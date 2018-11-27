@@ -268,28 +268,6 @@
 </div></div> <!-- /#main, /#main-wrapper -->
 
 <footer id="footer" role="contentinfo">
-  <div id="bottom">
-    <div class="full">
-      <ul>
-        <li class="title"><?php print t("get our newsletter") ?></li>
-        <li class="newsletter">
-          <!-- Begin MailChimp Signup Form -->
-          <div id="mc_embed_signup">
-            <form action="//ioby.us1.list-manage.com/subscribe/post?u=f3c712aa320de5a6d109211a6&amp;id=71207383ff" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
-              <div class="mc-field-group">
-                <label for="mce-EMAIL">email address</label>
-                <input type="text" value="" name="EMAIL" class="required email" id="mce-EMAIL">
-              </div>
-              <input type="hidden" value="<?php $path = drupal_get_destination(); print htmlentities(filter_xss($path['destination'])); ?>" name="MMERGE27" class="required" id="mce-MMERGE27">
-              <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="btn">
-            </form>
-          </div>
-          <!--End mc_embed_signup-->
-        </li>
-      </ul>
-    </div>
-  </div>
-
   <div class="section full clearfix">
     <?php print theme('links__system_secondary_menu',
     array('links' => $secondary_menu, //aka "user menu"
@@ -311,7 +289,6 @@
     copyright &copy; <?php print date("Y"); ?> ioby, a 501(c)(3) nonprofit<br/>
     site by <a href="http://www.newsignature.com" target="_blank">New Signature</a>
   </section>
-</div>
 </footer>
  <!-- /.section, /#footer -->
 

@@ -10,7 +10,7 @@
       else{
         $(".close-project-notification").click(function() {
             $(this).parent().hide();
-            $.cookie('hide-project-notification', '0');
+            $.cookie('hide-project-notification', '0', { expires: 7 }); // One week / 7 days
           });
       }
     }

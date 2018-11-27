@@ -274,6 +274,30 @@ function ioby_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function ioby_form_user_register_form_alter(&$form, &$form_state) {
+  // Make sure our submit handlers runs first, since we're changing the name
+  // field.
+  array_unshift($form['#submit'], 'ioby_user_form_submit');
+  $form['#submit'][] = 'ioby_user_form_submit';
+}
+
+/**
+ * Copies the user's email address into the 'name' field so that this form
+ * behaves the same way as the modal.
+ *
+ * @see ioby_user_modal_form_alter()
+ * @see _form_ajax_submit()
+ *
+ * @param $form
+ * @param $form_state
+ */
+function ioby_user_form_submit($form, &$form_state) {
+  $form_state['values']['name'] = $form_state['values']['mail'];
+}
+
 function custom_ioby_user_form_submit($form, &$form_state){
     $form_state['redirect'] = 'project';
 }

@@ -38,30 +38,53 @@
 
 <?php print $head; ?>
 <title><?php print $head_title; ?></title>
-<?php print $styles; ?>
-<?php print $scripts; ?>
+  <?php print $scripts; ?>
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="https://ioby.tfaforms.net/form-builder/4.3.0/css/wforms-layout.css" rel="stylesheet" type="text/css" />
-<!--[if IE 8]>
-<link href="https://ioby.tfaforms.net/form-builder/4.3.0/css/wforms-layout-ie8.css" rel="stylesheet" type="text/css" />
-<![endif]-->
-<!--[if IE 7]>
-<link href="https://ioby.tfaforms.net/form-builder/4.3.0/css/wforms-layout-ie7.css" rel="stylesheet" type="text/css" />
-<![endif]-->
-<!--[if IE 6]>
-<link href="https://ioby.tfaforms.net/form-builder/4.3.0/css/wforms-layout-ie6.css" rel="stylesheet" type="text/css" />
-<![endif]-->
-<link href="https://ioby.tfaforms.net/themes/get/5" rel="stylesheet" type="text/css" />
-<link href="https://ioby.tfaforms.net/form-builder/4.3.0/css/wforms-jsonly.css" rel="alternate stylesheet" title="This stylesheet activated by javascript" type="text/css" />
-<script type="text/javascript" src="https://ioby.tfaforms.net/wForms/3.10/js/wforms.js"></script>
-<script type="text/javascript">
-wFORMS.behaviors.prefill.skip = false;
-</script>
-<link rel="stylesheet" type="text/css" href="https://ioby.tfaforms.net/css/kalendae.css" />
-<script type="text/javascript" src="https://ioby.tfaforms.net/js/kalendae/kalendae.standalone.min.js" ></script>
-<script type="text/javascript" src="https://ioby.tfaforms.net/wForms/3.10/js/wforms_calendar.js"></script>
-<script type="text/javascript" src="https://ioby.tfaforms.net/wForms/3.10/js/localization-en_US.js"></script>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link href="https://ioby.tfaforms.net/form-builder/4.3.0/css/wforms-layout.css" rel="stylesheet" type="text/css" />
+  <!--[if IE 8]>
+  <link href="https://ioby.tfaforms.net/form-builder/4.3.0/css/wforms-layout-ie8.css" rel="stylesheet" type="text/css" />
+  <![endif]-->
+  <!--[if IE 7]>
+  <link href="https://ioby.tfaforms.net/form-builder/4.3.0/css/wforms-layout-ie7.css" rel="stylesheet" type="text/css" />
+  <![endif]-->
+  <!--[if IE 6]>
+  <link href="https://ioby.tfaforms.net/form-builder/4.3.0/css/wforms-layout-ie6.css" rel="stylesheet" type="text/css" />
+  <![endif]-->
+  <link href="https://ioby.tfaforms.net/themes/get/5" rel="stylesheet" type="text/css" />
+  <link href="https://ioby.tfaforms.net/form-builder/4.3.0/css/wforms-jsonly.css" rel="alternate stylesheet" title="This stylesheet activated by javascript" type="text/css" />
+  <script type="text/javascript" src="https://ioby.tfaforms.net/wForms/3.10/js/wforms.js"></script>
+  <script type="text/javascript">
+  wFORMS.behaviors.prefill.skip = false;
+  <?php /* check if a validation error exists in the first or second tab and reveal it if not visible */ ?>
+  function ideaFormValidationFail() {
+    if (jQuery(".idea-tabs #step1 .errMsg").length > 0) {
+      if (!jQuery('.idea-panel#step1').hasClass('active')) {
+        // console.log(jQuery(".idea-tabs #step1 .errMsg"));
+        jQuery('.wFormContainer .idea-panel.active').removeClass('active');
+        jQuery('.idea-panel#step1').addClass('active');
+        jQuery('.idea-tabs .tab.active').removeClass('active');
+        jQuery('.idea-tabs .tab[href=#step1]').addClass('active');
+      }
+      jQuery(window).scrollTop(jQuery("#step1").offset().top);
+    } else if (jQuery(".idea-tabs #step2 .errMsg").length > 0) {
+      if (!jQuery('.idea-panel#step2').hasClass('active')) {
+        // console.log(jQuery(".idea-tabs #step2 .errMsg"));
+        jQuery('.wFormContainer .tab.active').removeClass('active');
+        jQuery('.idea-panel#step2').addClass('active');
+        jQuery('.idea-tabs .idea-panel.active').removeClass('active');
+        jQuery('.idea-tabs .tab[href=#step2]').addClass('active');
+      }
+      jQuery(window).scrollTop(jQuery("#step2").offset().top);
+    }
+  }
+  wFORMS.behaviors.validation.onFail = ideaFormValidationFail;
+  </script>
+  <link rel="stylesheet" type="text/css" href="https://ioby.tfaforms.net/css/kalendae.css" />
+  <script type="text/javascript" src="https://ioby.tfaforms.net/js/kalendae/kalendae.standalone.min.js" ></script>
+  <script type="text/javascript" src="https://ioby.tfaforms.net/wForms/3.10/js/wforms_calendar.js"></script>
+  <script type="text/javascript" src="https://ioby.tfaforms.net/wForms/3.10/js/localization-en_US.js"></script>
+  <?php print $styles; ?>
 </head>
 <body class="<?php print $classes; ?>" <?php print $attributes;?>>
   <?php print $page_top; ?>

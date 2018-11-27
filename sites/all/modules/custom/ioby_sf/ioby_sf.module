@@ -277,6 +277,29 @@ function ioby_sf_project_validate($form, &$form_state) {
       }
     }
   }
+
+  // If we have just added a Potential Project to the node, make sure we have
+  // a valid email address.
+  $nid = $values['nid'];
+  $original_node = node_load($nid);
+
+  if (isset($values['salesforce_record_id']) && !empty($values['salesforce_record_id'])) {
+    // We are probably adding a new Potential Project. Confirm that.
+    try {
+      $rid = $original_node->salesforce_record_id;
+      if ($rid == NULL) {
+        // Confirmed! Now we need to make sure there's a project contact email.
+        if (empty($values['field_project_contact_email'][$language][0]['email'])) {
+          // Missing project contact email. Don't allow the node to be saved.
+          form_set_error('salesforce_record_id', 'You must provide a Project Contact Email on the About You step before you can make a Potential Project association. Please clear the association on this page, save your work, and then supply an email on the About You step.');
+          form_set_error('field_project_contact_email');
+        }
+      }
+    }
+    catch (EntityMetadataWrapperException $e) {
+      watchdog('ioby_sf', $e->getMessage(), array(), WATCHDOG_ERROR);
+    }
+  }
 }
 
 /**

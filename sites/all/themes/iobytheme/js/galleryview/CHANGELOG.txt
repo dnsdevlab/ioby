@@ -1,4 +1,4 @@
-﻿GalleryView - jQuery Content Gallery Plugin
+GalleryView - jQuery Content Gallery Plugin
 Author: 		Jack Anderson
 
 Version 3.0 beta 3 - 2011-03-15

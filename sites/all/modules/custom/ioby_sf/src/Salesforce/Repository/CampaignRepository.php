@@ -18,7 +18,6 @@ class CampaignRepository
     // to add them to the ioby_sf_campaigns table.
     $query = db_select('node', 'n')
       ->fields('n', array('nid'))
-      ->condition('n.status', NODE_PUBLISHED, '=')
       ->condition('n.type', IOBY_NODE_TYPE_PROJECT, '=')
       ->condition('create_new_sf_object', 1, '=')
       ->isNotNull('pp.nid')
@@ -50,7 +49,6 @@ class CampaignRepository
     // Use a cutoff date so we don't get basically every existing project.
     $query = db_select('node', 'n')
       ->fields('n', array('nid'))
-      ->condition('n.status', NODE_PUBLISHED, '=')
       ->condition('n.type', IOBY_NODE_TYPE_PROJECT, '=')
       ->where('n.changed > sfc.changed')
       ->where('n.changed > ' . IOBY_PROJECT_CUTOFF_DATE)
@@ -88,7 +86,6 @@ class CampaignRepository
     $query = db_select('node', 'n')
       ->fields('n', array('nid'))
       ->fields('pp', array('salesforce_record_id'))
-      ->condition('n.status', NODE_PUBLISHED, '=')
       ->condition('n.type', IOBY_NODE_TYPE_PROJECT, '=')
       ->condition('pp.create_new_sf_object', 1, '=')
       ->isNotNull('pp.salesforce_record_id')

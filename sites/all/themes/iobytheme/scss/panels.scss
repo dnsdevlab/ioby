@@ -1,0 +1,55 @@
+@charset "utf-8";
+
+.panel-2col-stacked {
+ 
+  .panel-col-top {
+    margin: 2em 0;
+  }
+  
+  .panel-col-first .inside {
+    margin:0 15px 20px 0;
+  }
+
+  .panel-col-last .inside {
+    margin:0 0 20px 15px;
+  }
+    
+}
+
+.panel-panel  {
+
+  .password-strength {
+    display: none;
+  }
+  
+  h2.pane-title {
+    font-size:169%;
+    padding-bottom:0.4em;
+    border-bottom:1px solid #a9bec5;
+    margin-bottom:0.7em;
+    margin-top: 0.3em;
+  }
+
+  div.password-confirm {
+    display: block;
+  }
+
+  div.form-item div.password-suggestions {
+    border: none;
+    width: auto;
+  
+  }
+}
+
+.project_display_center,
+.project_display_footer {
+  width:100%;
+}
+.project_display_footer {
+  text-align:center;
+}
+
+.panels-flexible-region-13-header {
+  width: 100%;
+  margin-top: 20px;
+}

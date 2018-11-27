@@ -1,5 +1,89 @@
 <?php
 
+function iobytheme_text_format_wrapper($variables) {
+  $element = $variables['element'];
+  $output = '<div class="text-format-wrapper">';
+  $output .= $element['#children'];
+
+  if (!empty($element['#description'])) {
+    // The string in the HTML to insert the description after
+    $sstr = '<div class="form-textarea-wrapper resizable">';
+    // The string to insert
+    $rstr = $sstr . '<div class="description">' . $element['#description'] . '</div>';
+    $output = str_replace($sstr, $rstr, $output);
+  }
+  $output .= "</div>\n";
+
+  return $output;
+}
+
+
+function iobytheme_form_element($variables) {
+  $element = &$variables['element'];
+  // This is also used in the installer, pre-database setup.
+  $t = get_t();
+
+  // This function is invoked as theme wrapper, but the rendered form element
+  // may not necessarily have been processed by form_builder().
+  $element += array(
+    '#title_display' => 'before',
+  );
+
+  // Add element #id for #type 'item'.
+  if (isset($element['#markup']) && !empty($element['#id'])) {
+    $attributes['id'] = $element['#id'];
+  }
+  // Add element's #type and #name as class to aid with JS/CSS selectors.
+  $attributes['class'] = array('form-item');
+  if (!empty($element['#type'])) {
+    $attributes['class'][] = 'form-type-' . strtr($element['#type'], '_', '-');
+  }
+  if (!empty($element['#name'])) {
+    $attributes['class'][] = 'form-item-' . strtr($element['#name'], array(' ' => '-', '_' => '-', '[' => '-', ']' => ''));
+  }
+  // Add a class for disabled elements to facilitate cross-browser styling.
+  if (!empty($element['#attributes']['disabled'])) {
+    $attributes['class'][] = 'form-disabled';
+  }
+  $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
+
+  // If #title is not set, we don't display any label or required marker.
+  if (!isset($element['#title'])) {
+    $element['#title_display'] = 'none';
+  }
+  $prefix = isset($element['#field_prefix']) ? '<span class="field-prefix">' . $element['#field_prefix'] . '</span> ' : '';
+  $suffix = isset($element['#field_suffix']) ? ' <span class="field-suffix">' . $element['#field_suffix'] . '</span>' : '';
+   $element_description = "";
+  if (!empty($element['#description'])) {
+    $element_description = '<div class="description">' . $element['#description'] . "</div>\n";
+  }
+  switch ($element['#title_display']) {
+    case 'before':
+    case 'invisible':
+      $output .= ' ' . theme('form_element_label', $variables);
+      $output .= $element_description;
+      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      break;
+
+    case 'after':
+      $output .= ' ' . $prefix . $element['#children'] . $suffix;
+      $output .= ' ' . theme('form_element_label', $variables) . "\n";
+
+      break;
+
+    case 'none':
+    case 'attribute':
+      // Output no label and no required marker, only the children.
+      $output .= $element_description;
+      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      break;
+  }
+  $output .= "</div>\n";
+
+  return $output;
+}
+
+
 function iobytheme_form_alter(&$form, &$form_state, $form_id) {
 
   if ($form_id == 'search_block_form') {
@@ -220,16 +304,19 @@ function iobytheme_preprocess_page(&$vars) {
       'preprocess' => FALSE,
       'group' => CSS_DEFAULT, //Add the default galleryview CSS before iobytheme-specific CSS files
       );
-    drupal_add_css(path_to_theme() . '/js/galleryview/css/jquery.galleryview.css', $options);
+    //drupal_add_css(path_to_theme() . '/js/galleryview/css/jquery.galleryview.css', $options);
+    drupal_add_css(path_to_theme() . '/css/plugins.min.css', $options);
     $vars['styles'] = drupal_get_css();
 
     $options['group'] = JS_THEME;
-    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.easing.js', $options);
-    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.timers.js', $options);
-    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.galleryview-ioby.js', $options);
-    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.ioby-rotator.js', $options);
+    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.easing.js', $options);
+    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.timers.js', $options);
+    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.galleryview-ioby.js', $options);
+    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.ioby-rotator.js', $options);
     $vars['script'] = drupal_get_js();
   }
+  
+  drupal_add_js(path_to_theme() . '/js/plugins.min.js', $options);
 
   // Footer Brand Image stuff, adds ~6 logos to footer based on 'Footer Brand Logo' content type
   // Looks like nodequeue neglected some of their internal API methods so part of it is dup'd here.
@@ -238,12 +325,28 @@ function iobytheme_preprocess_page(&$vars) {
   foreach (nodequeue_load_nodes($footer_brand_subqueue_id, FALSE, 0, 6) as $node) {
     $vars['footer_logos'][] = node_view($node, 'teaser');
   }
+
+  if (!empty($vars['node']) && $vars['node']->nid == '34783') {
+    if (user_is_logged_in()) {
+      global $user;
+      $user_wrapper = entity_metadata_wrapper('user', $user);
+      if ($user_wrapper->field_first_name->value() || $user_wrapper->field_last_name->value()) {
+        $vars['user_first_name'] = $user_wrapper->field_first_name->value();
+        $vars['user_last_name'] = $user_wrapper->field_last_name->value();
+      } else {
+        $vars['user_first_name'] = $user_wrapper->field_user_fullname->value();
+      }
+      $vars['user_email'] = $user_wrapper->mail->value();
+    }
+  }
 }
 
 
 function iobytheme_preprocess_html(&$vars) {
   $logo_colors = array("blue","orange","active","plum","grey");
   $vars['classes_array'][] = 'logo-'. $logo_colors[ array_rand($logo_colors) ];
+
+  drupal_add_css(drupal_get_path('theme','iobytheme').'/css/app.min.css');
 
   $contexts = context_active_contexts();
   if (array_key_exists('idea_css', $contexts)){
@@ -264,14 +367,12 @@ function iobytheme_preprocess_html(&$vars) {
   $script = array(
     '#tag' => 'script',
     '#attributes' => array('type' => 'text/javascript'),
-    '#value' => "<!-- Google Tag Manager -->
-                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push(
+    '#value' => "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push(
                 {'gtm.start': new Date().getTime(),event:'gtm.js'}
                 );var f=d.getElementsByTagName(s)[0],
                 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-                })(window,document,'script','dataLayer','GTM-KTTPQD');
-                <!-- End Google Tag Manager -->",
+                })(window,document,'script','dataLayer','GTM-KTTPQD');",
    );
    drupal_add_html_head($script, 'script');
 
@@ -279,7 +380,14 @@ function iobytheme_preprocess_html(&$vars) {
    //              <noscript><iframe src='https://www.googletagmanager.com/ns.html?id=GTM-KTTPQD'
    //              height='0' width='0' style='display:none;visibility:hidden'></iframe></noscript>
    //              <!-- End Google Tag Manager (noscript) -->";
-
+  $viewport = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+    'name' => 'viewport',
+    'content' => 'width=device-width, initial-scale=1, maximum-scale=1',
+  ),
+ );
+  drupal_add_html_head($viewport, 'viewport');
 }
 
 function iobytheme_preprocess(&$vars) {

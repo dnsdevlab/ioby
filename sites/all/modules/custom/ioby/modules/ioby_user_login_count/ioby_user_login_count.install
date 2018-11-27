@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+
+function ioby_user_login_count_schema() {
+  $schema = array();
+
+  $schema['ioby_user_login_count'] = array(
+   'description' => 'The base table for user login count',
+   'fields' => array(
+     'ioby_uid' => array(
+      'description' => 'User uid.',
+      'type' => 'serial',
+      'unsigned' => TRUE,
+      'not null' => TRUE
+      ),
+     'login_count' => array(
+       'description' => 'Login count of a user.',
+       'type' => 'varchar',
+       'length' => 255,
+       'not null' => FALSE,
+       ),
+     ),
+  'primary key' => array('ioby_uid'),
+);
+
+return $schema;
+}
+
+
+

@@ -1,0 +1,7 @@
+name = IOBY User Modal
+description = Ctools functionality for user modal
+package = IOBY
+core = 7.x
+dependencies[] = ioby
+dependencies[] = ctools
+version = "7.x-1.0"

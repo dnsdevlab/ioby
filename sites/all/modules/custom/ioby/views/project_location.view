@@ -110,6 +110,10 @@ $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
 $handler->display->display_options['style_plugin'] = 'ctools_context';
 $handler->display->display_options['row_plugin'] = 'fields';
 $handler->display->display_options['defaults']['relationships'] = FALSE;
+/* Relationship: Broken/missing handler */
+$handler->display->display_options['relationships']['field_campain_projects_nid']['id'] = 'field_campain_projects_nid';
+$handler->display->display_options['relationships']['field_campain_projects_nid']['table'] = 'field_data_field_campain_projects';
+$handler->display->display_options['relationships']['field_campain_projects_nid']['field'] = 'field_campain_projects_nid';
 $handler->display->display_options['defaults']['fields'] = FALSE;
 /* Field: Location: Latitude */
 $handler->display->display_options['fields']['latitude']['id'] = 'latitude';
@@ -137,12 +141,12 @@ $handler->display->display_options['fields']['title']['label'] = 'Project:';
 $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
 $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
 $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
-/* Field: Content: Total to Raise */
-$handler->display->display_options['fields']['field_project_total_cost']['id'] = 'field_project_total_cost';
-$handler->display->display_options['fields']['field_project_total_cost']['table'] = 'field_data_field_project_total_cost';
-$handler->display->display_options['fields']['field_project_total_cost']['field'] = 'field_project_total_cost';
-$handler->display->display_options['fields']['field_project_total_cost']['settings'] = array(
-  'thousand_separator' => ',',
+/* Field: Content: Project Cost */
+$handler->display->display_options['fields']['field_project_cost']['id'] = 'field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['table'] = 'field_data_field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['field'] = 'field_project_cost';
+$handler->display->display_options['fields']['field_project_cost']['settings'] = array(
+  'thousand_separator' => ' ',
   'decimal_separator' => '.',
   'scale' => '0',
   'prefix_suffix' => 1,

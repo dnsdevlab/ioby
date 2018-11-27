@@ -1,0 +1,4 @@
+.views-exposed-form div#edit-date-filter-min-wrapper,
+.views-exposed-form div#edit-date-filter-max-wrapper {
+    display: inline-block;
+}

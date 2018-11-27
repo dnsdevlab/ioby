@@ -493,9 +493,10 @@ $(document).bind('state:disabled', function(e) {
 $(document).bind('state:required', function(e) {
   if (e.trigger) {
     if (e.value) {
+      var $label = $(e.target).closest('.form-item, .form-wrapper').find('label');
       // Avoids duplicate required markers on initialization.
-      if (!$(e.target).closest('.form-item, .form-wrapper').find('label .form-required').length) {
-        $(e.target).closest('.form-item, .form-wrapper').find('label').append('<span class="form-required">*</span>');
+      if (!$label.find('.form-required').length) {
+        $label.append('<span class="form-required">*</span>');
       }
     }
     else {

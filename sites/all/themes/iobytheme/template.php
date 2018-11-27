@@ -1,5 +1,89 @@
 <?php
 
+function iobytheme_text_format_wrapper($variables) {
+  $element = $variables['element'];
+  $output = '<div class="text-format-wrapper">';
+  $output .= $element['#children'];
+
+  if (!empty($element['#description'])) {
+    // The string in the HTML to insert the description after
+    $sstr = '<div class="form-textarea-wrapper resizable">';
+    // The string to insert
+    $rstr = $sstr . '<div class="description">' . $element['#description'] . '</div>';
+    $output = str_replace($sstr, $rstr, $output);
+  }
+  $output .= "</div>\n";
+
+  return $output;
+}
+
+
+function iobytheme_form_element($variables) {
+  $element = &$variables['element'];
+  // This is also used in the installer, pre-database setup.
+  $t = get_t();
+
+  // This function is invoked as theme wrapper, but the rendered form element
+  // may not necessarily have been processed by form_builder().
+  $element += array(
+    '#title_display' => 'before',
+  );
+
+  // Add element #id for #type 'item'.
+  if (isset($element['#markup']) && !empty($element['#id'])) {
+    $attributes['id'] = $element['#id'];
+  }
+  // Add element's #type and #name as class to aid with JS/CSS selectors.
+  $attributes['class'] = array('form-item');
+  if (!empty($element['#type'])) {
+    $attributes['class'][] = 'form-type-' . strtr($element['#type'], '_', '-');
+  }
+  if (!empty($element['#name'])) {
+    $attributes['class'][] = 'form-item-' . strtr($element['#name'], array(' ' => '-', '_' => '-', '[' => '-', ']' => ''));
+  }
+  // Add a class for disabled elements to facilitate cross-browser styling.
+  if (!empty($element['#attributes']['disabled'])) {
+    $attributes['class'][] = 'form-disabled';
+  }
+  $output = '<div' . drupal_attributes($attributes) . '>' . "\n";
+
+  // If #title is not set, we don't display any label or required marker.
+  if (!isset($element['#title'])) {
+    $element['#title_display'] = 'none';
+  }
+  $prefix = isset($element['#field_prefix']) ? '<span class="field-prefix">' . $element['#field_prefix'] . '</span> ' : '';
+  $suffix = isset($element['#field_suffix']) ? ' <span class="field-suffix">' . $element['#field_suffix'] . '</span>' : '';
+   $element_description = "";
+  if (!empty($element['#description'])) {
+    $element_description = '<div class="description">' . $element['#description'] . "</div>\n";
+  }
+  switch ($element['#title_display']) {
+    case 'before':
+    case 'invisible':
+      $output .= ' ' . theme('form_element_label', $variables);
+      $output .= $element_description;
+      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      break;
+
+    case 'after':
+      $output .= ' ' . $prefix . $element['#children'] . $suffix;
+      $output .= ' ' . theme('form_element_label', $variables) . "\n";
+
+      break;
+
+    case 'none':
+    case 'attribute':
+      // Output no label and no required marker, only the children.
+      $output .= $element_description;
+      $output .= ' ' . $prefix . $element['#children'] . $suffix . "\n";
+      break;
+  }
+  $output .= "</div>\n";
+
+  return $output;
+}
+
+
 function iobytheme_form_alter(&$form, &$form_state, $form_id) {
 
   if ($form_id == 'search_block_form') {
@@ -67,19 +151,19 @@ function iobytheme_field__project_2($variables) {
 
   switch($field) {
     case "field_project_neighborhood":
-      return iobytheme_field_neighborhood($variables);
+    return iobytheme_field_neighborhood($variables);
     case "field_project_boroughs":
     case "field_project_facet":
     case "field_project_impact_areas":
-      return iobytheme_field_commas($variables);
+    return iobytheme_field_commas($variables);
     case "field_project_address":
-      return iobytheme_field_street($variables);
-    case "field_project_total_cost":
-      return iobytheme_field_cost($variables);
+    return iobytheme_field_street($variables);
+    case "field_project_cost":
+    return iobytheme_field_cost($variables);
     case "field_project_status":
-      return iobytheme_field_simple($variables);
+    return iobytheme_field_simple($variables);
     default:
-      return iobytheme_field_default($variables);
+    return iobytheme_field_default($variables);
   }
 }
 
@@ -208,6 +292,7 @@ function iobytheme_field__field_project_boroughs($vars) {
  */
 
 function iobytheme_preprocess_page(&$vars) {
+
   if ( (isset($_GET['ajax']) && $_GET['ajax'] == 1) || arg(0) == 'volunteerform' || arg(0) == 'popup') {
     $vars['theme_hook_suggestions'][] = 'page__ajax';
   }
@@ -218,17 +303,20 @@ function iobytheme_preprocess_page(&$vars) {
       'every_page' => FALSE,
       'preprocess' => FALSE,
       'group' => CSS_DEFAULT, //Add the default galleryview CSS before iobytheme-specific CSS files
-    );
-    drupal_add_css(path_to_theme() . '/js/galleryview/css/jquery.galleryview.css', $options);
+      );
+    //drupal_add_css(path_to_theme() . '/js/galleryview/css/jquery.galleryview.css', $options);
+    drupal_add_css(path_to_theme() . '/css/plugins.min.css', $options);
     $vars['styles'] = drupal_get_css();
 
     $options['group'] = JS_THEME;
-    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.easing.js', $options);
-    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.timers.js', $options);
-    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.galleryview-ioby.js', $options);
-    drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.ioby-rotator.js', $options);
+    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.easing.js', $options);
+    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.timers.js', $options);
+    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.galleryview-ioby.js', $options);
+    //drupal_add_js(path_to_theme() . '/js/galleryview/js/jquery.ioby-rotator.js', $options);
     $vars['script'] = drupal_get_js();
   }
+  
+  drupal_add_js(path_to_theme() . '/js/plugins.min.js', $options);
 
   // Footer Brand Image stuff, adds ~6 logos to footer based on 'Footer Brand Logo' content type
   // Looks like nodequeue neglected some of their internal API methods so part of it is dup'd here.
@@ -237,12 +325,69 @@ function iobytheme_preprocess_page(&$vars) {
   foreach (nodequeue_load_nodes($footer_brand_subqueue_id, FALSE, 0, 6) as $node) {
     $vars['footer_logos'][] = node_view($node, 'teaser');
   }
+
+  if (!empty($vars['node']) && $vars['node']->nid == '34783') {
+    if (user_is_logged_in()) {
+      global $user;
+      $user_wrapper = entity_metadata_wrapper('user', $user);
+      if ($user_wrapper->field_first_name->value() || $user_wrapper->field_last_name->value()) {
+        $vars['user_first_name'] = $user_wrapper->field_first_name->value();
+        $vars['user_last_name'] = $user_wrapper->field_last_name->value();
+      } else {
+        $vars['user_first_name'] = $user_wrapper->field_user_fullname->value();
+      }
+      $vars['user_email'] = $user_wrapper->mail->value();
+    }
+  }
 }
 
 
 function iobytheme_preprocess_html(&$vars) {
   $logo_colors = array("blue","orange","active","plum","grey");
   $vars['classes_array'][] = 'logo-'. $logo_colors[ array_rand($logo_colors) ];
+
+  drupal_add_css(drupal_get_path('theme','iobytheme').'/css/app.min.css');
+
+  $contexts = context_active_contexts();
+  if (array_key_exists('idea_css', $contexts)){
+    $vars['theme_hook_suggestions'][] = 'html__idea_css';
+  }
+
+  // IOBY-36, Addes Mailchimp CSS file
+  if (array_key_exists('mailchimp_css', $contexts)){
+    drupal_add_css(drupal_get_path('theme', 'iobytheme') . '/css/mailchimp.css');
+  }
+
+  // IOBY-71, Addes FormAssembly assets files
+  if (array_key_exists('form_assembly', $contexts)){
+    $vars['theme_hook_suggestions'][] = 'html__form_assembly';
+  }
+
+  // IOBY-121
+  $script = array(
+    '#tag' => 'script',
+    '#attributes' => array('type' => 'text/javascript'),
+    '#value' => "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push(
+                {'gtm.start': new Date().getTime(),event:'gtm.js'}
+                );var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','GTM-KTTPQD');",
+   );
+   drupal_add_html_head($script, 'script');
+
+   // $vars['google_tag_body'] .= "<!-- Google Tag Manager (noscript) -->
+   //              <noscript><iframe src='https://www.googletagmanager.com/ns.html?id=GTM-KTTPQD'
+   //              height='0' width='0' style='display:none;visibility:hidden'></iframe></noscript>
+   //              <!-- End Google Tag Manager (noscript) -->";
+  $viewport = array(
+    '#tag' => 'meta',
+    '#attributes' => array(
+    'name' => 'viewport',
+    'content' => 'width=device-width, initial-scale=1, maximum-scale=1',
+  ),
+ );
+  drupal_add_html_head($viewport, 'viewport');
 }
 
 function iobytheme_preprocess(&$vars) {
@@ -290,9 +435,60 @@ function iobytheme_menu_tree__menu_idea($vars) {
   return '<ul class="tabs">' . $vars['tree'] . '</ul>';
 }
 
+/*
+ * Use tab link style for the Campaign Essentials menu
+ */
+function iobytheme_menu_tree__menu_campaign_essentials($vars) {
+  return '<ul class="tabs">' . $vars['tree'] . '</ul>';
+}
+
+/*
+ * Use tab link style for the Trick Out My Trip Toolkit menu
+ * @author Russom Woldezghi
+ * IOBY-40
+ */
+function iobytheme_menu_tree__menu_trick_out_my_trip_toolkit($vars) {
+  return '<ul class="tabs">' . $vars['tree'] . '</ul>';
+}
+
+/*
+ * IOBY-48
+ */
+
+function iobytheme_menu_tree__menu_tabbed_page_menu($vars) {
+  return '<ul class="tabs">' . $vars['tree'] . '</ul>';
+}
+
 //kill links to user profiles, at least for now
 function iobytheme_username($variables) {
-  $output = '<span' . drupal_attributes($variables['attributes_array']) . '>' . $variables['name'] . $variables['extra'] . '</span>';
+  // If project node type, use first and last name from node, not user, if available
+  // IOBY-105
+  // @author Russom Woldezghi
+  if (isset($variables['account']->type) && $variables['account']->type == 'project_2') {
+
+    // Get nid and load the node object
+    $nid = $variables['account']->nid;
+    $node = node_load($nid);
+
+    // First and last name
+    $project_leader_first_name = $node->field_contact_first['und']['0']['value'];
+    $project_leader_last_name = $node->field_contact_last['und']['0']['value'];
+
+    // Get only first name and first character of last name
+    $project_leader_name = $project_leader_first_name.' '.substr($project_leader_last_name, 0, 1);
+
+    // if null, return username stored on the node object
+    if (is_null($project_leader_name)) {
+      $project_leader_name = $variables['name'];
+    }
+
+    // Output for username project
+    $output = '<span' . drupal_attributes($variables['attributes_array']) . '>' . $project_leader_name . $variables['extra'] . '</span>';
+  }else{
+
+    // Return username from node author info
+    $output = '<span' . drupal_attributes($variables['attributes_array']) . '>' . $variables['name'] . $variables['extra'] . '</span>';
+  }
   return $output;
 }
 
@@ -301,7 +497,7 @@ function iobytheme_image_formatter($variables) {
   $image = array(
     'path' => $item['uri'],
     'alt' => $item['alt'],
-  );
+    );
 
   /*
   if (isset($item['width']) && isset($item['height'])) {
@@ -354,8 +550,8 @@ function iobytheme_views_mini_pager__campaign_tabs($vars) {
         'element' => $element,
         'interval' => 1,
         'parameters' => $parameters,
-      )
-    );
+        )
+      );
     if (empty($li_previous)) {
       $li_previous = "&nbsp;";
     }
@@ -366,8 +562,8 @@ function iobytheme_views_mini_pager__campaign_tabs($vars) {
         'element' => $element,
         'interval' => 1,
         'parameters' => $parameters,
-      )
-    );
+        )
+      );
 
     if (empty($li_next)) {
       $li_next = "&nbsp;";
@@ -376,22 +572,22 @@ function iobytheme_views_mini_pager__campaign_tabs($vars) {
     $items[] = array(
       'class' => array('pager-previous'),
       'data' => $li_previous,
-    );
+      );
 
     $items[] = array(
       'class' => array('pager-current'),
       'data' => t('@current of @max', array('@current' => $pager_current, '@max' => $pager_max)),
-    );
+      );
 
     $items[] = array(
       'class' => array('pager-next'),
       'data' => $li_next,
-    );
+      );
 
     $items[] = array(
       'class' => array('view-all'),
       'data' => l('view all', '/', array('query' => array('items_per_page' => 'all'))),
-    );
+      );
 
     return theme('item_list',
       array(
@@ -399,8 +595,8 @@ function iobytheme_views_mini_pager__campaign_tabs($vars) {
         'title' => NULL,
         'type' => 'ul',
         'attributes' => array('class' => array('pager')),
-      )
-    );
+        )
+      );
   }
 }
 
@@ -411,4 +607,28 @@ function iobytheme_table($variables) {
   }
 
   return theme_table($variables);
+}
+
+/**
+ * Implements template_preprocess_search_result
+ * @param type $vars
+ */
+function iobytheme_preprocess_search_result(&$vars) {
+  if($vars['module'] == 'user'){
+     // Removes email within () in search result
+     // @see IOBY-99
+    $title = $vars['title'];
+    $vars['title'] = preg_replace("/\([^)]+\)/","",$title);
+
+    // Load user object by mail
+    $user = user_load_by_mail($vars['title']);
+
+    // If user has fullname, show it
+    if(!is_null($user->field_user_fullname)){
+      $vars['title'] = $user->field_user_fullname['und'][0]['safe_value'];
+    }
+    if($user->field_user_fullname = NULL) {
+      $vars['title'] = $user->name;
+    }
+  }
 }

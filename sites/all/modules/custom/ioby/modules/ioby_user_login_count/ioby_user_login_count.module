@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * Implements hook_user_login().
+ */
+
+function ioby_user_login_count_user_login(&$edit, $account) {
+  _ioby_user_login_count_update($account->uid);
+}
+
+/**
+ * Login count
+ */
+
+function _ioby_user_login_count_update($uid){
+    // check to make sure this runs once
+    static $update = false;
+    if ($update) return;
+    $update = true;
+
+    // Below code should be run once!
+
+   if (user_login_isset($uid)) {
+        // Update existing login count.
+        db_update('ioby_user_login_count')
+          ->expression('login_count', 'login_count + :value', array(':value' => 1))
+          ->condition('ioby_uid', $uid)
+          ->execute();
+      }
+      else {
+        // If there isn't a login count insert it.
+        $id = db_insert('ioby_user_login_count')
+          ->fields(array(
+            'ioby_uid' => $uid,
+            'login_count' => 1,
+          ))
+          ->execute();
+      }
+}
+
+/**
+ * @brief Check if login count is started
+ */
+
+function user_login_isset($uid) {
+  $result = db_query("SELECT login_count
+    FROM {ioby_user_login_count}
+    WHERE ioby_uid = :uid",
+    array(':uid' => $uid))->fetchField();
+  if ($result > 0) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * @brief gives user login count
+ * @details looks up iob_user_login_count table to get count by uid
+ * @return number of logins a uid has made
+ */
+function _get_user_login_count($uid){
+  $result = db_query("SELECT login_count
+    FROM {ioby_user_login_count}
+    WHERE ioby_uid = :uid",
+    array(':uid' => $uid))->fetchField();
+
+  if ($result > 0) {
+    return $result;
+  }
+
+  return FALSE;
+}

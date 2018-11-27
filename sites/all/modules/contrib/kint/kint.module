@@ -1,0 +1,191 @@
+<?php
+
+/**
+ * @file
+ * Drupal module for Kint debug library integration
+ */
+
+define('KINT_VERSION', '1.0.0-wip');
+define('KINT_MIN_VERSION', '1.0.0-wip');
+define('KINT_VENDOR_URL', 'http://raveren.github.io/kint');
+define('KINT_DOWNLOAD_URL', 'https://github.com/fat763/kint/tree/1.0.0-wip');
+define('KINT_DOWNLOAD_ARCHIVE', 'https://github.com/fat763/kint/archive/1.0.0-wip.zip');
+
+/**
+ * Implements hook_libraries_info().
+ *
+ * @see hook_libraries_info()
+ */
+function kint_libraries_info() {
+  $libraries['kint'] = array(
+    'name'             => 'Kint',
+    'vendor url'       => KINT_VENDOR_URL,
+    'download url'     => KINT_DOWNLOAD_URL,
+    'version callback' => 'kint_library_get_version',
+    'files'            => array(
+      'php' => array('Kint.class.php'),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Returns Kint library version.
+ *
+ * Module works only with 1.0.0-wip version of Kint library, so just return this version
+ */
+function kint_library_get_version() {
+  return KINT_VERSION;
+}
+
+/**
+ * Implements hook_menu().
+ *
+ * @see hook_menu()
+ */
+function kint_menu() {
+
+  // Kint module configuration page
+  $items['admin/config/development/kint'] = array(
+    'title'            => 'Kint',
+    'description'      => 'Kint configuration.',
+    'access arguments' => array('administer kint settings'),
+    'page callback'    => 'drupal_get_form',
+    'page arguments'   => array('kint_admin_form'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ *
+ * @see hook_permission()
+ */
+function kint_permission() {
+  return array(
+    'administer kint settings'      => array(
+      'title'       => t('Administer kint settings'),
+      'description' => t('Access to Kint configuration page.'),
+    ),
+    'access kint devel information' => array(
+      'title'       => t('Access Kint developer information'),
+      'description' => t('View developer output of Kint debug tool.'),
+    ),
+  );
+}
+
+/**
+ * Kint module configuration page form.
+ *
+ * @see drupal_get_form()
+ */
+function kint_admin_form($form, &$form_state) {
+
+  $form['kint_enabled'] = array(
+    '#title'         => t('Kint enabled'),
+    '#description'   => t('If disabled, kint will become silent.'),
+    '#type'          => 'checkbox',
+    '#default_value' => variable_get('kint_enabled', TRUE),
+  );
+
+  $form['kint_displayCalledFrom'] = array(
+    '#title'         => t('Display Called from'),
+    '#description'   => t('Whether to display where kint was called from'),
+    '#type'          => 'checkbox',
+    '#default_value' => variable_get('kint_displayCalledFrom', TRUE),
+  );
+
+  $form['kint_maxStrLength'] = array(
+    '#title'         => t('Max length of string'),
+    '#description'   => t('Max length of string before it is truncated and displayed separately in full. Zero or to disable'),
+    '#type'          => 'textfield',
+    '#size'          => 5,
+    '#default_value' => variable_get('kint_maxStrLength', 60),
+  );
+
+  $form['kint_maxLevels'] = array(
+    '#title'         => t('Max levels'),
+    '#description'   => t('Max array/object levels to go deep, if zero no limits are applied'),
+    '#type'          => 'textfield',
+    '#size'          => 5,
+    '#default_value' => variable_get('kint_maxLevels', 5),
+  );
+
+  $form['kint_hideSequentialKeys'] = array(
+    '#title'         => t('Hide sequential keys'),
+    '#description'   => t('Whether dumped indexed arrays that are in ideal sequence are displayed.'),
+    '#type'          => 'checkbox',
+    '#default_value' => variable_get('kint_hideSequentialKeys', TRUE),
+  );
+
+  $form['kint_theme'] = array(
+    '#title'         => t('Theme'),
+    '#type'          => 'select',
+    '#options'       => array(
+      'aante-light'    => t('Aante lignt'),
+      'original'       => t('Original'),
+      'solarized'      => t('Solarized'),
+      'solarized-dark' => t('Solarized dark'),
+    ),
+    '#default_value' => variable_get('kint_theme', 'original'),
+  );
+
+  return system_settings_form($form);
+}
+
+/**
+ * Initial configuration parameters into $GLOBAL array
+ */
+function kint_init_settings() {
+  $GLOBALS['_kint_settings'] = array();
+  $_kintSettings = & $GLOBALS['_kint_settings'];
+  $_kintSettings['enabled'] = variable_get('kint_enabled', TRUE);
+  $_kintSettings['displayCalledFrom'] = variable_get('kint_displayCalledFrom', TRUE);
+  $_kintSettings['appRootDirs'] = array(
+    $_SERVER['DOCUMENT_ROOT'] => str_replace('\\', '/', DRUPAL_ROOT),
+  );
+  $_kintSettings['maxStrLength'] = variable_get('kint_maxStrLength', 60);
+  $_kintSettings['maxLevels'] = variable_get('kint_maxLevels', 5);
+  $_kintSettings['hideSequentialKeys'] = variable_get('kint_hideSequentialKeys', TRUE);
+  $_kintSettings['theme'] = variable_get('kint_theme', 'original');
+}
+
+/**
+ * Implements HOOK_init().
+ *
+ * @see hook_init()
+ */
+function kint_init() {
+  kint_init_settings();
+  // Load Kint library
+  $library = libraries_load('kint');
+
+  // Check for library is downloaded and loaded
+  if (!$library['installed'] || !$library['loaded']) {
+    // Display error message from library info
+    drupal_set_message($library['error message'], 'warning', FALSE);
+  }
+}
+
+/**
+ * Alias of Kint::dump().
+ * Print data in Kint debug tool.
+ */
+function kint() {
+  if (Kint::enabled() && user_access('access kint devel information')) {
+    $args = func_get_args();
+    call_user_func_array(array('Kint', 'dump'), $args);
+  }
+}
+
+/**
+ * Alias of Kint::trace().
+ * Print backtrace in Kint debug tool.
+ */
+function kint_trace() {
+  if (Kint::enabled() && user_access('access kint devel information')) {
+    print call_user_func_array(array('Kint', 'trace'), array());
+  }
+}

@@ -2,6 +2,7 @@
 /cache/
 /files/
 /privatefiles/
+/sites/*/settings*.php
 /sites/*/files
 /sites/*/private
 /sites/*/privatefiles

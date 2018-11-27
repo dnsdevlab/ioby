@@ -42,6 +42,11 @@ class Campaign extends SalesforceObjectBase
   /**
    * @var string
    */
+  protected $project_borough;
+
+  /**
+   * @var string
+   */
   protected $status;
 
   /**
@@ -201,6 +206,23 @@ class Campaign extends SalesforceObjectBase
    */
   public function getProjectZip() {
     return $this->project_zip;
+  }
+
+  /**
+   * @param string $project_borough
+   *
+   * @return $this
+   */
+  public function setProjectBorough($project_borough) {
+    $this->project_borough = isset($project_borough) ? drupal_substr($project_borough, 0, 150) : NULL;
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getProjectBorough() {
+    return $this->project_borough;
   }
 
   /**

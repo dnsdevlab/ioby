@@ -83,17 +83,17 @@
   //get funding data
   $funding = iobyproject_amount_raised( $node->nid );
   $amt_raised = round($funding['amount_raised']);
-  $amt_needed = $content['field_project_total_cost']['#items'][0]['value'];
+  $amt_needed = $content['field_project_cost']['#items'][0]['value'];
   $amt_to_go = $amt_needed - $amt_raised;
   if ($amt_to_go <0 ) {
     $amt_to_go = 0;
     $amt_raised = $amt_needed;
   }
 
-
-
+  // IOBY-66 Status of project
+  $project_status = iobyproject_funding($node->nid);
   ?>
-<article id="node-<?php print $node->nid; ?>" class="project-microview <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+<article id="node-<?php print $node->nid; ?>" class="<?php print $project_status; ?> project-microview <?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <div class="main-info">
     <div class="project-photo"><a href="<?php print $node_url; ?>"><?php print render($content['field_project_photo'][0]);?></a></div>
     <h3><a href="<?php print $node_url; ?>"><?php print $title; ?></a></h3>

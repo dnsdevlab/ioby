@@ -31,13 +31,3 @@ commerce_authnet-undefined_indexes-1512130-18.patch
 apache_solr-page-title-fix.patch
   Fix issue on custom solr search pages where the page title is hard-coded to
   "Search Results" when viewing the page without performing a search.
-
-drupal-1958538-9.patch
-  Fix to improve and add new features to the math expression engine in the ctools
-  module: https://www.drupal.org/node/1958538
-
-states-duplicate-required-markers-1592688-55.patch
-  Fix issue with FAPI states that causes multiple required markers to display on
-  a field in some cases. See https://www.drupal.org/node/1592688. I ran into the
-  problem for conditional states fields on the project form after a mathfield
-  triggers an ajax refresh of calculated fields.

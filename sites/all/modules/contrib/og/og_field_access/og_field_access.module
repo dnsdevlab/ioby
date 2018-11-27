@@ -19,9 +19,8 @@ function og_field_access_field_access($op, $field, $entity_type, $entity, $accou
     return TRUE;
   }
 
+  $perm = $op == 'view' ? 'view ' . $field['field_name'] . ' field' : 'update ' . $field['field_name'] . ' field';
   list($id,, $bundle) = entity_extract_ids($entity_type, $entity);
-  $bundle_field_name = $bundle . '-' . $field['field_name'];
-  $perm = $op == 'view' ? 'view ' . $bundle_field_name . ' field' : 'update ' . $bundle_field_name . ' field';
   // Show fields in user registration form.
   if ($entity_type == 'user' && !$id) {
     return;
@@ -67,12 +66,11 @@ function og_field_access_og_permission() {
 
       foreach ($bundle_value as $field_name => $value) {
         $label = $value['label'];
-        $bundle_field_name = $bundle . '-' . $field_name;
 
-        $perm = 'view ' . $bundle_field_name . ' field';
+        $perm = 'view ' . $field_name . ' field';
         $perms[$perm] = array(
           'title' => t('View @label field', array('@label' => $label)),
-          'description' => t('View the %fieldname field for existing groups.', array('%fieldname' => $bundle_field_name)),
+          'description' => t('View the %fieldname field for existing groups.', array('%fieldname' => $field_name)),
           'roles' => array(OG_ANONYMOUS_ROLE, OG_AUTHENTICATED_ROLE),
           'default role' => array(
             OG_ANONYMOUS_ROLE,
@@ -82,10 +80,10 @@ function og_field_access_og_permission() {
           'module' => 'og_field_access',
         );
 
-        $perm = 'update ' . $bundle_field_name . ' field';
+        $perm = 'update ' . $field_name . ' field';
         $perms[$perm] = array(
           'title' => t('Edit @label field', array('@label' => $label)),
-          'description' => t('Edit the %fieldname field for existing groups.', array('%fieldname' => $bundle_field_name)),
+          'description' => t('Edit the %fieldname field for existing groups.', array('%fieldname' => $field_name)),
           'roles' => array(OG_ANONYMOUS_ROLE, OG_AUTHENTICATED_ROLE),
           'default role' => array(OG_ADMINISTRATOR_ROLE),
           'module' => 'og_field_access',

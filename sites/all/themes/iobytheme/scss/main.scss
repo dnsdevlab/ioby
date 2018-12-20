@@ -746,7 +746,7 @@ h6.locale {
   width: 570px;
   float: right;
   padding-top: 40px;
-  
+
   @media (max-width: $small-break) {
     & > p{
       float: none !important;
@@ -767,7 +767,7 @@ h6.locale {
     width: 350px;
     max-width: 350px;
     padding-left: 10px;
-  }  
+  }
 }
 
 #intro .button {
@@ -851,11 +851,7 @@ input.button.button-blue {
     -ms-filter: progid:DXImageTransform.Microsoft.gradient(
             gradientType=1, startColor=0, endColorStr=#e9e9e2
     );
-    //background-image:-o-linear-gradient(right, $light, rgba(236,230,220,0));
-    //background-image:-moz-linear-gradient(right, $light, rgba(236,230,220,0));
-    //background-image:-webkit-gradient(linear, right top, left top, from($light), to(rgba(236,230,220,0)));
-    //background-image:-webkit-linear-gradient(right, $light, rgba(236,230,220,0));
-    background-image:linear-gradient(right, $light, rgba(236,230,220,0));
+    background-image:linear-gradient(to left, $light, rgba(236,230,220,0));
     display:block;
     width:((960px - $image-width)/2) + 1px;
     height:$image-height;
@@ -873,11 +869,7 @@ input.button.button-blue {
     -ms-filter: progid:DXImageTransform.Microsoft.gradient(
             gradientType=1, startColorStr=#e9e9e2, endColor=0
     );
-    //background-image:-o-linear-gradient(left, $light, rgba(236,230,220,0));
-    //background-image:-moz-linear-gradient(left, $light, rgba(236,230,220,0));
-    //background-image:-webkit-gradient(linear, left top, right top, from($light), to(rgba(236,230,220,0)));
-    //background-image:-webkit-linear-gradient(left, $light, rgba(236,230,220,0));
-    background-image:linear-gradient(left, $light, rgba(236,230,220,0));
+    background-image:linear-gradient($light, rgba(236,230,220,0));
     display:block;
     width:((960px - $image-width)/2) + 1px;
     height:$image-height;
@@ -1365,18 +1357,18 @@ input[type='password'], textarea {
   margin-bottom: 2px;
   color: $active;
   font-size: 110%;
-  background-color: $vlight + #111111;
+  background-color: #fff;
 }
 .description, .fieldset-description{
   font-style: italic;
-  color: $dark + #222222;
+  color: #5c3536;
   line-height: inherit;
   font-size: 1em !important;
   margin: .75em 0 !important;
 }
 .description, .counter {
   font-style: italic;
-  color: $dark + #222222;
+  color: #5c3536;
   line-height: 1.3em;
   margin:2px;
 }
@@ -1703,7 +1695,7 @@ footer#footer {
   float: left;
   width: 200px;
   margin-left: 10px;
-  border-right: 1px solid $beige * 0.3;
+  border-right: 1px solid #3c3c37;
   margin-top:5px;
   min-height: 130px;
   @include responsive;
@@ -1757,7 +1749,7 @@ footer#footer {
 #footer #block-views-single-testimonial-block {
   margin:3px 0 0 10px;
   width:345px;
-  border-right: 1px solid $beige * 0.3;
+  border-right: 1px solid #3c3c37;
   padding-right:25px;
   min-height: 130px;
   @media (max-width: $small-break) {
@@ -2936,7 +2928,7 @@ a.txt1 {
 }
 
 .project-miniview{
-      
+
 
   @media (max-width: $small-break)  {
     min-width: 0 !important;

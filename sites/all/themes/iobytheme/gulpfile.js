@@ -15,6 +15,8 @@ var runSequence = require('run-sequence');
 var svgSprite = require('gulp-svg-sprite');
 //var clean = require('gulp-clean');
 
+// test commit 
+
 // if you need a new jquery plugin, add it here
 var vendorjs = [
   'js/jqfix.js',
@@ -223,7 +225,7 @@ gulp.task('default', function() {
 gulp.task('css', function(cb) {
   runSequence(
     'scss-lint',
-    'css-compile', 
+    'css-compile',
     cb);
 });
 

@@ -1,0 +1,21 @@
+{% extends 'wrappers-home' %}
+
+{% block home_top %}
+  {% include 'organisms-hero' %}
+{% endblock %}
+
+{% block home_outline_first %}
+  {% include 'organisms-impact-list' %}
+{% endblock %}
+
+{% block home_middle %}
+  {% include 'organisms-connect' %}
+  {% include 'organisms-featured-projects' %}
+  {% include 'organisms-cities' %}
+  {% include 'organisms-find-projects' %}
+{% endblock %}
+
+{% block home_outline_last %}
+  {% include 'organisms-updates' %}
+  {% include 'organisms-promo-list' %}
+{% endblock %}

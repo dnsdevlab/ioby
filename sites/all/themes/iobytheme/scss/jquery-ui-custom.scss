@@ -45,7 +45,7 @@
   background-image:url(../img/button-bg.png);
   background-repeat: repeat-x;
   text-align: center;
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: $barlow,'Arial Narrow',sans-serif;
   color: #fff;
   padding: 2px 12px;
   font-size: 140%;
@@ -54,7 +54,7 @@
 }
 
 .ui-button .ui-button-text {
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: $barlow,'Arial Narrow',sans-serif;
   color: #fff;
   font-size: 140%;
 }

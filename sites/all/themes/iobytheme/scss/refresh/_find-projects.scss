@@ -1,0 +1,169 @@
+
+.find-projects {
+  padding: 0 40px;
+
+  @media (max-width: 400px) {
+    padding: 0 20px;
+  }
+
+  &,* {
+    box-sizing: border-box;
+  }
+
+  &__inside {
+    position: relative;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-bottom: 120px;
+  }
+
+  &__header {
+    text-align: center;
+  }
+
+  &__title {
+    font-family: $barlow;
+    font-weight: 800;
+    font-size: 30px;
+    color: $theBlue;
+    line-height: calc(36/30);
+    margin: 0;
+    border-bottom: 0;
+    padding: 0;
+    text-transform: none;
+  }
+
+  &__body {
+    @include clearfix();
+    list-style: none;
+    margin: 60px 0 0;
+    padding: 0;
+    width: calc(100% + 20px);
+
+    @media (max-width: 400px) {
+      margin-top: 32px;
+    }
+  }
+
+  &__item {
+    float: left;
+    padding-right: 20px;
+    margin-bottom: 20px;
+    width: 33.3333333%;
+
+    @media (max-width: 1000px) {
+      width: 50%;
+    }
+
+    @media (max-width: 740px) {
+      width: 100%;
+    }
+
+    &:nth-last-child(n+4):nth-last-child(-n+4):first-child:last-child,
+    &:nth-last-child(n+4):nth-last-child(-n+4):first-child ~ &:last-child,
+    &:nth-last-child(n+7):nth-last-child(-n+7):first-child:last-child,
+    &:nth-last-child(n+7):nth-last-child(-n+7):first-child ~ &:last-child,
+    &:nth-last-child(n+10):nth-last-child(-n+10):first-child:last-child,
+    &:nth-last-child(n+10):nth-last-child(-n+10):first-child ~ &:last-child,
+    &:nth-last-child(n+13):nth-last-child(-n+13):first-child:last-child,
+    &:nth-last-child(n+13):nth-last-child(-n+13):first-child ~ &:last-child {
+      position: relative;
+      left: 33.33333%;
+
+      @media (max-width: 1000px) {
+       left: 0;
+      }
+    }
+  }
+
+  &__footer {
+    margin-top: 50px;
+    text-align: center;
+
+    &-button {
+      font-family: $barlow;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 14px;
+      color: #FFFFFF;
+      letter-spacing: 2px;
+      background: $theOrange;
+      padding: 16px 30px 17px;
+      display: inline-block;
+      text-shadow: none;
+
+      &:hover {
+        background: $theBlue;
+        color: #fff;
+        text-shadow: none;
+      }
+    }
+  }
+}
+
+.project-type {
+
+  a {
+    border: 2px solid $theBlue;
+    display: table;
+    width: 100%;
+    position: relative;
+    background: #fff;
+    padding: 0 18px 0 90px;
+    height: 66px;
+
+    &:hover {
+      background: $theBlue;
+      text-shadow: none;
+
+      .project-type__title {
+        color: $theWhite;
+      }
+
+      path {
+        fill: $theWhite;
+      }
+    }
+  }
+
+  &__title {
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-family: $barlow;
+    font-weight: 800;
+    font-size: 20px;
+    line-height: calc(22/20);
+    color: $theOrange;
+    transform: color .2s ease;
+    display: table-cell;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+  }
+
+  &__icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 90px;
+    text-align: center;
+
+    svg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+
+      path {
+        transition: fill .2s ease;
+      }
+    }
+  }
+}
+
+.cities + .find-projects {
+  margin-top: -74px;
+}

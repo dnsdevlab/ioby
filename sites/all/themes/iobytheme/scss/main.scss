@@ -5,9 +5,9 @@
  */
 
 $beige: #c7c8b7;
-$blue: #3599cc;
+$blue: #3599CC;
 $dark: #3a1314;
-$orange: #e88020;
+$orange: #E88124;
 $silver: #696a6d;
 $plum: #780032;
 $grey: #696a6d;
@@ -16,7 +16,21 @@ $smoke: #b3b3b3;
 $interact: $orange;
 $active: $plum;
 $light: #ece6dc; /* $beige + #20202B; */
-$vlight: #f4f4f1;
+$vlight: #F5F2ED;
+
+// colors and fonts added during refresh
+$theOrange: #E88124;
+$theBlue: #3599CC;
+$theBlack: #000;
+$theGranite: #EBE5DB;
+$theGreen: #78AD3B;
+$theEggshell: #F5F2ED;
+$theWhite: #fff;
+$thePurple: #8241D7;
+$theGrey: #6A6B6E;
+
+$barlow: "Barlow";
+$lato: "Lato";
 
 @mixin rounded ($radius: 15px) {
   -webkit-border-radius: $radius;
@@ -215,29 +229,6 @@ select {
   color: #780032;
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-  background: rgba(255,255,255,0.75);;
-  border: solid 2px #fff;
-  -webkit-border-radius: 7px;
-}
-
-
-
-::-webkit-scrollbar-track-piece {
-  background-color: rgba(255,255,255,0);
-  -webkit-border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #3599CC;
-  -webkit-border-radius: 5px;
-}
-
-
-
-
 /*
  * ACTUAL STYLES
  */
@@ -249,7 +240,8 @@ select {
 
 
 body {
-  background-color: $dark;
+  background-color: #fff;
+  -webkit-font-smoothing: antialiased;
 
 }
 
@@ -329,11 +321,13 @@ header#siteheader {
 }
 
 header#pageheader {
-  background-color: $light;
-  padding:10px 0;
-  @media (max-width: $small-break){
-    margin-top: 300px;
+  background-color: #F5F2ED;
+  padding: 77px 0 10px;
+
+  @media (max-width: 400px) {
+    padding-top: 10px;
   }
+
   .mobileheader {
       img {
       width: 100%;
@@ -401,18 +395,26 @@ header#pageheader {
   @include responsive;
 
   .stat_num {
-    font-size:300%;
-    font-weight:bold;
-    line-height:1em;
+    font-size: 50px;
+    line-height: 1;
+    font-weight: 800;
+    font-family: $barlow;
+
+    @media (max-width: 600px) {
+      font-size: 32px;
+    }
   }
 
   .stat_label {
     @extend .smallcaps;
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: 600;
     margin-bottom: 15px;
   }
 
   h3 {
-    font-family: Kreon,"Arial Narrow",sans-serif;
+    font-family: $barlow,"Arial Narrow",sans-serif;
     margin: 0 0 30px 0;
     font-weight: 900;
   }
@@ -954,33 +956,38 @@ body {
 }
 
 h1,h2,h3,h4,h5,h6 {
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: $barlow,'Arial Narrow',sans-serif;
   color: $dark;
   font-weight: normal;
 }
 
 h1 {
-  font-size:308%;
-  font-weight: 900;
+  font-size: 50px;
+  font-weight: 800;
   line-height: 1.2em;
-  padding-top: 30px;
+  padding-top: 20px;
   margin-left:10px;
+  color: black;
+
+  @media (max-width: 600px) {
+    font-size: 32px;
+  }
 }
 
 article h1 {
-  font-size: 250%;
   margin-left: 0;
 }
 
 h2 {
-  font-size:23px;
-  text-transform: lowercase;
-  padding-bottom: 0.4em;
-  border-bottom: 1px solid $beige;
   margin-bottom: 0.4em;
-  @media (max-width: $small-break) {
-    font-size: 2.1em;
-    line-height: 1.2em;
+  font-family: $barlow;
+  font-weight: 800;
+  color: $theBlue;
+  font-size: 30px;
+  line-height: calc(36/30);
+
+  @media (max-width: 600px) {
+    font-size: 24px;
   }
 }
 
@@ -989,6 +996,8 @@ h3 {
   @extend .lato;
   font-weight: bold;
   margin:2em 0 1em;
+  line-height: 1.2;
+  color: #000;
 }
 
 h4 {
@@ -1003,7 +1012,7 @@ h4 {
 }
 
 #comments h3 {
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: $barlow,'Arial Narrow',sans-serif;
   color:$blue;
   font-size: 182%;
   margin: 0 0 0 0;
@@ -1040,7 +1049,7 @@ span.nolink {
 }
 
 #navigation {
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: $barlow,'Arial Narrow',sans-serif;
   font-weight: 900;
   font-size: 17px;
   text-align: right;
@@ -1053,7 +1062,7 @@ span.nolink {
 
 
 #off-canvas {
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: $barlow,'Arial Narrow',sans-serif;
   background-color: #ffffff;
   border-bottom: 3px solid $orange;
   font-weight: 900;
@@ -1178,7 +1187,7 @@ ul.nice-menu-down .menuparent ul {
   @extend .inblock;
   @include rounded(20px);
   text-align: center;
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: $barlow,'Arial Narrow',sans-serif;
   color: #fff;
   padding: 6px 15px;
   font-size: 140%;
@@ -1205,46 +1214,31 @@ ul.nice-menu-down .menuparent ul {
 
 
 a.button,input.button,
-#content input.form-submit[type='submit'], #block-user-login input.form-submit[type='submit'], #modalContent input.form-submit[type='submit'], #edit-submit--4 {
-  @extend .inblock;
-  @include rounded(20px);
-  //  background-image:url(../img/button-bg.png);
-  //  background-repeat: repeat-x;
-  //background: rgb(236,151,38); /* Old browsers */
-  //background: -moz-linear-gradient(top,  rgb(236,151,38) 1%, rgb(210,116,29) 53%, rgb(202,97,24) 100%); /* FF3.6+ */
-  //background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgb(236,151,38)), color-stop(53%,rgb(210,116,29)), color-stop(100%,rgb(202,97,24))); /* Chrome,Safari4+ */
-  //background: -webkit-linear-gradient(top,  rgb(236,151,38) 1%,rgb(210,116,29) 53%,rgb(202,97,24) 100%); /* Chrome10+,Safari5.1+ */
-  //background: -o-linear-gradient(top,  rgb(236,151,38) 1%,rgb(210,116,29) 53%,rgb(202,97,24) 100%); /* Opera 11.10+ */
-  //background: -ms-linear-gradient(top,  rgb(236,151,38) 1%,rgb(210,116,29) 53%,rgb(202,97,24) 100%); /* IE10+ */
-  background: linear-gradient(to bottom,  rgb(236,151,38) 1%,rgb(210,116,29) 53%,rgb(202,97,24) 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ec9726', endColorstr='#ca6118',GradientType=0 ); /* IE6-9 */
-  text-align: center;
-  font-family: Kreon,'Arial Narrow',sans-serif;
-  color: #fff;
-  padding: 10px 20px;
-  font-size: 143%;
-  -webkit-transition: background-position .25s ease;
-  -moz-transition: background-position .25s ease;
-  -ms-transition: background-position .25s ease;
-  -o-transition: background-position .25s ease;
-  transition: background-position .25s ease;
-  background-size:100% 100px ;
-  /* min-width: 80px; */
-  margin:5px;
+#content input.form-submit[type='submit'],
+#block-user-login input.form-submit[type='submit'],
+#modalContent input.form-submit[type='submit'],
+#edit-submit--4 {
+  display: inline-block;
   vertical-align: middle;
-  border: 1px solid #eb8220;
-  min-width: 80px;
-  &.hover, &:hover {
-    background-position: 0 -40px;
+  border-radius: 0;
+  width: auto;
+  min-width: 0;
+  margin: 0;
+  font-family: $barlow;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 14px;
+  color: #FFFFFF;
+  letter-spacing: 2px;
+  background: $theOrange;
+  padding: 16px 30px 17px;
+  text-shadow: none;
+  line-height: 1.25;
+
+  &:hover {
+    background: $theBlue;
+    color: #fff;
     text-shadow: none;
-  }
-  @media (max-width: $small-break) {
-    @include rounded(22px);
-    font-size: 22px;
-    width: 60%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
   }
 }
 
@@ -1478,6 +1472,9 @@ blockquote {
   color: $dark;
   width: 580px;
   @include responsive;
+  font-size: 16px;
+  line-height: 23px;
+
   @media (max-width: $small-break) {
     font-size: 18px;
     line-height: 22px;
@@ -1544,6 +1541,8 @@ div.horizontal-tabs ul.horizontal-tabs-list
     background-color: transparent;
     border:0;
     font-size: 11px;
+    margin-right: 5px;
+
     @media (max-width: $small-break) {
       display: flex;
       font-size: 1.3em;
@@ -1554,7 +1553,6 @@ div.horizontal-tabs ul.horizontal-tabs-list
   a {
     display: block;
     padding: 4px 9px;
-    @include rounded(10px);
     margin:0 0 0 0;
     background: transparent;
     border: none;
@@ -1569,14 +1567,15 @@ div.horizontal-tabs ul.horizontal-tabs-list
   a.current, a.current:hover,
   a.active, a.active:hover {
     color: #fff;
-    background: $blue url(../img/button-bg.png) repeat-x 0 -70px !important;
+    background: $theBlue;
     border: none;
     text-shadow: none;
+    border-radius: 0;
+
     @media (max-width: $small-break) {
       width: auto;
       font-size: 1em;
       padding: 12px 15px;
-      @include rounded(25px);
     }
   }
 
@@ -1594,19 +1593,22 @@ ul.quicktabs-style-nostyle{
   margin:0 0 0 -8px;
   background-color: transparent;
 
-  li {
-    margin: 0px !important;
+  #content & {
+    margin-left: 0;
+  }
 
+  li {
     @extend .inblock;
     *float:left;
     background-color: transparent;
     border:0;
-    font-size: 11px;
+    font-size: 14px;
+    margin: 0 10px 0 0 !important;
 
     &.active {
       a {
-        color: #fff;
-        background: $blue url(../img/button-bg.png) repeat-x 0 -70px !important;
+        color: #000;
+        text-decoration: underline;
         border: none;
         text-shadow: none;
       }
@@ -1617,21 +1619,14 @@ ul.quicktabs-style-nostyle{
   a {
     color: $orange;
     display: block;
-    padding: 4px 9px;
-    @include rounded(10px);
     margin:0 0 0 0;
     background: transparent;
     border: none;
-
-    &:visited {
-      color:$orange;
-    }
   }
 
   a:hover {
-    background: $vlight;
-    border: none;
-    color: $active;
+    text-decoration: underline;
+    color: #780032;
   }
 }
 
@@ -1677,7 +1672,7 @@ footer#footer {
 
 #bottom li.title {
   padding:8px 13px;
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: $barlow,'Arial Narrow',sans-serif;
   color: $blue;
   font-size: 123%;
   vertical-align: top;
@@ -1711,7 +1706,7 @@ footer#footer {
 
   a {
     color:#fff;
-    font-family: Kreon,'Arial Narrow',sans-serif;
+    font-family: $barlow,'Arial Narrow',sans-serif;
     font-size: 108%;
     font-weight: bold;
     text-transform: lowercase;
@@ -1767,7 +1762,7 @@ footer#footer {
   .views-field-field-user,
   .views-field-field-person-name {
     text-align: right;
-    font-family: Kreon,'Arial Narrow',sans-serif;
+    font-family: $barlow,'Arial Narrow',sans-serif;
     font-weight: bold;
     font-size: 108%;
     color: $orange;
@@ -1834,7 +1829,7 @@ footer#footer {
 }
 
 #footer #block-block-2  .content {
-  font-family:Kreon,'Arial Narrow',sans-serif;
+  font-family: $barlow,'Arial Narrow',sans-serif;
   font-size: 162%;
   line-height: 125%;
   margin-top: 2px;
@@ -2421,32 +2416,51 @@ form.node-donation-form #autocomplete {
   text-align: left;
   margin: 0 auto;
   display: block;
-  color:$vlight;
+  color: $vlight;
   font-size: 20px;
-  border: 1px solid $vlight;
   min-height: 77px;
-  background: rgba(255, 255, 255, .1);
+
   &:hover {
     text-shadow: none;
-    background: rgba(255, 255, 255, .25);
     color:white;
+
+    p {
+      text-decoration: underline;
+    }
+
     img {
       opacity: .8;
     }
   }
+
   button {
-    font-size: 11px;
-    display: inline-block;
     color: #fff;
-    background: #3599cc url(/sites/all/themes/iobytheme/img/button-bg.png) repeat-x 0 -70px !important;
+    font-weight: 800;
+    font-family: $barlow;
+    font-size: 18px;
+    line-height: 28px;
+    background: none;
     border: none;
-    text-shadow: none;
-    padding: 0 9px;
-    line-height: 2;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
+    padding: 0;
+
+    &:after {
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      width: 8px;
+      height: 16px;
+      background: transparent url('../img/caret-white-right.svg') no-repeat center center;
+      background-size: 8px 16px;
+      margin: 0 0 0 8px;
+      position: relative;
+      transition: transform .2s ease;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
   }
+
   .field-name-field-campaign-logo {
     float:right;
     margin-left: 10px;
@@ -2458,6 +2472,10 @@ form.node-donation-form #autocomplete {
   + .sponsor-info {
     margin-top: 5px;
 
+  }
+
+  p {
+    line-height: 1.2;
   }
 
 }
@@ -2570,7 +2588,7 @@ div#autocomplete {
 
 .block-facetapi > h2 {
   font-size: 17px;
-  font-family: "Kreon";
+  font-family: $barlow;
   text-align: left;
   text-transform: capitalize;
   border: 0;
@@ -2971,4 +2989,8 @@ a.txt1 {
 
 .not-logged-in .funded-project{
   position: relative;
+}
+
+.region-header {
+  padding-top: 10px;
 }

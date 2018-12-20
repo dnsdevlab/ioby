@@ -1,0 +1,21 @@
+<section class="promo-list">
+  <div class="promo-list__inside">
+    <ul class="promo-list__body">
+      {% for post2 in post.list %}
+        {% if loop.index == 1 %}
+          <li class="promo-list__item">
+            {% include 'molecules-promo' with { post : post2 } %}
+          </li>
+        {% elseif loop.index == 2 %}
+          <li class="promo-list__item">
+            {% include 'molecules-promo-blue' with { post : post2 } %}
+          </li>
+        {% else %}
+          <li class="promo-list__item">
+            {% include 'molecules-promo-purple' with { post : post2 } %}
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul><!--/.promo-list__body-->
+  </div><!--/.promo-list__inside-->
+</section><!--/.promo-list-->

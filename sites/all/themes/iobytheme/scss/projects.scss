@@ -15,7 +15,7 @@
     color: #fff;
     padding:10px;
     text-align: center;
-    background: $orange;
+    background: $theOrange;
   }
 
   .intro {
@@ -41,7 +41,7 @@
 //      color:$active;
 color:$blue;
 font-weight: bold;
-font-family: Kreon, Arial Narrow, sans-serif;
+font-family: $barlow, Arial Narrow, sans-serif;
 font-size: 15px;
 margin-bottom: 8px;
   @media (max-width: $small-break) {
@@ -212,7 +212,7 @@ background-color: #fff;
 
   .big {
     color: $dark;
-    font-family: Kreon, Arial Narrow, sans-serif;
+    font-family: $barlow, Arial Narrow, sans-serif;
     font-weight: 900;
     font-size: 277%;
     display: block;
@@ -234,7 +234,7 @@ form#iobyproject-donation-form {
 
     .field-prefix {
       color: $orange;
-      font-family: Kreon, Arial Narrow, sans-serif;
+      font-family: $barlow, Arial Narrow, sans-serif;
       font-size:461%;
       font-weight: bold;
       line-height: 1em;
@@ -389,6 +389,14 @@ ul.donation_list {
   position:relative;
   z-index: 20;
 
+  #content &,
+  .region-content & {
+    p {
+      font-size: 16px;
+      line-height: 23px;
+    }
+  }
+
   .main-info {
     border:1px solid $beige;
     padding:$main-padding;
@@ -400,14 +408,8 @@ ul.donation_list {
     @media (max-width: $small-break) {
       height: auto;
     }
-    p {
-      @media (max-width: $small-break) {
-        font-size: 12px !important;
-        line-height: 18px;
-      }
-    }
+
     .project-summary {
-      line-height:1.4em;
       color: #444;
     }
 
@@ -429,12 +431,18 @@ ul.donation_list {
 
   }
 
-  h3, h3 a {
-    color:$dark;
-    font-size:18px;
+  h3,
+  h3 a {
+    color: #000;
+    font-size:24px;
+    line-height: 1.1;
     margin:0.5em 0 0.2em;
-    font-weight:normal;
-    font-family: Kreon,'Arial Narrow',sans-serif;
+    font-family: $barlow,'Arial Narrow',sans-serif;
+  }
+
+  h3 a:hover {
+    text-decoration: underline;
+    color: #000;
   }
 
   .project-needs {
@@ -559,14 +567,13 @@ td > .project-miniview {
 .project-miniview:hover {
   direction:ltr; /*Nudge IE7 to recognize z-index change*/
   z-index: 500;
+
   .main-info {
     -moz-box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     -webkit-box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    h3 a {
-      color:$orange;
-    }
   }
+
   .extra-info {
     -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -614,7 +621,7 @@ td > .project-miniview {
         font-size:16px;
         margin:0 0 0 0;
         font-weight:normal;
-        font-family: Kreon,'Arial Narrow',sans-serif;
+        font-family: $barlow,'Arial Narrow',sans-serif;
         line-height:0.7em;
       }
     }
@@ -868,7 +875,7 @@ div.view-id-project_view.view-display-id-page_3 .view-content {
   font-size: 31px;
   line-height: 1.25;
   font-weight: 600;
-  font-family: Kreon,'Arial Narrow',sans-serif;
+  font-family: $barlow,'Arial Narrow',sans-serif;
   padding: 8px 0;
   text-align: inherit;
 
@@ -944,10 +951,19 @@ div.view-id-project_view.view-display-id-page_3 .view-content {
 
 #rail #iobyproject-donation-form input.form-submit[type='submit']{
  margin-left: 49px;
+ white-space: pre-wrap;
+ padding-top: 14px;
+ padding-bottom: 14px;
+ border: none;
+
  @media (max-width: $small-break) {
    width: auto;
    margin-left: auto;
    margin-right: auto;
+ }
+
+ &:hover {
+   cursor: pointer;
  }
 }
 

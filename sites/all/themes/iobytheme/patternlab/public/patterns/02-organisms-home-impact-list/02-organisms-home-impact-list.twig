@@ -1,0 +1,27 @@
+<section class="impact-list">
+  <div class="impact-list__inside">
+    <header class="impact-list__header">
+      <h2 class="impact-list__title">{{ post.title|raw }}</h2>
+    </header>
+    <div class="impact-list__body">
+      {% for post2 in post.list %}
+        {% if loop.index == 1 %}
+          <div class="impact-list__item impact-list__item--green">
+            {% include 'molecules-impact-green' with { post : post2 } %}
+          </div><!--/.impact-list__item-->
+        {% elseif loop.index == 2 %}
+          <div class="impact-list__item impact-list__item--orange">
+            {% include 'molecules-impact-orange' with { post : post2 } %}
+          </div><!--/.impact-list__item-->
+        {% else %}
+          <div class="impact-list__item impact-list__item--purple">
+            {% include 'molecules-impact-purple' with { post : post2 } %}
+          </div><!--/.impact-list__item-->
+        {% endif %}
+      {% endfor %}
+    </div><!--/.impact-list__body-->
+    <footer class="impact-list__footer">
+      <a href=".">{{ post.footer }}</a>
+    </footer>
+  </div><!--/.impact-list__inside-->
+</section><!--/.impact-list-->

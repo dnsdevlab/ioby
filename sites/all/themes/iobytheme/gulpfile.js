@@ -25,6 +25,7 @@ var vendorjs = [
   'js/galleryview/js/jquery.timers.js',
   'js/curvycorners.js',
   'js/html5.js',
+  'js/typed.min.js'
 ];
 
 // if you need some vendor css, add it here:
@@ -213,9 +214,10 @@ gulp.task('plab-css', function(){
 
 // the "watch" task - triggers events on save
 gulp.task('default', function() {
-  gulp.watch(['scss/**/*.scss'], ['scss-lint','css-compile']);
-  gulp.watch(['patternlab/source/**/**'], ['plab']);
-  gulp.watch(['js/app.js'], ['js']);
+  // gulp.watch(['scss/**/*.scss'], ['scss-lint','css-compile']);
+  // gulp.watch(['patternlab/source/**/**'], ['plab']);
+  // gulp.watch(['js/app.js'], ['js']);
+  gulp.watch(['scss/**/*.scss'], gulp.series('build'));
 });
 
 // compile css once

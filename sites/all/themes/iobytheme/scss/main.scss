@@ -1525,23 +1525,24 @@ div.horizontal-tabs {
 }
 
 #content ul.tabs,
-div.horizontal-tabs ul.horizontal-tabs-list
-{
+div.horizontal-tabs ul.horizontal-tabs-list {
   border: none;
   list-style: none;
-  padding:10px 0;
-  margin:0 0 0 -8px;
+  padding: 10px 0;
+  margin: 0;
   background-color: transparent;
+
   @media (max-width: $small-break) {
     font-size: 1em;
   }
+
   li {
     @extend .inblock;
     *float:left;
     background-color: transparent;
     border:0;
     font-size: 11px;
-    margin-right: 5px;
+    margin-right: 0px;
 
     @media (max-width: $small-break) {
       display: flex;
@@ -1552,10 +1553,14 @@ div.horizontal-tabs ul.horizontal-tabs-list
 
   a {
     display: block;
-    padding: 4px 9px;
+    padding: 2px 11px;
     margin:0 0 0 0;
     background: transparent;
     border: none;
+    font-family: $barlow;
+    font-weight: 800;
+    font-size: 16px;
+    text-transform: none;
 
     &:visited {
       color:$orange;
@@ -1586,7 +1591,7 @@ div.horizontal-tabs ul.horizontal-tabs-list
   }
 }
 
-ul.quicktabs-style-nostyle{
+ul.quicktabs-style-nostyle {
   border: none;
   list-style: none;
   padding:5px 0;
@@ -1612,7 +1617,6 @@ ul.quicktabs-style-nostyle{
         border: none;
         text-shadow: none;
       }
-
     }
   }
 
@@ -2954,7 +2958,7 @@ a.txt1 {
     width: 50% !important;
 
     .main-info{
-      height: 380px;
+      //height: 380px;
     }
   }
 

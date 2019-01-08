@@ -1,0 +1,23 @@
+<div class="page-wrapper">
+  <!--[if lte IE 8]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+  <a id="bypass-link-main" class="screen-reader-text" href="#main">Skip Navigation</a>
+
+  <div class="page-wrapper-inside">
+    {% include 'organisms-header' %}
+    {% block after_header %}
+      <div class="plab-area">After header area</div>
+    {% endblock %}
+
+    <main id="main-wrapper">
+      <div id="main" class="clearfix {{ mainclass }}">
+        {% block main %}
+          <div class="plab-area">Main body content area</div>
+        {% endblock %}
+      </div><!--/#main-->
+    </main><!--/#main-wrapper-->
+
+    {% include 'organisms-footer' %}
+  </div><!--/.page-wrap-inside-->
+</div><!--/.page-wrapper-->

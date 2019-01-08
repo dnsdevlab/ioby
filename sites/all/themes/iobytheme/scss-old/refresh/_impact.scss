@@ -1,0 +1,77 @@
+
+.impact {
+  position: relative;
+  width: 100%;
+  padding-left: 253px;
+
+  @media (max-width: 650px) {
+    padding-left: 0;
+  }
+
+  &, * {
+    box-sizing: border-box;
+  }
+
+  &__image {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translatey(-50%);
+    width: 278px;
+    height: 333px;
+
+    @media (max-width: 650px) {
+      position: relative;
+      top: auto;
+      transform: none;
+      max-width: 380px;
+      margin: 0 auto;
+    }
+  }
+
+  &__text {
+    background: white;
+    padding: 40px 60px 50px;
+    position: relative;
+    z-index: 2;
+    max-width: 588px;
+
+    @media (max-width: 840px) {
+      padding: 30px 40px 40px;
+    }
+
+    @media (max-width: 650px) {
+      margin-top: -60px;
+    }
+
+    @media (max-width: 400px) {
+      padding-left: 0;
+      padding: 30px 40px 40px;
+    }
+  }
+
+  &__title {
+    font-family: $barlow;
+    font-weight: 800;
+    font-size: 24px;
+    color: #188DC8;
+    margin: 0;
+    padding: 0;
+
+    strong {
+      font-size: 42px;
+    }
+  }
+
+  &__description {
+
+    &,p {
+      margin: 16px 0 0;
+      font-family: $lato;
+      font-weight: 400;
+      font-size: 18px;
+      color: #000000;
+      line-height: calc(28/18);
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{% set newpercent = 100 - post.percent %}
+<article class="featured-project">
+  <a href=".">
+    <div class="featured-project__image">
+      <figure>
+        <img src="{{ post.img.src }}" alt="{{ post.img.alt }}" title="{{ post.img.title }}" />
+      </figure>
+    </div>
+    <div class="featured-project__text">
+      <h3 class="featured-project__title">{{ post.title }}</h3>
+      <div class="featured-project__location-and-description">
+        <div class="featured-project__location">{{ post.location }}</div>
+        <div class="featured-project__description">{{ post.description }}</div>
+      </div>
+      <div class="featured-project__progress">
+        <span class="featured-project__progress-stat">
+          <span data-percent="{{ post.percent }}" class="featured-project__progress-number">{{ post.percent }}</span><span class="progress-bar__percent">%</span>
+        </span>
+        <span class="featured-project__progress-funded-text">funded</span>
+        <div class="featured-project__progress-bar">
+          <div class="featured-project__progress-bar-inside" style="width: {{ newpercent }}%;"></div>
+        </div><!--/.featured-project__progress-bar-->
+        <div class="featured-project__progress-bar-meta">
+          <span class="featured-project__progress-bar-amount">{{ post.amountRemaining }} still needed</span>
+          {% if post.volunteers %}
+            <span> + Volunteers </span>
+          {% endif %}
+
+          {% if post.daysRemaining %}
+          <span class="featured-project__progress-bar-days">{{ post.daysRemaining }} days to go</span>
+          {% endif %}
+        </div><!--/.featured-project__progress-bar-meta-->
+      </div>
+    </div>
+  </a>
+</article><!--/.featured-project-->

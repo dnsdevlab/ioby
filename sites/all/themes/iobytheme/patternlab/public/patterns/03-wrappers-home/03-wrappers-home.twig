@@ -1,0 +1,22 @@
+{% extends 'wrappers-open' %}
+
+{% block after_header %}{% endblock %}
+
+{% block main %}
+  {% block home_top %}
+    <div class="plab-area">Home Top Area</div>
+  {% endblock %}
+  <div class="home-wrapper-outline-bg">
+    {% block home_outline_first %}
+      <div class="plab-area">Home Outline First Area</div>
+      {% endblock %}
+  </div><!--/.home-wrapper-outline-bg-->
+  {% block home_middle %}
+    <div class="plab-area">Home Middle Area</div>
+  {% endblock %}
+  <div class="home-wrapper-outline-bg">
+    {% block home_outline_last %}
+      <div class="plab-area">Home Outline Last Area</div>
+    {% endblock %}
+  </div><!--/.home-wrapper-outline-bg-->
+{% endblock %}

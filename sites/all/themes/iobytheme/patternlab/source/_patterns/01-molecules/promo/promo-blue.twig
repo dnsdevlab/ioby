@@ -1,0 +1,16 @@
+{% extends 'molecules-promo' %}
+{% set class = 'promo--blue' %}
+
+{% block svg %}
+  <svg width="318" height="273" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+      <mask id="promo-mask-blue">
+        <path fill="#ffffff" d="M126.523 0L317.92 48.512l-30.158 98.621a112.616 112.616 0 0 0-4.403 22.009l-9.461 95.518c-30.153 10.494-63.782 10.434-100.887-.177C135.907 253.87 78.236 237.082 0 214.115L117.604 35.042a35.381 35.381 0 0 0 7.847-19.827L126.523 0z"/>
+      </mask>
+    </defs>
+    <g mask="url(#promo-mask-blue)">
+      <image x="0" y="0" width="380" height="380" transform="translate(-32,-54)" xlink:href="{{ post.img.src }}"/>
+      <rect fill="#49A3D1" opacity=".6" width="100%" height="100%"/>
+    </g>
+  </svg>
+{% endblock %}

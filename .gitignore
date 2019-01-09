@@ -1,6 +1,5 @@
 # Ignore paths that contain generated content.
 /cache/
-/files/
 /privatefiles/
 /sites/*/settings*.php
 /sites/*/files

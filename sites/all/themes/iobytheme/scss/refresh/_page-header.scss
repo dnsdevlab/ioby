@@ -900,6 +900,7 @@
       width: 100%;
       padding: 10px 12px;
       margin-bottom: 10px;
+      box-sizing: border-box;
 
       &::-webkit-input-placeholder { color: #3599CC; }
       &::-moz-placeholder { color: #3599CC; }

@@ -91,6 +91,10 @@
       &:-ms-input-placeholder { color: #3599CC; }
       &:-moz-placeholder { color: #3599CC; }
       &::placeholder { color: #3599CC; }
+
+      &:focus {
+        outline: none;
+      }
     }
 
     input[type='submit']{

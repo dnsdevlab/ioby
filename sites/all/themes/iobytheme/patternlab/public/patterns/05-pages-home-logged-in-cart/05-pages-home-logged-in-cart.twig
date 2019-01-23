@@ -12,7 +12,11 @@
   {% include 'organisms-connect' %}
   {% include 'organisms-featured-projects' with { post : projects } %}
   {% include 'organisms-cities' with { post : cities } %}
-  {% include 'organisms-find-projects' with { post : projecttypes } %}
+  {% if projecttypes %}
+    {% include 'organisms-find-projects' with { post : projecttypes } %}
+  {% endif %}
+  {% include 'organisms-more-projects' with { post : more } %}
+
 {% endblock %}
 
 {% block home_outline_last %}

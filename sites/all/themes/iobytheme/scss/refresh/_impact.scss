@@ -48,19 +48,20 @@
       padding-left: 0;
       padding: 30px 40px 40px;
     }
+
+    @media (max-width: 380px) {
+      padding-left: 0;
+      padding: 30px 30px 34px;
+    }
   }
 
   &__title {
     font-family: $barlow;
     font-weight: 800;
-    font-size: 24px;
+    font-size: 26px;
     color: #188DC8;
     margin: 0;
     padding: 0;
-
-    strong {
-      font-size: 42px;
-    }
   }
 
   &__description {

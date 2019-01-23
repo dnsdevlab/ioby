@@ -87,12 +87,6 @@
         <span class="offcanvas__close-text">Close</span>
         <span class="offcanvas__close-icon"></span>
       </button>
-      <nav class="offcanvas__project-nav">
-        <ul>
-          <li><a href=".">Find a Project</a></li>
-          <li><a href=".">Create a Project</a></li>
-        </ul>
-      </nav>
       <nav class="offcanvas__primary-nav">
         <ul>
           <li class="expanded">
@@ -152,7 +146,8 @@
       <figure>
         <picture>
           <source srcset="../../images/site/hero_large.jpg" media="(min-width: 700px)" />
-          <img srcset="../../images/site/hero_small.jpg" alt="image description" title="Crop width and height" />
+          <source srcset="../../images/site/hero_small.jpg" media="(min-width: 440px)" />
+          <img srcset="../../images/site/hero_smallest.jpg" alt="image description" title="Crop width and height" />
         </picture>
       </figure>
     </div><!--/.hero__image-->
@@ -421,7 +416,7 @@
           </ul>
   </div><!--/.cities__inside-->
 </section><!--/.cities-->
-  <section class="find-projects">
+      <section class="find-projects">
   <div class="find-projects__inside">
     <header class="find-projects__header">
       <h2 class="find-projects__title">Find more great projects to support</h2>
@@ -508,11 +503,14 @@
           </div><!--/.project-type-->
         </li>
           </ul>
-    <footer class="find-projects__footer">
-      <a href="." class="find-projects__footer-button">or, browse all projects</a>
-    </footer>
   </div><!--/.find-projects-->
 </section><!-- /.find-projects -->
+    <div class="more-projects">
+  <div class="more-projects__inside">
+    <a href=".">or, browse all projects</a>
+  </div><!--/.more-projects-->
+</div><!--/.more-projects-->
+
   <div class="home-wrapper-outline-bg">
       <section class="updates">
   <div class="updates__inside">
@@ -661,7 +659,6 @@
               <a href=".">Donate to ioby</a>
             </div>
             <div class="page-footer__nav-col4">
-              <a href=".">Tax Information</a>
               <a href=".">Press Room</a>
               <a href=".">Contact</a>
               <a href=".">Jobs</a>
@@ -766,6 +763,7 @@
             <ul>
               <li><a href=".">Privacy Policy</a></li>
               <li><a href=".">Terms &amp; Conditions</a></li>
+              <li><a href=".">Tax Information</a></li>
             </ul>
           </nav>
         </div>

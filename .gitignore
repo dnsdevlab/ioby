@@ -5,6 +5,7 @@
 /sites/*/files
 /sites/*/private
 /sites/*/privatefiles
+/files
 
 # Ignore dev settings paths and files
 /sites/*.newsig.com

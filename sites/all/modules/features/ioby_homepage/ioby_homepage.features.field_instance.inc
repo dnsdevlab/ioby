@@ -880,8 +880,8 @@ function ioby_homepage_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'bean-promo-field_text'.
-  $field_instances['bean-promo-field_text'] = array(
+  // Exported field_instance: 'bean-promo-field_promo_text'.
+  $field_instances['bean-promo-field_promo_text'] = array(
     'bundle' => 'promo',
     'default_value' => NULL,
     'deleted' => 0,
@@ -896,7 +896,7 @@ function ioby_homepage_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'bean',
-    'field_name' => 'field_text',
+    'field_name' => 'field_promo_text',
     'label' => 'Text',
     'required' => 1,
     'settings' => array(

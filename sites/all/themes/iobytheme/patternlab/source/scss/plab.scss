@@ -1,0 +1,112 @@
+// styles that only show up on the pattern lab. This file generates it's on css file that
+// only gets loaded on the pattern library site. It doesnt need to be on prod.
+
+//@import "abstracts";
+
+.sg-pattern {
+  overflow: hidden;
+}
+
+.sg-pattern-example {
+  position: relative;
+}
+
+.sg-pattern-head {
+  padding: 0 !important;
+  // color: $text;
+  // background: $lightgrey;
+}
+
+.sg-pattern-head h3 a {
+  // color: $text;
+  // background: $lightgrey;
+  display: block;
+  padding: 6px 13px;
+  font-size: 13px;
+}
+
+.sg-pattern-head h3 {
+  border-top: none;
+}
+
+.sg-subtype > h2 a{
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  // background: $navy;
+  // color: $white;
+  padding: 6px 13px;
+  line-height: 1.1;
+  display: block;
+}
+
+#sg-patterns, .pl body{
+  // background: $white;
+}
+
+
+.sg-colors {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: inline-block;
+    vertical-align: top;
+    margin-bottom: 5px;
+  }
+
+  .sg-swatch {
+    width: 150px;
+    height: 100px;
+    display: block;
+
+    &.bg-white {
+      // border: 1px solid $gray;
+    }
+  }
+
+  .sg-label {
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    // color: $gray;
+    display: block;
+  }
+
+  .sg-name {
+    font-size: 18px;
+    font-weight: 900;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .sg-color-text {
+    display: block;
+    // border: 1px solid $gray;
+    border-top: none;
+    padding: 16px;
+  }
+}
+
+.plab-area {
+  padding: 40px;
+  background: tomato;
+  color: white;
+  text-align: center;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 10px solid darken(tomato, 5%);
+}
+
+// #sg-pattern-extra-organisms-email-signup,
+// #sg-pattern-extra-organisms-live-here,
+// #sg-pattern-data-organisms-live-here-video,
+// #sg-pattern-data-organisms-mission,
+// #sg-pattern-data-organisms-footer {
+//
+//   .sg-pattern-example {
+//     overflow: hidden;
+//   }
+// }

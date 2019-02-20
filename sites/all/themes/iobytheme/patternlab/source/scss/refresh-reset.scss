@@ -1,86 +1,86 @@
-@charset "utf-8";
-//@TODO separate resets into own file
-// Smoothing.
-body,
-button, 
-input, 
-optgroup, 
-select, 
-textarea {
-  -webkit-font-smoothing: antialiased;
-}
-
-// Reset for old styles.
-body.refresh-home{
-  background: $theWhite;
-}
-
-// Some light resets for wide-ranging stuff.
-.refresh-home{
-  section *{
-    text-transform: none;
-  }
-  *{
-    font-family: "Barlow";
-    font-weight: bold;
-  }
-}
-
-html body.refresh-home.admin-menu{
-  margin-top: 0 !important;
-}
-
-// .refresh-home{
-//   overflow-x: hidden;
+// @charset "utf-8";
+// //@TODO separate resets into own file
+// // Smoothing.
+// body,
+// button,
+// input,
+// optgroup,
+// select,
+// textarea {
+//   -webkit-font-smoothing: antialiased;
 // }
-
-a:hover{
-  text-shadow: none !important;
-}
-
-/**
- * Placeholders
- */
-
- ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: $theBlue;
-  font-weight: normal;
-}
-::-moz-placeholder { /* Firefox 19+ */
-  color: $theBlue;
-  font-weight: normal;
-}
-:-ms-input-placeholder { /* IE 10+ */
-  color: $theBlue;
-  font-weight: normal;
-}
-:-moz-placeholder { /* Firefox 18- */
-  color: $theBlue;
-  font-weight: normal;
-}
-
-::-webkit-input-placeholder-shown { /* Chrome/Opera/Safari */
-  color: $theBlue;
-  font-weight: normal;
-}
-::-moz-placeholder-shown { /* Firefox 19+ */
-  color: $theBlue;
-  font-weight: normal;
-}
-:-ms-input-placeholder-shown { /* IE 10+ */
-  color: $theBlue;
-  font-weight: normal;
-}
-:-moz-placeholder-shown { /* Firefox 18- */
-  color: $theBlue;
-  font-weight: normal;
-}
-
-//@TODO get back normal scrollbar
-::-webkit-scrollbar,::-webkit-scrollbar-thumb,::-webkit-scrollbar-track-piece{
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  border: 0 !important;
-  border-radius: none !important;
-}
+//
+// // Reset for old styles.
+// body.refresh-home{
+//   background: $theWhite;
+// }
+//
+// // Some light resets for wide-ranging stuff.
+// .refresh-home{
+//   section *{
+//     text-transform: none;
+//   }
+//   * {
+//     font-family: "Barlow";
+//     font-weight: bold;
+//   }
+// }
+//
+// html body.refresh-home.admin-menu{
+//   margin-top: 0 !important;
+// }
+//
+// // .refresh-home{
+// //   overflow-x: hidden;
+// // }
+//
+// a:hover{
+//   text-shadow: none !important;
+// }
+//
+// /**
+//  * Placeholders
+//  */
+//
+//  ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+//   color: $theBlue;
+//   font-weight: normal;
+// }
+// ::-moz-placeholder { /* Firefox 19+ */
+//   color: $theBlue;
+//   font-weight: normal;
+// }
+// :-ms-input-placeholder { /* IE 10+ */
+//   color: $theBlue;
+//   font-weight: normal;
+// }
+// :-moz-placeholder { /* Firefox 18- */
+//   color: $theBlue;
+//   font-weight: normal;
+// }
+//
+// ::-webkit-input-placeholder-shown { /* Chrome/Opera/Safari */
+//   color: $theBlue;
+//   font-weight: normal;
+// }
+// ::-moz-placeholder-shown { /* Firefox 19+ */
+//   color: $theBlue;
+//   font-weight: normal;
+// }
+// :-ms-input-placeholder-shown { /* IE 10+ */
+//   color: $theBlue;
+//   font-weight: normal;
+// }
+// :-moz-placeholder-shown { /* Firefox 18- */
+//   color: $theBlue;
+//   font-weight: normal;
+// }
+//
+// //@TODO get back normal scrollbar
+// ::-webkit-scrollbar,::-webkit-scrollbar-thumb,::-webkit-scrollbar-track-piece{
+//   display: none !important;
+//   width: 0 !important;
+//   height: 0 !important;
+//   border: 0 !important;
+//   border-radius: none !important;
+// }

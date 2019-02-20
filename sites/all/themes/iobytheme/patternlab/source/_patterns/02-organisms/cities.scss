@@ -1,0 +1,101 @@
+@import "../../scss/refresh-variables";
+
+.cities {
+  padding: 0 40px;
+
+  @media (max-width: 400px) {
+    padding: 0 40px;
+  }
+
+  &,* {
+    box-sizing: border-box;
+  }
+
+  &__inside {
+    position: relative;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding-top: 46px;
+    padding-bottom: 46px;
+  }
+
+  &__header {
+    text-align: center;
+  }
+
+  &__title {
+    font-family: $barlow;
+    font-weight: 800;
+    font-size: 30px;
+    color: $theBlue;
+    line-height: calc(36/30);
+    margin: 0;
+    border-bottom: 0;
+    padding: 0;
+    text-transform: none;
+
+    svg {
+      position: relative;
+      top: 14px;
+      right: 14px;
+
+      @media (max-width: 400px) {
+        display: block;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        top: -10px;
+        right: 0;
+      }
+    }
+  }
+
+  &__body {
+    @include clearfix();
+    list-style: none;
+    margin: 60px 0 0;
+    padding: 0;
+    width: calc(100% + 20px);
+
+    @media (max-width: 400px) {
+      margin-top: 32px;
+    }
+  }
+
+  &__item {
+    float: left;
+    padding-right: 20px;
+    margin-bottom: 20px;
+    width: 25%;
+
+    @media (max-width: 1000px) {
+      width: 33.3333333%;
+    }
+
+    @media (max-width: 840px) {
+      width: 50%;
+    }
+
+    @media (max-width: 560px) {
+      width: 100%;
+    }
+  }
+}
+
+.city {
+  a {
+    display: block;
+    background: $theBlue;
+    color: $theWhite;
+    padding: 21px 26px 23px;
+    font-family: $barlow;
+    font-weight: 800;
+    font-size: 20px;
+    line-height: calc(22/20);
+
+    &:hover {
+      background: $theOrange;
+      text-shadow: none;
+    }
+  }
+}

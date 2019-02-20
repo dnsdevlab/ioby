@@ -1,18 +1,11 @@
 <section class="updates">
-  <div class="updates__inner-wrap">
-    {% if articlePreviews %}
-    <div class="updates__article-previews">
-      {% for article in articlePreviews %}
-        {% include "molecules-article-preview" with { article: article } %}
-      {% endfor %}
-    </div>
-    {% endif %}
-    {% if featuredLinks %}
-    <ul class="updates__featured-links">
-      {% for link in featuredLinks %}
-        <li class="featured-link">{% include "molecules-featured-link" with { link: link } %}</li>
+  <div class="updates__inside">
+    <ul class="updates__body">
+      {% for post2 in post.list %}
+        <li class="updates__item">
+          {% include 'molecules-update' with { post : post2 } %}
+        </li>
       {% endfor %}
     </ul>
-    {% endif %}
-  </div>
-</section>
+  </div><!--/.updates__inside-->
+</section><!--/.updates-->

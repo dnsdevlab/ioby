@@ -1,13 +1,15 @@
 <section class="hero">
-  <div class="hero__overlay"></div>
-  <!-- TODO use the SVG overlay -->
-  <!-- <video autoplay loop>
-      <source src="../../images/test.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' />
-      <img src="../../images/screenshot.png" title="Your browser does not support the <video> tag">
-  </video> -->
-  <img class="hero__static" src="../../images/screenshot.png"/>
-  <div class="hero__text">
-    <span>You’re one step away<br/>from making your community</span><br/>
-    <span class="active-text">better.</span><!--<span class="cursor">|</span>-->
-  </div>
-</section>
+  <div class="hero__inside">
+    <div class="hero__image">
+      <figure>
+        <picture>
+          <source srcset="https://placehold.it/1400x787" media="(min-width: 700px)" />
+          <img srcset="https://placehold.it/700x394" alt="image description" title="Crop width and height" />
+        </picture>
+      </figure>
+    </div><!--/.hero__image-->
+    <div class="hero__text" data-words="word,second word,last word">
+      <h2>Hero Text. Integer erat posuere a ante lorem ipsum  <br/><span class="active-text-and-cursor"><span class="active-text"></span></span></h2>
+    </div><!--/.hero__text-->
+  </div><!--/.hero__inside-->
+</section><!--/.hero-->

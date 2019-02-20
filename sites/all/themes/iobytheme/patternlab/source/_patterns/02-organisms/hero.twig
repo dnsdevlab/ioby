@@ -1,13 +1,15 @@
 <section class="hero">
-  <div class="hero__overlay"></div>
-  <!-- TODO use the SVG overlay -->
-  <!-- <video autoplay loop>
-      <source src="../../images/test.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"' />
-      <img src="../../images/screenshot.png" title="Your browser does not support the <video> tag">
-  </video> -->
-  <img class="hero__static" src="../../images/screenshot.png"/>
-  <div class="hero__text">
-    <span>You’re one step away<br/>from making your community</span><br/>
-    <span class="active-text">better.</span><!--<span class="cursor">|</span>-->
-  </div>
-</section>
+  <div class="hero__inside">
+    <div class="hero__image">
+      <figure>
+        <picture>
+          <source srcset="{{ post.img.srclarge }}" media="(min-width: 700px)" />
+          <img srcset="{{ post.img.srcsmall }}" alt="{{ post.img.alt }}" title="{{ post.img.title }}" />
+        </picture>
+      </figure>
+    </div><!--/.hero__image-->
+    <div class="hero__text" data-words="{% for post2 in post.words %}{{ post2.title}}{% if loop.index != loop.last %},{% endif %}{% endfor %}">
+      <h2>{{ post.text }} <br/><span class="active-text-and-cursor"><span class="active-text"></span></span></h2>
+    </div><!--/.hero__text-->
+  </div><!--/.hero__inside-->
+</section><!--/.hero-->

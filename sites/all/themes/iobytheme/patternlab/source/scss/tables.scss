@@ -6,39 +6,34 @@
   margin-left: 0;
 }
 
-.view-display-id-campaign_projects_grid .view-content .item-list ul {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+.view-campaign-tabs .view-content ul li{
+  list-style: none;
+  margin: 0;
+  overflow: hidden;
+  width: 33%;
+  float: left;
+}
 
-  @media (max-width: 550px) {
-    display: block;
+.view-campaign-tabs .view-content ul li article{
+  width: 100%;
+}
+
+@media screen and (max-width: 768px){
+  .view-campaign-tabs .view-content ul li{
+    width: 50%;
   }
+}
 
-  .views-row {
-    flex-basis: 32%;
-    list-style: none;
-    margin: 0 0 3% 0 !important;
-
-    @media (max-width: 900px) {
-      flex-basis: 48.5%;
-    }
-
-    @media (max-width: 550px) {
-      display: block;
-      margin: 0 0 20px 0 !important;
-    }
-
-    .project-miniview {
-      height: 100%;
-    }
+@media screen and (max-width: 550px){
+  .view-campaign-tabs .view-content ul li{
+    width: 100%;
   }
 }
 
 // about
 
 @media screen and (max-width: 768px){
-
+  
   //table reset styles
   .node-about-ioby-section{
     table,thead,tbody,tr,td{
@@ -208,7 +203,7 @@
         @media screen and(max-width: 460px){
           width: 50% !important;
           min-height: 431px;
-        }
+        }      
       }
 
       img{

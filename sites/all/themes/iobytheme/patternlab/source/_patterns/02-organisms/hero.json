@@ -1,9 +1,22 @@
 {
   "post" : {
-  },
-  "breadcrumbs" : {
-    "menu1" : "Level 1",
-    "menu2" : "Level 2",
-    "menu3" : "Page Title"
+    "text": "Hero Text. Integer erat posuere a ante lorem ipsum ",
+    "words" : [
+      {
+        "title" : "word"
+      },
+      {
+        "title" : "second word"
+      },
+      {
+        "title" : "last word"
+      }
+    ],
+    "img": {
+      "srclarge": "https://placehold.it/1400x787",
+      "srcsmall": "https://placehold.it/700x394",
+      "alt" : "image description",
+      "title": "Crop width and height"
+    }
   }
 }

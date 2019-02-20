@@ -1,0 +1,11 @@
+{
+  "post": {
+    "img": {
+      "src": "https://placehold.it/380x380",
+      "alt" : "image description",
+      "title": "Crop width, auto height"
+    },
+    "title" : "Impact title",
+    "description": "Impact description. Integer posuere erat a ante venenatis dapibus posuere velit aliquet."
+  }
+}

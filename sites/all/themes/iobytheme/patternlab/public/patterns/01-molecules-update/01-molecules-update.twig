@@ -1,0 +1,17 @@
+<article class="update">
+  <a href=".">
+    <div class="update__image">
+      <figure>
+        <img src="{{ post.img.src }}" alt="{{ post.img.alt }}" title="{{ post.img.title }}" />
+      </figure>
+    </div><!--/.update__image-->
+    <div class="update__text">
+      <div class="update__date">{{ post.date }}</div>
+      <h3 class="update__title">{{ post.title }}</h3>
+      <div class="update__description"><p>{{ post.description }}</p></div>
+      <div class="update__button">
+        <span>{{ post.button }}</span>
+      </div>
+    </div><!--/.update__text-->
+  </a>
+</article><!--/.update-->

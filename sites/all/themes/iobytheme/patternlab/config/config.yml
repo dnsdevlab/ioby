@@ -5,9 +5,14 @@ ie:
     - less
     - scss
 id:
-    - scss
-    - .svn
     - .sass-cache
+    - .svn
+    #- css
+    #- favicons
+    #- images
+    #- js
+    - sass
+    - scss
 cleanPublic: 'true'
 patternStates:
     - inprogress
@@ -26,7 +31,7 @@ ishControlsHide:
     - hay
 styleguideKit: pattern-lab/styleguidekit-twig-default
 styleguideKitPath: vendor/pattern-lab/styleguidekit-twig-default
-lineageMatch: '{%([ ]+)?(?:include|extends|embed)( |\()[&quot;\&#039;]([\/.@A-Za-z0-9-_]+)[&quot;\&#039;]([\s\S+]*?)%}'
+lineageMatch: '{%([ ]+)?include( |\()[&quot;\&#039;]([A-Za-z0-9-_]+)[&quot;\&#039;](\))?(.*)%}'
 lineageMatchKey: 3
 patternExtension: twig
 twigDebug: false

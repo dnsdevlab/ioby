@@ -1,5 +1,6 @@
 @charset "utf-8";
 
+@import 'refresh-variables';
 
 .resbutton{
   @extend .inblock;
@@ -206,7 +207,7 @@
                     background: linear-gradient(to bottom,  rgb(236,151,38) 1%,rgb(210,116,29) 53%,rgb(202,97,24) 100%) !important; /* W3C */
                     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ec9726', endColorstr='#ca6118',GradientType=0 ) !important; /* IE6-9 */
                     text-align: center !important;
-                    font-family: $barlow,'Arial Narrow',sans-serif !important;
+                    font-family: Kreon,'Arial Narrow',sans-serif !important;
                     color: #fff !important;
                     padding: 10px 20px !important;
                     font-size: 143% !important;

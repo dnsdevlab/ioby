@@ -1,92 +1,155 @@
-@import "../../scss/refresh-global";
+@import "../../scss/refresh-variables";
 
 .connect{
-  background-image: linear-gradient(-134deg, #6765A7 0%, #4185B1 100%);
+  background-image: linear-gradient(134deg, #6765A7 0%, #4185B1 100%);
+  padding: 76px 0 99px 0;
+  color: $theWhite;
 
-  &__inner-wrap{
-    @extend .inner-wrap;
-    width: 960px;
-    @include clearfix;
-    
-    > h3{
-      color: $theWhite;
-      text-align: center;
-      margin: 0;
-      padding: 80px 0 16px;
-      line-height: 42px;
-      @extend .fe;
-      span{
-        display: block;
-        @extend .ff;
-      }
-    }    
+  &,* {
+    box-sizing: border-box;
   }
 
-  //moving out of there for bem's sake
-  &__block{
-    color: $theWhite;    
-    width: 60%;
-    float: left;
-    padding-bottom: 92px;
+  &__inside {
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
 
-    &:nth-of-type(2){
-      width: 40%;
-      padding-left: 104px;
+    @media (max-width: 840px) {
+      padding-right: 40px;
+      padding-left: 40px;
     }
 
-    input[type='email']{
-      background: $theWhite;
-      color: $theBlue;
-      border: none;
+    @media (max-width: 400px) {
+      padding-right: 20px;
+      padding-left: 20px;
+    }
+  }
+
+  &__header {
+    padding: 0 0 30px;
+    text-align: center;
+  }
+
+  &__title {
+    font-family: $barlow;
+    font-size: 24px;
+    margin: 0;
+    padding: 0;
+    line-height: 42/24;
+    font-weight: 800;
+    color: $theWhite;
+
+    span {
+      display: block;
+      font-size: 30px;
+      margin-top: 6px;
+    }
+  }
+
+  &__body {
+    @include clearfix;
+  }
+
+  &__newsletter,
+  &__social {
+    &-title {
+      font-family: $barlow;
+      letter-spacing:2px;
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: $theWhite;
+    }
+  }
+
+  &__newsletter {
+    width: 456px;
+    float: left;
+
+    @media (max-width: 760px) {
+      float: none;
+      width: 100%;
+    }
+
+    &-form-item {
+      position: relative;
+    }
+
+    input[type='email'] {
       -webkit-appearance: none;
+      border: none;
       appearance: none;
-      @extend .barlow;
+      font-family: $barlow;
       font-weight: 600;
-      @extend .fd;
-      width: 320px;
-      padding: 16px;
+      font-size: 20px;
+      color: #3599CC;
+      background: $theWhite;
+      width: 100%;
+      padding: 13px 13px;
+
+      &::-webkit-input-placeholder { color: #3599CC; }
+      &::-moz-placeholder { color: #3599CC; }
+      &:-ms-input-placeholder { color: #3599CC; }
+      &:-moz-placeholder { color: #3599CC; }
+      &::placeholder { color: #3599CC; }
     }
 
     input[type='submit']{
-      color: $theWhite;
-      background-color: $theBlue;
       border: none;
       -webkit-appearance: none;
       appearance: none;
-      @extend .barlow;
-      font-weight: 600;
-      @extend .uc;
-      letter-spacing: 0.125em;
-      @extend .fb;
-      padding: 22px 32px;
+      background: #3599CC;
+      font-family: $barlow;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 2.67px;
+      color: $theWhite;
+      padding: 17px 0;
+      height: 58px;
       width: 136px;
-      @include bgFade($theBlue);
-    }
-
-    h4{
-      @extend .fc;
-      letter-spacing: 0.125em;
-      margin-top: 60px;
-      color: $theWhite;
+      position: absolute;
+      top: -4px;
+      right: 0;
       text-transform: uppercase;
-    }
-    
-    a{
-      color: $theWhite;
+      transition: background .2s ease;
+
+      @media (max-width: 400px) {
+        width: 110px;
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      &:hover {
+        background: #E88124;
+        cursor: pointer;
+      }
     }
   }
 
-  &__social{
-    ul{
-      li{
-        padding-top: 9px;
+  &__social {
+    float: right;
+
+    @media (max-width: 760px) {
+      float: none;
+    }
+
+    &-list {
+      a {
+        padding-top: 4px;
         padding-right: 26px;
         display: inline-block;
-        a{
-          @include fade;
+        transition: opacity .2s ease;
+
+        &:last-child {
+          padding-right: 0;
+        }
+
+        &:hover {
+          opacity: .5;
         }
       }
     }
   }
-
 }

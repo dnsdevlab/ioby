@@ -17,7 +17,6 @@ var svgSprite = require('gulp-svg-sprite');
 
 // if you need a new jquery plugin, add it here
 var vendorjs = [
-  'source/js/jquery.js',
   'source/js/jqfix.js',
   'source/js/jquery.fitvids.js',
   'source/js/galleryview/js/jquery.easing.js',
@@ -29,8 +28,8 @@ var vendorjs = [
   'source/js/html5.js',
   'source/js/countUp.js',
   'source/js/countUp-jquery.js',
-  'source/js/jquery.waypoints.min.js',
-  'source/js/inview.min.js',
+  // 'source/js/jquery.waypoints.min.js',
+  // 'source/js/inview.min.js',
   'source/js/typed.min.js'
 ];
 
@@ -109,11 +108,33 @@ gulp.task('css-compile', function(){
     .pipe(gulp.dest('public/css'));
 });
 
+gulp.task('plab-css-compile', function(){
+
+    return gulp.src(['source/scss/plab.scss'])
+      .pipe($.sass().on('error', $.sass.logError))
+      .pipe(postcss([ autoprefixer({
+        browsers: [
+        '> 1%',
+        'last 2 versions',
+        'Firefox ESR',
+        'Opera 12.1',
+        'ie >= 9',
+        'Firefox >= 23',
+        'Chrome >= 22',
+        'Safari >= 4',
+        'iOS >= 5.1',
+        'Android >= 4.1'
+        ]
+      }) ]))
+      .pipe(cleanCSS({compatibility: 'ie9'}))
+      .pipe(gulp.dest('public/css'));
+});
+
 
 // compile the copies of drupal css
 gulp.task('cms-css-compile', function(){
 
-  return gulp.src(['source/cms/*'])
+  return gulp.src(['source/cms-css/*.css'])
     .pipe($.sass().on('error', $.sass.logError))
     .pipe(concat('cms.min.css'))
     .pipe(postcss([ autoprefixer({
@@ -163,7 +184,6 @@ gulp.task('css-vendor-assets', function(){
 gulp.task('js', function(){
   return gulp.src(['source/js/app.js','source/js/refresh.js'])
     .pipe(concat('scripts.min.js'))
-    .pipe(uglify())
     .pipe(gulp.dest('public/js'));
 });
 
@@ -171,7 +191,6 @@ gulp.task('js', function(){
 gulp.task('js-vendor', function(){
   return gulp.src(vendorjs)
     .pipe(concat('plugins.min.js'))
-    .pipe(uglify())
     .pipe(gulp.dest('public/js'));
 });
 
@@ -198,7 +217,7 @@ gulp.task('js-vendor', function(){
 //       }
 //     ))
 //     .pipe(gulp.dest('.'));
-// }); 
+// });
 
 // Pipe all SVG icons that need animation into the pattern library as twig files
 
@@ -263,17 +282,16 @@ gulp.task('plab-css', function(){
 // the "watch" task - triggers events on save
 gulp.task('default', function() {
   //gulp.watch(['source/scss/**/*.scss','source/_patterns/**/*.scss'], ['build']);
-  gulp.watch(['source/**/**'], ['build']); //@TODO make this more efficient
+  gulp.watch(['source/**/**'], gulp.series('build')); //@TODO make this more efficient
   //gulp.watch(['source/js/app.js'], ['build']);
 });
 
 // compile css once
-gulp.task('css', function(cb) {
-  runSequence(
+gulp.task('css', gulp.series(
     'scss-lint',
-    'css-compile', 
-    cb);
-});
+    'css-compile',
+    'plab-css-compile'
+));
 
 // compile all svgs once (also recompiles css and plab)
 /*
@@ -288,17 +306,14 @@ gulp.task('svg', function(cb) {
 */
 
 // compile everything once
-gulp.task('build', function(cb) {
-  runSequence(
+gulp.task('build', gulp.series(
   //['svginline', 'svgsprites'],
   'scss-lint',
   'plab',
-  ['css-compile', 'cms-css-compile', 'css-vendor', 'css-vendor-assets', 'js', 'js-vendor'],
+  ['plab-css-compile','css-compile', 'cms-css-compile', 'css-vendor', 'css-vendor-assets', 'js', 'js-vendor']
   //'plab',
-  cb)
-});
+));
 
 // just incase someone tries to run 'gulp watch' instead of just 'gulp'
-gulp.task('watch', ['default']);
-
+// gulp.task('watch', ['default']);
 // @TODO: stop plab from duplicating cms source css files into public

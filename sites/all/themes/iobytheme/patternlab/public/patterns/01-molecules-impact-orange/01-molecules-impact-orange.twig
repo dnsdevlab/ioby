@@ -1,0 +1,14 @@
+{% extends 'molecules-impact-green' %}
+{% block svg %}
+  <svg width="333" height="315" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+      <mask id="image-mask-orange">
+        <path fill="#ffffff" d="M98.407 26.716L245.045.754c10.894-1.927 22.02-.148 32.001 5.19 18.2 9.752 39.279 19.751 45.6 37.246 3.618 9.999 7.162 58.43 9.173 90.455 1.172 18.68-3.37 37.13-12.832 52.467l-21.021 34.001c-21.426 34.66-52.993 59.486-89.045 70.012L123.724 315 48.67 298.971c-24.29-5.172-42.924-27.51-46.28-55.383L.624 228.795c-2.243-18.763 1.606-37.79 10.821-53.538l86.962-148.54z"/>
+      </mask>
+    </defs>
+    <g mask="url(#image-mask-orange)">
+      <image x="0" y="0" width="380" height="380" transform="translate(-24, -32)" xlink:href="{{ post.img.src }}"/>
+      <rect fill="#E88124" opacity=".6" width="100%" height="100%"/>
+    </g>
+  </svg>
+{% endblock %}

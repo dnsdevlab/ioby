@@ -1,0 +1,16 @@
+{
+  "post": {
+    "title" : "Featured Project Title",
+    "location": "City, ST",
+    "description":"Featured Project Description. Vestibulum id ligula porta felis euismod semper.",
+    "percent":"44",
+    "amountRemaining":"$453",
+    "volunteers": true,
+    "daysRemaining": "12",
+    "img": {
+      "src": "https://placehold.it/631x420",
+      "alt" : "image description",
+      "title": "Crop width and height"
+    }
+  }
+}

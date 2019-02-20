@@ -885,7 +885,7 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'promo',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '@TODO: Add this after we determine behavior',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -902,13 +902,13 @@ function ioby_homepage_field_default_field_instances() {
     'settings' => array(
       'better_formats' => array(
         'allowed_formats' => array(
-          'filtered_html' => 'filtered_html',
+          'filtered_html' => 0,
           'filtered_text' => 'filtered_text',
-          'plain_text' => 'plain_text',
-          'raw' => 'raw',
-          'rich_text' => 'rich_text',
+          'plain_text' => 0,
+          'raw' => 0,
+          'rich_text' => 0,
         ),
-        'allowed_formats_toggle' => 0,
+        'allowed_formats_toggle' => 1,
         'default_order_toggle' => 0,
         'default_order_wrapper' => array(
           'formats' => array(
@@ -1015,10 +1015,9 @@ function ioby_homepage_field_default_field_instances() {
     'description' => 'Recommended character limit is 40 characters including spaces.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
-        'module' => 'text',
+        'label' => 'hidden',
         'settings' => array(),
-        'type' => 'text_default',
+        'type' => 'hidden',
         'weight' => 13,
       ),
       'teaser' => array(
@@ -2081,7 +2080,7 @@ function ioby_homepage_field_default_field_instances() {
     'description' => 'Recommended character limit is 60 characters including spaces.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',

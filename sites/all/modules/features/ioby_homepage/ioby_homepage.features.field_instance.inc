@@ -51,7 +51,7 @@ function ioby_homepage_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 31,
+      'weight' => 2,
     ),
   );
 
@@ -117,7 +117,7 @@ function ioby_homepage_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 32,
+      'weight' => 3,
     ),
   );
 
@@ -183,7 +183,7 @@ function ioby_homepage_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 33,
+      'weight' => 4,
     ),
   );
 
@@ -343,7 +343,7 @@ function ioby_homepage_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => 1,
+      'weight' => 2,
     ),
   );
 
@@ -499,7 +499,7 @@ function ioby_homepage_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 2,
+      'weight' => 3,
     ),
   );
 
@@ -509,7 +509,7 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'project_feature',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '@TODO: Add this after we determine behavior',
+    'description' => 'When blank, this field does not appear.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -575,7 +575,7 @@ function ioby_homepage_field_default_field_instances() {
   $field_instances['bean-project_feature-field_featured_project_image'] = array(
     'bundle' => 'project_feature',
     'deleted' => 0,
-    'description' => '@TODO: Add this after we determine behavior',
+    'description' => 'When blank, this field uses the first photo listed in Add Project Photo(s) on the Project node.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -607,7 +607,6 @@ function ioby_homepage_field_default_field_instances() {
       'active' => 1,
       'module' => 'image',
       'settings' => array(
-        'maxlength_js_label' => 'Content limited to @limit characters, remaining: <strong>@remaining</strong>',
         'preview_image_style' => 'thumbnail',
         'progress_indicator' => 'throbber',
       ),
@@ -622,7 +621,7 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'project_feature',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '@TODO: Add this after we determine behavior',
+    'description' => 'When blank, this field does not appear. Do not enter a State without also entering a City.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -642,9 +641,7 @@ function ioby_homepage_field_default_field_instances() {
     'widget' => array(
       'active' => 1,
       'module' => 'options',
-      'settings' => array(
-        'maxlength_js_label' => 'Content limited to @limit characters, remaining: <strong>@remaining</strong>',
-      ),
+      'settings' => array(),
       'type' => 'options_select',
       'weight' => 6,
     ),
@@ -656,7 +653,7 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'project_feature',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '@TODO: Add this after we determine behavior',
+    'description' => 'When blank, this field uses the Project Tagline from the Project node.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -723,7 +720,7 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'project_feature',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'If blank, pulls from the Project Name field.',
+    'description' => 'When blank, this field uses the Title from the Project node.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -876,7 +873,7 @@ function ioby_homepage_field_default_field_instances() {
         'progress_indicator' => 'throbber',
       ),
       'type' => 'image_image',
-      'weight' => 32,
+      'weight' => 2,
     ),
   );
 
@@ -944,7 +941,7 @@ function ioby_homepage_field_default_field_instances() {
         'rows' => 5,
       ),
       'type' => 'text_textarea',
-      'weight' => 33,
+      'weight' => 3,
     ),
   );
 
@@ -953,7 +950,7 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'homepage',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '@TODO: Add this after we determine behavior',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -999,9 +996,7 @@ function ioby_homepage_field_default_field_instances() {
     'widget' => array(
       'active' => 0,
       'module' => 'link',
-      'settings' => array(
-        'maxlength_js_label' => 'Content limited to @limit characters, remaining: <strong>@remaining</strong>',
-      ),
+      'settings' => array(),
       'type' => 'link_field',
       'weight' => 11,
     ),
@@ -1083,7 +1078,7 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'homepage',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Recommended character limit is 20 characters including spaces.',
+    'description' => '<p>Text that appears above the email field.</p><p>Recommended character limit is 20 characters including spaces.</p>',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1155,7 +1150,7 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'homepage',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Recommended character limit is 15 characters including spaces.',
+    'description' => '<p>Text that appears above the social icons.</p><p>Recommended character limit is 15 characters including spaces.</p>',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1299,7 +1294,9 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'homepage',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => 'Recommended character limit is 30 characters including spaces.',
+    'description' => '<p>Text that appears at the top of the email CTA. This field is displayed in a visual style that gives it greater emphasis than Title Line One.</p>
+<p>If the optional Title Line One field has been supplied, Title Line Two appears below it.</p>
+<p>Recommended character limit is 30 characters including spaces.</p>',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1887,7 +1884,7 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'homepage',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '@TODO: Add this after we determine behavior',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -1922,7 +1919,7 @@ function ioby_homepage_field_default_field_instances() {
       ),
       'enable_tokens' => 1,
       'rel_remove' => 'default',
-      'title' => 'none',
+      'title' => 'required',
       'title_label_use_field_label' => 0,
       'title_maxlength' => 128,
       'title_value' => '',
@@ -1933,9 +1930,7 @@ function ioby_homepage_field_default_field_instances() {
     'widget' => array(
       'active' => 0,
       'module' => 'link',
-      'settings' => array(
-        'maxlength_js_label' => 'Content limited to @limit characters, remaining: <strong>@remaining</strong>',
-      ),
+      'settings' => array(),
       'type' => 'link_field',
       'weight' => 15,
     ),
@@ -2018,7 +2013,7 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'homepage',
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '@TODO: Add this after we determine behavior',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -2053,7 +2048,6 @@ function ioby_homepage_field_default_field_instances() {
       'module' => 'inline_entity_form',
       'settings' => array(
         'fields' => array(),
-        'maxlength_js_label' => 'Content limited to @limit characters, remaining: <strong>@remaining</strong>',
         'type_settings' => array(
           'allow_clone' => 0,
           'allow_existing' => 1,
@@ -2149,7 +2143,7 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'homepage',
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => 'TODO: cardinality on this? up to 3?',
+    'description' => '',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -2184,7 +2178,6 @@ function ioby_homepage_field_default_field_instances() {
       'module' => 'inline_entity_form',
       'settings' => array(
         'fields' => array(),
-        'maxlength_js_label' => 'Content limited to @limit characters, remaining: <strong>@remaining</strong>',
         'type_settings' => array(
           'allow_clone' => 0,
           'allow_existing' => 1,
@@ -2205,7 +2198,11 @@ function ioby_homepage_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('@TODO: Add this after we determine behavior');
+  t('<p>Text that appears above the email field.</p><p>Recommended character limit is 20 characters including spaces.</p>');
+  t('<p>Text that appears above the social icons.</p><p>Recommended character limit is 15 characters including spaces.</p>');
+  t('<p>Text that appears at the top of the email CTA. This field is displayed in a visual style that gives it greater emphasis than Title Line One.</p>
+<p>If the optional Title Line One field has been supplied, Title Line Two appears below it.</p>
+<p>Recommended character limit is 30 characters including spaces.</p>');
   t('City Link');
   t('Date');
   t('Enter a minimum of three and maximum of five words (ex: safer, greener, more liveable, fun) to animate in the hero, in the order you want them to appear. The character limit is 15 characters including spaces.');
@@ -2221,7 +2218,6 @@ function ioby_homepage_field_default_field_instances() {
   t('Hero Animated Text');
   t('Hero Image');
   t('Hero Static Text');
-  t('If blank, pulls from the Project Name field.');
   t('Image');
   t('Impact Blocks');
   t('Ioby Updates Blocks');
@@ -2232,8 +2228,6 @@ function ioby_homepage_field_default_field_instances() {
   t('Project Feature Blocks');
   t('Promos');
   t('Recommended character limit is 120 characters including spaces.');
-  t('Recommended character limit is 15 characters including spaces.');
-  t('Recommended character limit is 20 characters including spaces.');
   t('Recommended character limit is 30 characters including spaces.');
   t('Recommended character limit is 40 characters including spaces.');
   t('Recommended character limit is 60 characters including spaces.');
@@ -2243,13 +2237,17 @@ function ioby_homepage_field_default_field_instances() {
   t('Start Project CTA Text');
   t('Subtitle');
   t('Summary');
-  t('TODO: cardinality on this? up to 3?');
   t('Text');
   t('Title');
   t('Title Line 1');
   t('Title Line 2');
   t('Upload an image that is at least 1400px wide by 787px tall. Note that the image resizes and crops (automatically within drupal - ie: you do not need to upload another image) to 700px wide by 394px tall on tablet sized devices, cropping approximately 5% of the original image on the right and left. Then on mobile deviecs it crops further to 440px wide by 216px tall. ');
   t('Upload an image that is at least 380px wide by 380px tall, with a 1:1 ratio. Note that each image will be cropped by their svg mask (the unique shapes). ');
+  t('When blank, this field does not appear.');
+  t('When blank, this field does not appear. Do not enter a State without also entering a City.');
+  t('When blank, this field uses the Project Tagline from the Project node.');
+  t('When blank, this field uses the Title from the Project node.');
+  t('When blank, this field uses the first photo listed in Add Project Photo(s) on the Project node.');
 
   return $field_instances;
 }

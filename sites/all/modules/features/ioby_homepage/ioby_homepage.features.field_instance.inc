@@ -2143,7 +2143,7 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'homepage',
     'default_value_function' => '',
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Must supply three blocks.',
     'display' => array(
       'default' => array(
         'label' => 'above',

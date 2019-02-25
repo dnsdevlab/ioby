@@ -664,7 +664,7 @@ function ioby_homepage_field_default_field_instances() {
     'entity_type' => 'bean',
     'field_name' => 'field_featured_project_summary',
     'label' => 'Featured Project Summary',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'better_formats' => array(
         'allowed_formats' => array(

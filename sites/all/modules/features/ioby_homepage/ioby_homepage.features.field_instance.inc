@@ -782,6 +782,7 @@ function ioby_homepage_field_default_field_instances() {
   // Exported field_instance: 'bean-project_feature-field_project'.
   $field_instances['bean-project_feature-field_project'] = array(
     'bundle' => 'project_feature',
+    'default_value' => NULL,
     'default_value_function' => '',
     'deleted' => 0,
     'description' => '',
@@ -810,10 +811,13 @@ function ioby_homepage_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'inline_entity_form',
+      'module' => 'entityreference',
       'settings' => array(
         'fields' => array(),
+        'match_operator' => 'CONTAINS',
         'maxlength_js_label' => 'Content limited to @limit characters, remaining: <strong>@remaining</strong>',
+        'path' => '',
+        'size' => 60,
         'type_settings' => array(
           'allow_clone' => 0,
           'allow_existing' => 1,
@@ -825,7 +829,7 @@ function ioby_homepage_field_default_field_instances() {
           'override_labels' => 0,
         ),
       ),
-      'type' => 'inline_entity_form',
+      'type' => 'entityreference_autocomplete',
       'weight' => 2,
     ),
   );

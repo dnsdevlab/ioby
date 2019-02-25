@@ -429,9 +429,7 @@ function ioby_homepage_field_default_field_instances() {
     'widget' => array(
       'active' => 1,
       'module' => 'options',
-      'settings' => array(
-        'maxlength_js_label' => 'Content limited to @limit characters, remaining: <strong>@remaining</strong>',
-      ),
+      'settings' => array(),
       'type' => 'options_buttons',
       'weight' => 7,
     ),
@@ -882,7 +880,7 @@ function ioby_homepage_field_default_field_instances() {
     'bundle' => 'promo',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => '<p>This field should contain a link in the WYSIWYG.</p><p>Example: <strong>Visit our <a href="/blog">Blog</a> to see ioby projects in action</strong></p>',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -2203,6 +2201,7 @@ function ioby_homepage_field_default_field_instances() {
   t('<p>Text that appears at the top of the email CTA. This field is displayed in a visual style that gives it greater emphasis than Title Line One.</p>
 <p>If the optional Title Line One field has been supplied, Title Line Two appears below it.</p>
 <p>Recommended character limit is 30 characters including spaces.</p>');
+  t('<p>This field should contain a link in the WYSIWYG.</p><p>Example: <strong>Visit our <a href="/blog">Blog</a> to see ioby projects in action</strong></p>');
   t('City Link');
   t('Date');
   t('Enter a minimum of three and maximum of five words (ex: safer, greener, more liveable, fun) to animate in the hero, in the order you want them to appear. The character limit is 15 characters including spaces.');

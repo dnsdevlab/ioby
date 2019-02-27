@@ -26,13 +26,13 @@ base theme = boron
 ;stylesheets[screen][] = css/jquery-ui-custom.less
 ;stylesheets[screen][] = css/idea-form.less
 ;this doesn't appear to do anything:
-stylesheets[all] = patternlab/public/css/app.min.css
+stylesheets[all][] = css/app.min.css
 
-scripts[] = patternlab/public/js/app.min.js
+scripts[] = js/picturefill.min.js
+scripts[] = js/plugins.min.js
+;scripts[] = js/scripts.min.js
 
-scripts[] = patternlab/public/js/picturefill.min.js
-scripts[] = patternlab/public/js/plugins.min.js
-scripts[] = patternlab/public/js/scripts.min.js
+scripts[] = js/app.min.js
 ;scripts[] = patternlab/public/js/refresh.js
 
 ; html5.js is required for IE to understand the new elements like article

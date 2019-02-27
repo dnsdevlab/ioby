@@ -8,25 +8,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     {# Define paths for convenience #}
-    {% set css = '../../css' %}
-    {% set js = '../../js' %}
+    {% set css = '../../../../css' %}
+    {% set js = '../../../../js' %}
     {% set cms = '../../cms' %}
-    {% set jshead = '../../js/vendorhead' %}
-    {% set favicons = '../../favicons' %}
 
     <!-- begin favicon references -->
     <link rel="shortcut icon" sizes="16x16" href="{{ favicons }}/favicon.ico" type="image/vnd.microsoft.icon" />
     <!-- end favicon references -->
 
+    <!-- begin fonts -->
     <link href="https://fonts.googleapis.com/css?family=Barlow:400,600,700|Lato:400,400i,700,700i" rel="stylesheet">
+    <!-- end fonts -->
 
-    <link rel="stylesheet" href="{{css}}/style.css" media="all" />
-    <link rel="stylesheet" href="{{css}}/cms.min.css" media="all" />
-    <link rel="stylesheet" href="{{css}}/app.min.css" media="all" />
-    <link rel="stylesheet" href="{{css}}/plab.css" media="all" />
-
-    <!-- TODO  move all these to PLAB? -->
-
+    <!-- begin copies of drupal css and js -->
+    <link rel="stylesheet" href="{{cms}}/30636dbdc66df27874c86b2289173d3e.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/admin_menu_toolbar.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/admin_menu.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/admin_menu.uid1.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/colorbox_style.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/comment.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/commerce_cart.theme.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/commerce_line_item.theme.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/contextual.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/ctools.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/date.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/datepicker.1.7.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/field.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/flexible.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/ioby_user_modal.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/ioby-project-notification.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/jquery.ui.button.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/jquery.ui.core.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/jquery.ui.dialog.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/jquery.ui.resizable.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/jquery.ui.theme.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/modal.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/nice_menus_default.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/nice_menus.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/node.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/nodequeue.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/panels.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/search.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/shortcut.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/system.base.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/system.menus.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/system.messages.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/system.theme.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/user.css" media="all" />
+    <link rel="stylesheet" href="{{cms}}/views.css" media="all" />
     <script src="{{cms}}/jquery.js?v=1.4.4"></script>
     <script src="{{cms}}/jquery.once.js?v=1.2"></script>
     <script src="{{cms}}/drupal.js?p45bwj"></script>
@@ -67,13 +96,23 @@
     <script src="{{cms}}/ioby-project-notification.js?p45bwj"></script>
     <script src="{{cms}}/nodequeue.js?p45bwj"></script>
     <script src="{{cms}}/autocomplete.js?v=7.44"></script>
+    <!-- end drupal css and js copies -->
+
+    <!-- begin custom css -->
+    <link rel="stylesheet" href="{{css}}/app.min.css" media="all" />
+    <!-- end custom css -->
+
+    <!-- begin vender and custom JS -->
     <script src='{{js}}/picturefill.min.js'></script>
     <script src='{{js}}/plugins.min.js'></script>
-    <script src='{{js}}/scripts.min.js'></script>
+    <script src='{{js}}/app.min.js'></script>
+    <!--/. end vendor and custom JS -->
+
 
     <!-- Begin Pattern Lab (Required for Pattern Lab to run properly) -->
+    <link rel="stylesheet" href="../../styleguide/css/plab.css" media="all" />
     {{ patternLabHead | raw }}
     <!-- End Pattern Lab -->
 
   </head>
-  <body class="{{ bodyClass }} {% if home %}refresh-home{% endif %}">
+  <body class="{{ bodyclass }} {% if home %}refresh-home{% endif %}">

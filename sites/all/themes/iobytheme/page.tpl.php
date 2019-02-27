@@ -234,18 +234,18 @@
     <?php /*endif; */?>
   </header>-->
 
-  <?php /*
+  <?php if (!empty($bundle) && $bundle == 'homepage') {} else { ?>
  <header id="pageheader">
     <div class="full">
       <?php if ($breadcrumb && $is_admin): ?><!--
         <div id="breadcrumb"><?php print $breadcrumb; ?></div>
       --><?php endif; ?>
 
-      <?php if (!empty($bundle) && $bundle == 'homepage') {} else { ?>
+
         <?php print render($title_prefix); ?>
         <h1 id="pagetitle"><?php print $title; ?></h1>
         <?php print render($title_suffix); ?>
-      <?php } ?>
+
       <?php print render($page['header']); ?>
 
       <?php if (isset($node) && $node->type == 'project_2') :
@@ -272,7 +272,8 @@
 <!--      --><?php //endif;
     ?>
     </div>
-  </header> <?php */ ?>
+  </header>
+  <?php } ?>
 
   <main id="main-wrapper">
 

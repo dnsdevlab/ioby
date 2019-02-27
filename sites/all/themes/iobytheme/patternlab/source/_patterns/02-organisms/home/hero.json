@@ -15,6 +15,7 @@
     "img": {
       "srclarge": "https://placehold.it/1400x787",
       "srcsmall": "https://placehold.it/700x394",
+      "srcsmallest": "https://placehold.it/440x216",
       "alt" : "image description",
       "title": "Crop width and height"
     }

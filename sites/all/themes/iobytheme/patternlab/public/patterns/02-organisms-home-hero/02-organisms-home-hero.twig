@@ -4,7 +4,8 @@
       <figure>
         <picture>
           <source srcset="{{ post.img.srclarge }}" media="(min-width: 700px)" />
-          <img srcset="{{ post.img.srcsmall }}" alt="{{ post.img.alt }}" title="{{ post.img.title }}" />
+          <source srcset="{{ post.img.srcsmall }}" media="(min-width: 440px)" />
+          <img srcset="{{ post.img.srcsmallest }}" alt="{{ post.img.alt }}" title="{{ post.img.title }}" />
         </picture>
       </figure>
     </div><!--/.hero__image-->

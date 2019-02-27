@@ -12,10 +12,15 @@
     display: block;
 
     &:hover {
+      cursor: pointer;
       text-shadow: none;
 
       .featured-project__image:after {
-        opacity: .9;
+        opacity: .7;
+      }
+
+      .featured-project__title {
+        color: #3599cc;
       }
     }
   }
@@ -32,7 +37,7 @@
       height: 100%;
       opacity: 0;
       transition: opacity .2s ease;
-      background-image: linear-gradient(172deg,rgba(141, 204, 69, 0.2) 0%, rgba(120,177,56,0.3) 13%, rgba(73,132,75,0.4) 38%, rgba(38,100,89,0.6) 60%, #044465 100%);
+      background-image: linear-gradient(135deg, #8DCC45 0%, #3599CC 80%, #4185B1 100%);
     }
 
     img {
@@ -52,11 +57,6 @@
     padding: 0;
     border: none;
     transition: color .2s ease;
-
-    &:hover {
-      text-decoration: underline;
-      cursor: pointer;
-    }
   }
 
   &__text {

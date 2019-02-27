@@ -467,14 +467,22 @@ $(function(){
 
           // when you click the dropdown button ...
           $('.expanded > span').bind('click', function(){
+            $document.unbind('click touchstart', PollForNavOutsideClick);
               // add a class to the parent so you can style things
               $(this).parent().toggleClass('is-open');
-              // use jquery to slide reveal the submenu (css animations wont work because we dont know the height)
-              $(this).siblings('ul').slideToggle();
-              setTimeout(function(){
-                $offcanvas_height = $offcanvas_content.height();
-                $page_wrapper.height($offcanvas_height);
-              }, 400);
+
+              if ($(window).width() < 1140) {
+                // use jquery to slide reveal the submenu (css animations wont work because we dont know the height)
+                $(this).siblings('ul').slideToggle();
+                setTimeout(function(){
+                  $offcanvas_height = $offcanvas_content.height();
+                  $page_wrapper.height($offcanvas_height);
+                }, 400);
+              } else {
+                setTimeout(function(){
+                  $document.bind('click touchstart', PollForNavOutsideClick);
+                }, 400);
+              }
           });
 
           // a function that closes the offcanvas when you press escape key
@@ -489,6 +497,13 @@ $(function(){
           var PollForOffcanvasOutsideClick = function(e) {
               if(!$(e.target).closest('.offcanvas').length) {
                 OffcanvasClose();
+              }
+          };
+
+          // same thing but for desktop nav clicks
+          var PollForNavOutsideClick = function(e) {
+              if(!$(e.target).closest('.page-header__primary-nav .expanded ul').length) {
+                NavClose();
               }
           };
 
@@ -507,6 +522,15 @@ $(function(){
 
               // Stop polling for click outside.
               $document.unbind('click touchstart', PollForOffcanvasOutsideClick);
+          };
+
+          // a function to close the desktop "cities" button dropdown which requires click
+          var NavClose = function(e) {
+              // close all accordians if a user closes the offcanvas nav
+              $('.page-header__primary-nav').find('.is-open').removeClass('is-open');
+
+              // Stop polling for click outside.
+              $document.unbind('click touchstart', PollForNavOutsideClick);
           };
 
           // a function to open the offcanvas

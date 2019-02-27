@@ -349,7 +349,7 @@ function iobytheme_preprocess_page(&$vars) {
     $vars['script'] = drupal_get_js();
   }
 
-  drupal_add_js(path_to_theme() . '/patternlab/public/js/plugins.min.js', $options);
+//  drupal_add_js(path_to_theme() . '/patternlab/public/js/plugins.min.js', $options);
 
   // Footer Brand Image stuff, adds ~6 logos to footer based on 'Footer Brand Logo' content type
   // Looks like nodequeue neglected some of their internal API methods so part of it is dup'd here.

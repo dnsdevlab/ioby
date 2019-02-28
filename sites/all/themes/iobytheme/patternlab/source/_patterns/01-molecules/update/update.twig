@@ -9,9 +9,15 @@
       <div class="update__date">{{ post.date }}</div>
       <h3 class="update__title">{{ post.title }}</h3>
       <div class="update__description"><p>{{ post.description }}</p></div>
-      <div class="update__button">
-        <span>{{ post.button }}</span>
-      </div>
+      {% if post.button %}
+        <div class="update__button">
+          <span>{{ post.button }}</span>
+        </div>
+      {% else %}
+        <div class="update__link">
+          <span>{{ post.link }}</span>
+        </div>
+      {% endif %}
     </div><!--/.update__text-->
   </a>
 </article><!--/.update-->

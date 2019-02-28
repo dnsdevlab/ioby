@@ -128,4 +128,22 @@
       }
     }
   }
+
+  &__link {
+    margin-top: 22px;
+
+    span {
+      display: inline-block;
+      color: $theOrange;
+      font-weight: 800;
+      font-family: $barlow;
+      font-size: 20px;
+      line-height: calc(28/20);
+
+      &:hover {
+        text-decoration: underline;
+        color: $theOrange;
+      }
+    }
+  }
 }

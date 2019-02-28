@@ -58,6 +58,12 @@
     max-width: 1042px;
     margin: 0 auto;
 
+    &:after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+
     @media (max-width: 1000px) {
       max-width: 631px;
     }
@@ -430,9 +436,11 @@
     @include clearfix;
     position: relative;
     top: -43px;
+    float: left;
 
     @media (max-width: 1000px) {
       top: 0;
+      float: none;
     }
   }
 

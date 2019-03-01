@@ -82,7 +82,7 @@
           <div class="page-header__logo">
             <a href="/">
               <h1 class="visually-hidden">ioby</h1>
-              <img src="/sites/all/themes/iobytheme/patternlab/public/img/ioby-logo.svg" alt="ioby" />
+              <img src="/sites/all/themes/iobytheme/img/ioby-logo.svg" alt="ioby" />
             </a>
           </div>
           <nav class="page-header__project-nav">
@@ -346,12 +346,12 @@
           <div class="page-footer__featured">
             <div class="page-footer__featured-label" >Featured In</div>
             <ul class="page-footer__featured-list">
-              <li><img alt="Atlantic Cities" src="/sites/all/themes/iobytheme/img-old/ioby_featuredInLogo_atlanticCities.png"/></li>
-              <li><img alt="Next American City" src="/sites/all/themes/iobytheme/img-old/ioby_featuredInLogo_nextAmericanCity.png"/></li>
-              <li><img alt="Time" src="/sites/all/themes/iobytheme/img-old/ioby_featuredInLogo_time.png"/></li>
-              <li><img alt="WNYC" src="/sites/all/themes/iobytheme/img-old/ioby_featuredInLogo_WNYC.png"/></li>
-              <li><img alt="Fast Company" src="/sites/all/themes/iobytheme/img-old/ioby_featuredInLogo_fastCo.png"/></li>
-              <li><img alt="The Wall Street Journal" src="/sites/all/themes/iobytheme/img-old/ioby_featuredInLogo_wallStreet.png"/></li>
+              <li><img alt="Atlantic Cities" src="/sites/all/themes/iobytheme/img/ioby_featuredInLogo_atlanticCities.png"/></li>
+              <li><img alt="Next American City" src="/sites/all/themes/iobytheme/img/ioby_featuredInLogo_nextAmericanCity.png"/></li>
+              <li><img alt="Time" src="/sites/all/themes/iobytheme/img/ioby_featuredInLogo_time.png"/></li>
+              <li><img alt="WNYC" src="/sites/all/themes/iobytheme/img/ioby_featuredInLogo_WNYC.png"/></li>
+              <li><img alt="Fast Company" src="/sites/all/themes/iobytheme/img/ioby_featuredInLogo_fastCo.png"/></li>
+              <li><img alt="The Wall Street Journal" src="/sites/all/themes/iobytheme/img/ioby_featuredInLogo_wallStreet.png"/></li>
             </ul>
           </div><!--/.page-footer__featured-->
         </div><!--/.page-footer__top-area-inside-->

@@ -333,14 +333,14 @@
         <div class="page-footer__top-area-inside">
           <figure class="page-footer__top">
             <?php print render($testimonial); ?>
-            <blockquote class="page-footer__quote">
+            <?php /* <blockquote class="page-footer__quote">
               <p>I used to dread fundraising. It's great knowing that all the supports and personal attention will be there to make the process painless and effective. We've had a great, memorable and transformative experience.”</p>
             </blockquote>
             <figcaption class="page-footer__caption">
               <span><strong>Joe Matunis</strong></span>
               <span>El Puente Cycling Club, Project Leader,</span>
               <span>Brooklyn, NY</span>
-            </figcaption>
+            </figcaption>*/ ?>
           </figure>
 
           <div class="page-footer__featured">

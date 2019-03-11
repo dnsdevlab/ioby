@@ -393,6 +393,9 @@ function iobytheme_preprocess_page(&$vars) {
     }
   }
 
+  if ($testimonial = iobytheme_get_block('views', 'single_testimonial-block')) {
+    $vars['testimonial'] = $testimonial;
+  }
 }
 
 function iobytheme_preprocess_html(&$vars) {

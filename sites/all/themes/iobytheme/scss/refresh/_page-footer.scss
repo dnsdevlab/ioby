@@ -73,7 +73,8 @@
     @include clearfix;
   }
 
-  &__quote {
+  &__quote,
+  &__top .views-field-body {
     position: relative;
     float: left !important;
     width: 66% !important;
@@ -100,7 +101,8 @@
       background-size: cover;
     }
 
-    p {
+    p,
+    .field-content {
       font-family: $barlow;
       font-weight: 400;
       font-size: 20px;
@@ -111,7 +113,8 @@
     }
   }
 
-  &__caption {
+  &__caption,
+  &__top .views-field-field-person-name{
     font-family: $lato;
     font-weight: 400;
     font-size: 14px;

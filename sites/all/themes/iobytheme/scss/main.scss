@@ -354,7 +354,7 @@ header#pageheader {
 
 #content {
   width:100%;
-  padding:10px 10px 20px 10px;
+  padding:0 10px 0 10px;
   margin:0 0 0 0;
   @media (max-width: $small-break) {
     padding: 20px 0 20px 0;
@@ -2997,4 +2997,7 @@ a.txt1 {
 
 .region-header {
   padding-top: 10px;
+  #block-block-6 .rteright {
+    text-align: initial;
+  }
 }

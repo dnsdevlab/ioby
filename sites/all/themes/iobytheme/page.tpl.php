@@ -87,7 +87,7 @@
           </div>
           <nav class="page-header__project-nav">
             <ul>
-              <li><?php print l('Find a Project »', 'projects/browse', [
+              <li><?php print l('Find a Project', 'projects/browse', [
                   'query' => array('f' => array('sm_field_project_status:1')),
                 ]);
                 ?></a></li>

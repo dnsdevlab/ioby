@@ -362,24 +362,7 @@
           <div class="page-footer__bottom">
 
             <div class="page-footer__left">
-              <div class="page-footer__nav">
-                <div class="page-footer__nav-col1">
-                  <a href="/idea">Start a Project</a>
-                </div>
-                <div class="page-footer__nav-col2">
-                  <a href="/about">About</a>
-                  <a href="/blog">Blog</a>
-                </div>
-                <div class="page-footer__nav-col3">
-                  <a href="http://support.ioby.org/">Help</a>
-                  <a href="/donate">Donate to ioby</a>
-                </div>
-                <div class="page-footer__nav-col4">
-                  <a href="/press-room">Press Room</a>
-                  <a href="/contact">Contact</a>
-                  <a href="/jobs">Jobs</a>
-                </div>
-              </div>
+              <?php print $footer_menu; ?>
             </div><!--/.page-footer__left-->
 
             <div class="page-footer__right">
@@ -474,14 +457,8 @@
             <div class="page-footer__logo">
               <svg width="80" height="44" xmlns="http://www.w3.org/2000/svg"><g fill="#E88124" fill-rule="evenodd"><path d="M22.263 11.632a11.604 11.604 0 0 0-1.301 0 11.251 11.251 0 0 0-7.182 3.14l7.823 7.828c.094.094.113.229.042.299-.07.07-.198.046-.285-.055 0 0-3.257-3.794-9.08-6.295a11.24 11.24 0 0 0-1.957 6.355c0 6.234 5.055 11.29 11.29 11.29 6.236 0 11.29-5.056 11.29-11.29 0-6.019-4.707-10.935-10.64-11.272M72.603 11.613v10.856c0 .13-.082.238-.181.238-.1 0-.174-.107-.164-.237 0 0 .378-4.98-1.961-10.857H57.419v11.125c0 5.084 3.462 9.372 8.19 10.7l-4.401 5.972 5.896 4.461 10.714-14.547A10.958 10.958 0 0 0 80 22.75V11.613h-7.397zM45.488 11.55H43.21c-2.34 5.987-1.963 11.06-1.963 11.06.01.132-.063.24-.163.24s-.18-.108-.18-.241V.645h-7.355v33.527l11.29.022c6.236 0 11.291-5.074 11.291-11.332 0-6.04-4.708-10.975-10.64-11.313M10.968 5.162C10.968 2.31 8.513 0 5.484 0S0 2.311 0 5.162c0 2.85 2.455 5.16 5.484 5.16.614 0 1.205-.096 1.756-.271A5.557 5.557 0 0 0 9.206 8.95c1.083-.943 1.762-2.29 1.762-3.788M1.29 34.194h7.097V11.613H1.29z"/></g></svg>        </div>
             <div class="page-footer__fine-print">
-              <p>copyright © 2018 ioby, a 501(c)(3) nonprofit</p>
-              <nav class="page-footer__privacy-nav">
-                <ul>
-                  <li><a href="/privacy">Privacy Policy</a></li>
-                  <li><a href="/terms">Terms &amp; Conditions</a></li>
-                  <li><a href="/tax-deductible-donations">Tax Information</a></li>
-                </ul>
-              </nav>
+              <p>copyright © <?php print date('Y'); ?> ioby, a 501(c)(3) nonprofit</p>
+              <?php print $privacy_menu; ?>
             </div>
           </div><!--/.page-footer__far-bottom-->
         </div><!--/.page-footer__bottom-area-inside-->
@@ -525,23 +502,6 @@
     <!-- /#navigation -->
 
 <!--    --><?php //print render($page['footer']); ?>
-
-<!--  <div class="clearfix">&nbsp;</div>-->
-
-<!--  <section class="footer-logos">-->
-<!--    --><?php //print render($footer_logos); ?>
-<!--  </section>-->
-
-<!--  <section class="credits">-->
-<!--    copyright &copy; --><?php //print date("Y"); ?><!-- ioby, a 501(c)(3) nonprofit<br/>-->
-<!--    site by <a href="http://www.newsignature.com" target="_blank">New Signature</a>-->
-<!--  </section>-->
-<!--</div>-->
-<!--</footer>-->
- <!-- /.section, /#footer -->
-
-  <!--    {% include 'organisms-footer' %}-->
-
 
   </div><!--/#page -->
 

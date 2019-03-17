@@ -396,6 +396,9 @@ function iobytheme_preprocess_page(&$vars) {
   if ($testimonial = iobytheme_get_block('views', 'single_testimonial-block')) {
     $vars['testimonial'] = $testimonial;
   }
+  
+  $vars['footer_menu'] = iobytheme_create_menu('user-menu');
+  $vars['privacy_menu'] = iobytheme_create_menu('menu-privacy-menu');
 }
 
 function iobytheme_preprocess_html(&$vars) {
@@ -1009,4 +1012,38 @@ function iobytheme_get_width_height_from_style($style_name) {
     'width' => '',
     'height' => '',
   );
+}
+
+function iobytheme_create_menu($menu_name) {
+  if ($menu_name == 'user-menu') {
+    $footer_links = menu_load_links($menu_name);
+    $footer_menu = '<div class="page-footer__nav"><div class="page-footer__nav-col1"><a href="/idea">Start a Project</a></div><div class="page-footer__nav-col2">';
+    $link_count = 0;
+    foreach ($footer_links as $link) {
+      if ($link['hidden'] == FALSE) {
+        $footer_menu .= l($link['link_title'], $link['link_path']);
+        $link_count++;
+        if ($link_count == 2) {
+          $footer_menu .= '</div><div class="page-footer__nav-col3">';
+        }
+        if ($link_count == 4) {
+          $footer_menu .= '</div><div class="page-footer__nav-col4">';
+        }
+      }
+    }
+    $footer_menu .= '</div></div>';
+    return $footer_menu;
+  }
+  elseif ($menu_name == 'menu-privacy-menu') {
+    $privacy_links = menu_load_links($menu_name);
+    $privacy_menu = '<nav class="page-footer__privacy-nav"><ul>';
+    foreach ($privacy_links as $link) {
+      if ($link['hidden'] == FALSE) {
+        $privacy_menu .= '<li>' . l($link['link_title'], $link['link_path']) . '</li>';
+      }
+    }
+    $privacy_menu .= '</ul></nav>';
+    return $privacy_menu;
+  }
+  return false;
 }

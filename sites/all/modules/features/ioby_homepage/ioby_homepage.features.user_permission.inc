@@ -10,16 +10,6 @@
 function ioby_homepage_user_default_permissions() {
   $permissions = array();
 
-  // Exported permission: 'create any impact bean'.
-  $permissions['create any impact bean'] = array(
-    'name' => 'create any impact bean',
-    'roles' => array(
-      'Content Admin' => 'Content Admin',
-      'admin' => 'admin',
-    ),
-    'module' => 'bean',
-  );
-
   // Exported permission: 'create any impact_bean bean'.
   $permissions['create any impact_bean bean'] = array(
     'name' => 'create any impact_bean bean',
@@ -50,16 +40,6 @@ function ioby_homepage_user_default_permissions() {
   // Exported permission: 'create any promo bean'.
   $permissions['create any promo bean'] = array(
     'name' => 'create any promo bean',
-    'roles' => array(
-      'Content Admin' => 'Content Admin',
-      'admin' => 'admin',
-    ),
-    'module' => 'bean',
-  );
-
-  // Exported permission: 'delete any impact bean'.
-  $permissions['delete any impact bean'] = array(
-    'name' => 'delete any impact bean',
     'roles' => array(
       'Content Admin' => 'Content Admin',
       'admin' => 'admin',
@@ -104,16 +84,6 @@ function ioby_homepage_user_default_permissions() {
     'module' => 'bean',
   );
 
-  // Exported permission: 'edit any impact bean'.
-  $permissions['edit any impact bean'] = array(
-    'name' => 'edit any impact bean',
-    'roles' => array(
-      'Content Admin' => 'Content Admin',
-      'admin' => 'admin',
-    ),
-    'module' => 'bean',
-  );
-
   // Exported permission: 'edit any impact_bean bean'.
   $permissions['edit any impact_bean bean'] = array(
     'name' => 'edit any impact_bean bean',
@@ -147,17 +117,6 @@ function ioby_homepage_user_default_permissions() {
     'roles' => array(
       'Content Admin' => 'Content Admin',
       'admin' => 'admin',
-    ),
-    'module' => 'bean',
-  );
-
-  // Exported permission: 'view any impact bean'.
-  $permissions['view any impact bean'] = array(
-    'name' => 'view any impact bean',
-    'roles' => array(
-      'admin' => 'admin',
-      'anonymous user' => 'anonymous user',
-      'authenticated user' => 'authenticated user',
     ),
     'module' => 'bean',
   );

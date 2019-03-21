@@ -363,13 +363,12 @@
     </ul>
   </div><!--/.cities__inside-->
 </section><!--/.cities-->
-<?php /* SUPPRESSED AT LAUNCH
+
 <div class="more-projects">
   <div class="more-projects__inside">
     <a href="/projects/browse?f[0]=sm_field_project_status%3A1">or, browse all projects</a>
   </div><!--/.more-projects-->
 </div><!--/.more-projects-->
-<? */ ?>
 
 <div class="home-wrapper-outline-bg">
   <?php if (!empty($ioby_updates)): ?>

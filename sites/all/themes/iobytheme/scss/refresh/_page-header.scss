@@ -212,11 +212,11 @@
       height: 100%;
 
       @media (max-width: 1300px) {
-        margin-right: 18px;
+        margin-right: 18px !important;
       }
 
       &:last-child {
-        margin-right: 0;
+        margin-right: 0 !important;
       }
 
       > span,
@@ -885,6 +885,7 @@
 
         &:hover {
           cursor: pointer;
+          color: #fff;
         }
       }
 
@@ -1067,4 +1068,9 @@ body.offcanvas-open {
     min-height: 100vh;
     overflow: hidden;
   }
+}
+
+
+#user-login-form .form-actions {
+  margin: 0;
 }

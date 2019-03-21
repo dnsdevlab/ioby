@@ -93,7 +93,8 @@
     }
   }
 
-  &__description {
+  &__description,
+  #content &__description {
     margin-top: 24px;
 
     p {

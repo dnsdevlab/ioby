@@ -260,9 +260,9 @@ body {
   min-width: 960px;
   width: auto;
   @include responsive;
-  @media (max-width: $small-break) {
-    margin-top: 20px;
-  }
+  //@media (max-width: $small-break) {
+    //margin-top: 20px;
+  //}
 
 }
 
@@ -354,10 +354,10 @@ header#pageheader {
 
 #content {
   width:100%;
-  padding:0 10px 0 10px;
-  margin:0 0 0 0;
+  padding:0;
+  margin:0;
   @media (max-width: $small-break) {
-    padding: 20px 0 20px 0;
+    padding: 0;
   }
 
 }

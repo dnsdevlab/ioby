@@ -18,7 +18,8 @@
     }
   }
 
-  &__text {
+  &__text,
+  #content &__text{
     padding: 96px 40px 60px;
     background: #fff;
 

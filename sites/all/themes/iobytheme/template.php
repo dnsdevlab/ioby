@@ -381,16 +381,18 @@ function iobytheme_preprocess_page(&$vars) {
     $vars['bundle'] = $vars['node']->type;
   }
 
-  // load cart items
-  if (user_is_logged_in()) {
-    // get cart items
-    global $user;
-    if ($order = commerce_cart_order_load($user->uid)) {
-      // Count the number of product line items on the order.
-      $wrapper = entity_metadata_wrapper('commerce_order', $order);
-      $quantity = commerce_line_items_quantity($wrapper->commerce_line_items, commerce_product_line_item_types());
-      $vars['cart_items'] = $quantity;
-    }
+  // get cart items
+  global $user;
+  // try and load anonymous cart first
+  $order = commerce_cart_order_load();
+  if(!$order) {
+    $order = commerce_cart_order_load($user->uid);
+  }
+  if (!empty($order)) {
+    // Count the number of product line items on the order.
+    $wrapper = entity_metadata_wrapper('commerce_order', $order);
+    $quantity = commerce_line_items_quantity($wrapper->commerce_line_items, commerce_product_line_item_types());
+    $vars['cart_items'] = $quantity;
   }
 
   if ($testimonial = iobytheme_get_block('views', 'single_testimonial-block')) {

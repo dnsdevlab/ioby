@@ -186,7 +186,7 @@
                 endif;
                 ?>
               </li>
-              <li>
+              <li class="offcanvas__login">
                 <?php if ($logged_in):
                   print l('Log Out','user/logout');
                 else:

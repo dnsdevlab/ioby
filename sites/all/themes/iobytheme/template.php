@@ -696,6 +696,11 @@ function iobytheme_preprocess_ioby_update_bundle(&$vars, $bundle, $view_mode) {
   if ($link_style = field_get_items('bean', $bean, 'field_updates_link_style')) {
     $vars['link_style'] = $link_style[0]['value'];
   }
+
+  if ($date = field_get_items('bean', $bean, 'field_updates_date')) {
+    $unix = strtotime($date[0]['value']);
+    $vars['date'] = date('F j, Y', $unix);
+  }
 }
 
 /*

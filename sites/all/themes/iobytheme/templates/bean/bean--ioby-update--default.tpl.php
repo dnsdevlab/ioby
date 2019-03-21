@@ -9,7 +9,6 @@
       <div class="update__text">
         <?php if (!empty($date)): ?>
           <div class="update__date"><?php print $date; ?></div>
-          <?php print render($content['field_updates_date']); ?>
         <?php endif; ?>
         <h3 class="update__title"><?php print $title; ?></h3>
         <div class="update__description"><p><?php print $summary; ?></p></div>

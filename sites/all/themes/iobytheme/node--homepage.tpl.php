@@ -205,18 +205,14 @@
         <h4 class="connect__newsletter-title"><?php print $email_form_supertitle; ?></h4>
 
         <div class="connect__newsletter-form-item"> <!--id="mc_embed_signup">-->
-          <!-- Begin MailChimp Signup Form -->
-<!--            <div id="mc_embed_signup">-->
-            <form action="//ioby.us1.list-manage.com/subscribe/post?u=f3c712aa320de5a6d109211a6&amp;id=71207383ff" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+          <form action="https://page.ioby.org/Subscribe-Website.html" method="GET" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
               <div class="mc-field-group">
                 <label for="connect-email" class="visually-hidden">Email address</label>
-                <input type="email" value="" name="EMAIL" class="required email" id="connect-email">
+                <input type="email" value="" name="email" class="required email" id="connect-email" required>
               </div>
-              <input type="hidden" value="<?php $path = drupal_get_destination(); print htmlentities(filter_xss($path['destination'])); ?>" name="MMERGE27" class="required" id="connect-email">
+              <!--<input type="hidden" value="<?php /*$path = drupal_get_destination(); print htmlentities(filter_xss($path['destination'])); */?>" name="MMERGE27" class="required" id="connect-email">-->
               <input type="submit" value="Sign up" name="subscribe" placeholder="Email address">
             </form>
-<!--            </div>-->
-          <!--End mc_embed_signup -->
 <!--            <label class="visually-hidden" for="connect-email">Email address</label>-->
 <!--            <input type="email" name="email" id="connect-email" placeholder="Email address"/>-->
 <!--            <input type="submit" value="Sign up"/>-->

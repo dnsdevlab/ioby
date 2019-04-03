@@ -374,10 +374,10 @@
 
               <div class="page-footer__signup">
                 <div class="page-footer__signup-label">Join Our Newsletter</div>
-                <form name="footer-signup">
+                <form name="footer-signup" action="https://page.ioby.org/Subscribe-Website.html" method="GET">
                   <label class="visually-hidden" for="footer-email">Email</label>
                   <div class="page-footer__signup-form">
-                    <input id="footer-email" type="email" name="email" placeholder="Email address"/>
+                    <input id="footer-email" type="email" name="email" placeholder="Email address" required/>
                     <input type="submit" value="Sign Up"/>
                   </div>
                 </form>

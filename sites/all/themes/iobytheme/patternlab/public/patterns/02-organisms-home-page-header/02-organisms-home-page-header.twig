@@ -1,0 +1,163 @@
+<header class="page-header refresh-header">
+  <div class="page-header__inside">
+    <div class="page-header__left">
+      <div class="page-header__logo">
+        <a href=".">
+          {% if home %}<h1 class="visually-hidden">ioby</h1>{% endif %}
+          <img src="../../../../img/ioby-logo.svg" alt="ioby" />
+        </a>
+      </div>
+      <nav class="page-header__project-nav">
+        <ul>
+          <li><a href=".">Find a Project</a></li>
+          <li><a href=".">Create a Project</a></li>
+        </ul>
+      </nav>
+    </div><!--/.page-header__left-->
+    <div class="page-header__right">
+      <nav class="page-header__primary-nav">
+        <ul>
+          <li class="expanded">
+            <span>Cities</span>
+            <ul>
+              <li><a href=".">Cleveland</a></li>
+              <li><a href=".">Detroit</a></li>
+              <li><a href=".">Memphis</a></li>
+              <li><a href=".">New York</a></li>
+              <li><a href=".">Pittsburgh</a></li>
+            </ul>
+          </li>
+          <li><a href=".">About</a></li>
+          <li><a href=".">Blog</a></li>
+          <li><a href=".">Resources</a></li>
+          <li><a href=".">Help</a></li>
+        </ul>
+      </nav>
+      <div class="page-header__search">
+        <div class="page-header__search-trigger">
+          <button><span class="visually-hidden">Show Search</span>{% include "atoms-search-icon" %}</button>
+        </div>
+        <div class="page-header__search-content">
+          <form>
+            <label for="header-search-query" class="visually-hidden">Search</label>
+            <input placeholder="Search ..." type="search" id="header-search-query"/>
+            <input class="visually-hidden" type="submit" value="Search"/>
+          </form>
+        </div><!--/.header__search-content-->
+      </div><!--/.header__search-->
+      {% if cart %}
+        <div class="page-header__cart">
+          <a href=".">
+            <span class="page-header__cart-icon">{% include "atoms-cart-icon" %}</span>
+            <span class="page-header__cart-number">{{ cart }}</span>
+          </a>
+        </div><!--/.header__card-->
+      {% endif %}
+      <nav class="page-header__auth-nav">
+        {% if loggedin %}
+        <ul>
+          <li>
+            <a href=".">My Account</a>
+          </li>
+          <li>
+            <a href=".">Log Out</a>
+          </li>
+        </ul>
+        {% else %}
+        <ul>
+          <li>
+            <a href=".">Sign Up</a>
+          </li>
+          <li class="page-header__login">
+            <button class="page-header__login-trigger">Log In</button>
+            <div class="page-header__login-content">
+              <form class="login-form">
+                <label for="header-login-email">E-mail or username</label>
+                <input type="email" id="header-login-email"/>
+                <label for="header-login-password">Password</label>
+                <input type="password" id="header-login-password"/>
+                <input class="button" type="submit" value="Log In"/>
+                <p><a href=".">Or request a new pasword</a></p>
+              </form>
+            </div><!--/.login-form-->
+          </li>
+        </ul>
+        {% endif %}
+      </nav>
+      <div class="page-header__offcanvas-trigger">
+        <button>
+          <span class="page-header__offcanvas-trigger-text">Menu</span>
+          <span class="page-header__offcanvas-trigger-icon"></span>
+        </button>
+      </div>
+    </div><!--/.page-header__right-->
+  </div><!--/.page-header__inside-->
+</header>
+<div class="offcanvas">
+  <div class="offcanvas__content">
+    <div class="offcanvas__top">
+      <button class="offcanvas__close">
+        <span class="offcanvas__close-text">Close</span>
+        <span class="offcanvas__close-icon"></span>
+      </button>
+      <nav class="offcanvas__primary-nav">
+        <ul>
+          <li class="expanded">
+            <span>Cities</span>
+            <ul>
+              <li><a href=".">Cleveland</a></li>
+              <li><a href=".">Detroit</a></li>
+              <li><a href=".">Memphis</a></li>
+              <li><a href=".">New York</a></li>
+              <li><a href=".">Pittsburgh</a></li>
+            </ul>
+          </li>
+          <li><a href=".">About</a></li>
+          <li><a href=".">Blog</a></li>
+          <li><a href=".">Resources</a></li>
+          <li><a href=".">Help</a></li>
+        </ul>
+      </nav>
+      <div class="offcanvas__search">
+        <form>
+          <label for="header-search-query-mobile" class="visually-hidden">Search</label>
+          <input placeholder="Search ..." type="search" id="header-search-query-mobile"/>
+          <input class="visually-hidden" type="submit" value="Search"/>
+        </form>
+      </div>
+    </div><!--/.offcanvas__top-->
+    <div class="offcanvas__bottom">
+      <nav class="offcanvas__auth-nav">
+        {% if loggedin %}
+        <ul>
+          <li>
+            <a href=".">My Account</a>
+          </li>
+          <li>
+            <a href=".">Log Out</a>
+          </li>
+        </ul>
+        {% else %}
+        <ul>
+          <li>
+            <a href=".">Sign Up</a>
+          </li>
+          <li class="offcanvas__login">
+            <p class="offcanvas__login-label">Log In</p>
+            <div class="offcanvas__login-content">
+              <form class="login-form">
+                <label for="header-login-email-mobile">E-mail or username</label>
+                <input type="email" id="header-login-email-mobile"/>
+                <label for="header-login-password-mobile">Password</label>
+                <input type="password" id="header-login-password-mobile"/>
+                <input class="button" type="submit" value="Log In"/>
+                <p><a href=".">Or request a new pasword</a></p>
+              </form>
+            </div><!--/.login-form-->
+          </li>
+        </ul>
+        {% endif %}
+      </nav>
+    </div><!--/.offcanvas__bottom-->
+  </div><!--/.offcanvas__content-->
+</div><!--/.offcanvas-->

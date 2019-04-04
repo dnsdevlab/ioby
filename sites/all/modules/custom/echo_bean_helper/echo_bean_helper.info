@@ -1,0 +1,4 @@
+name = Echo Bean Helper
+description = Utility code supporting Paul's way of working with Beans.
+core = 7.x
+package = Echo

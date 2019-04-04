@@ -1,11 +1,11 @@
 # Ignore paths that contain generated content.
 /cache/
-/files/
 /privatefiles/
 /sites/*/settings*.php
 /sites/*/files
 /sites/*/private
 /sites/*/privatefiles
+/files
 
 # Ignore dev settings paths and files
 /sites/*.newsig.com

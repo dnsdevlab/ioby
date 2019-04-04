@@ -26,12 +26,18 @@ base theme = boron
 ;stylesheets[screen][] = css/jquery-ui-custom.less
 ;stylesheets[screen][] = css/idea-form.less
 ;this doesn't appear to do anything:
-stylesheets[all] = css/app.min.css
+stylesheets[all][] = css/app.min.css
+
+scripts[] = js/picturefill.min.js
+scripts[] = js/plugins.min.js
+;scripts[] = js/scripts.min.js
+
+scripts[] = js/app.min.js
+;scripts[] = patternlab/public/js/refresh.js
 
 ; html5.js is required for IE to understand the new elements like article
 ; http://remysharp.com/2009/01/07/html5-enabling-script/
 ; ------------------------------
-scripts[] = js/app.min.js
 ; scripts[] = js/curvycorners.js
 
 ; simplified regions

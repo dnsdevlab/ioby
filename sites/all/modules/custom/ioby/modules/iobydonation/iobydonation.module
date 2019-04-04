@@ -60,17 +60,6 @@ function iobydonation_views_api() {
     'api' => '3',
   );
 }
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function iobydonation_form_commerce_checkout_form_checkout_alter(&$form, &$form_state) {
-  // Disable autocomplete on the Coupon Code field. See IOBYE-49.
-  $form['commerce_coupon']['coupon_code']['#attributes'] = array(
-    'autocomplete' => 'off',
-  );
-}
-
 /**
  * Creates a donation node
  */

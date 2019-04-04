@@ -1,0 +1,158 @@
+
+.connect{
+  background-image: linear-gradient(134deg, #6765A7 0%, #4185B1 100%);
+  padding: 76px 0 99px 0;
+  color: $theWhite;
+
+  &,* {
+    box-sizing: border-box;
+  }
+
+  &__inside {
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media (max-width: 840px) {
+      padding-right: 40px;
+      padding-left: 40px;
+    }
+
+    @media (max-width: 400px) {
+      padding-right: 20px;
+      padding-left: 20px;
+    }
+  }
+
+  &__header {
+    padding: 0 0 30px;
+    text-align: center;
+  }
+
+  &__title {
+    font-family: $barlow;
+    font-size: 24px;
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+    font-weight: 800;
+    color: $theWhite;
+
+    span {
+      display: block;
+      font-size: 30px;
+      margin-top: 6px;
+    }
+  }
+
+  &__body {
+    @include clearfix;
+  }
+
+  &__newsletter,
+  &__social {
+    &-title {
+      font-family: $barlow;
+      letter-spacing:2px;
+      font-size: 18px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: $theWhite;
+    }
+  }
+
+  &__newsletter {
+    width: 456px;
+    float: left;
+
+    @media (max-width: 760px) {
+      float: none;
+      width: 100%;
+    }
+
+    &-form-item {
+      position: relative;
+    }
+
+    input[type='email'] {
+      -webkit-appearance: none;
+      border: none;
+      appearance: none;
+      font-family: $barlow;
+      font-weight: 600;
+      font-size: 20px;
+      color: #3599CC;
+      background: $theWhite;
+      width: 100%;
+      padding: 13px 13px;
+
+      &::-webkit-input-placeholder { color: #3599CC; }
+      &::-moz-placeholder { color: #3599CC; }
+      &:-ms-input-placeholder { color: #3599CC; }
+      &:-moz-placeholder { color: #3599CC; }
+      &::placeholder { color: #3599CC; }
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    input[type='submit']{
+      border: none;
+      -webkit-appearance: none;
+      appearance: none;
+      background: #3599CC;
+      font-family: $barlow;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 2.67px;
+      color: $theWhite;
+      padding: 17px 0;
+      height: 58px;
+      width: 136px;
+      position: absolute;
+      top: -4px;
+      right: 0;
+      text-transform: uppercase;
+      transition: background .2s ease;
+
+      @media (max-width: 400px) {
+        width: 110px;
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      &:hover {
+        background: #E88124;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__social {
+    float: right;
+
+    @media (max-width: 760px) {
+      float: none;
+    }
+
+    &-list {
+      a {
+        padding-top: 4px;
+        padding-right: 26px;
+        display: inline-block;
+        transition: opacity .2s ease;
+
+        &:last-child {
+          padding-right: 0;
+        }
+
+        &:hover {
+          opacity: .5;
+        }
+      }
+    }
+  }
+}

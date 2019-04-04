@@ -11,7 +11,6 @@ var reporter    = require('postcss-reporter');
 var syntax_scss = require('postcss-scss');
 var stylelint   = require('stylelint');
 var autoprefixer = require('autoprefixer');
-var runSequence = require('run-sequence');
 var svgSprite = require('gulp-svg-sprite');
 //var clean = require('gulp-clean');
 
@@ -26,6 +25,7 @@ var vendorjs = [
   'js/galleryview/js/jquery.timers.js',
   'js/curvycorners.js',
   'js/html5.js',
+  'js/typed.min.js'
 ];
 
 // if you need some vendor css, add it here:
@@ -116,7 +116,7 @@ gulp.task('css-vendor-assets', function(){
 
 // compile javascript
 gulp.task('js', function () {
-  gulp.src('js/app.js')
+  return gulp.src(['js/app.js'])
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
     .pipe(uglify())
@@ -214,40 +214,32 @@ gulp.task('plab-css', function(){
 
 // the "watch" task - triggers events on save
 gulp.task('default', function() {
-  gulp.watch(['scss/**/*.scss'], ['scss-lint','css-compile']);
-  gulp.watch(['patternlab/source/**/**'], ['plab']);
-  gulp.watch(['js/app.js'], ['js']);
+  // gulp.watch(['scss/**/*.scss'], ['scss-lint','css-compile']);
+  // gulp.watch(['patternlab/source/**/**'], ['plab']);
+  // gulp.watch(['js/app.js'], ['js']);
+  gulp.watch(['scss/**/*.scss'], gulp.series('build'));
 });
 
 // compile css once
-gulp.task('css', function(cb) {
-  runSequence(
+gulp.task('css', gulp.series(
     'scss-lint',
-    'css-compile', 
-    cb);
-});
+    'css-compile'
+));
 
 // compile all svgs once (also recompiles css and plab)
 /*
-gulp.task('svg', function(cb) {
-  runSequence(
+gulp.task('svg', gulp.series(
     //'cleansvg',
     ['svginline', 'svgsprites'],
     'css',
-    'plab',
-    cb);
-});
+    'plab'
+));
 */
 
 // compile everything once
-gulp.task('build', function(cb) {
-  runSequence(
+gulp.task('build', gulp.series(
   //['svginline', 'svgsprites'],
   'scss-lint',
-  ['css-compile', 'css-vendor', 'css-vendor-assets', 'js', 'js-vendor'],
+  ['css-compile', 'css-vendor', 'css-vendor-assets', 'js', 'js-vendor']
   //'plab',
-  cb)
-});
-
-// just incase someone tries to run 'gulp watch' instead of just 'gulp'
-gulp.task('watch', ['default']);
+));

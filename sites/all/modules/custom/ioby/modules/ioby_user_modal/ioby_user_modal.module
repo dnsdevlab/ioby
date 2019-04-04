@@ -195,9 +195,8 @@ function ioby_user_modal_init() {
 function ioby_user_modal_form_alter(&$form, &$form_state, $form_id) {
 
   // Don't continue on form alter for user "like" pages, login or registration pages
-  if (current_path() == 'user' || current_path() == 'user/register' || current_path() == 'admin/people/create') {
-    return;
-  }
+  if (current_path() == 'user' || current_path() == 'user/register')
+    return true;
 
   // Set destination
   if (!empty($_GET['destination'])){

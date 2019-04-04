@@ -1,0 +1,18 @@
+<section class="featured-projects">
+  <div class="featured-projects__inside">
+    <header class="featured-projects__header">
+      <h2 class="featured-projects__title">{{ post.title }}</h2>
+    </header>
+    <div class="featured-projects__body">
+      {% for post2 in post.list %}
+        <div class="featured-projects__item">
+          {% include "molecules-featured-project" with { post : post2 } %}
+        </div><!--/.featured-projects__item-->
+      {% endfor %}
+    </div><!--/.featured-projects__body-->
+    <footer class="featured-projects__footer">
+      <div class="featured-projects__footer-text">{{ post.footertext }}</div>
+      <a class="featured-projects__footer-button" href=".">{{ post.footerbutton }}</a>
+    </footer>
+  </div><!--/.featured-projects__inside-->
+</section><!--/.featured-projects-->

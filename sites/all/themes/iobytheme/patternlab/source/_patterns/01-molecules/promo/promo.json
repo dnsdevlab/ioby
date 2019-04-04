@@ -1,0 +1,10 @@
+{
+  "post": {
+    "img": {
+      "src": "https://placehold.it/380x380",
+      "alt" : "image description",
+      "title": "Crop width, auto height"
+    },
+    "description": "Promo description. Integer posuere erat a ante <a href='.'>venenatis dapibus</a> posuere velit aliquet."
+  }
+}

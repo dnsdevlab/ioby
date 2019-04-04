@@ -680,8 +680,10 @@ function iobyproject_incentives() {
   return array('#markup' => theme('iobyproject-incentives', array('incentives' => $incentives)));
 }
 
-function iobyproject_countdown() {
-  $node = menu_get_object();
+function iobyproject_countdown($node, $raw = FALSE) {
+  if (empty($node)) {
+    $node = menu_get_object();
+  }
 
   //do nothing if project doesn't have deadline
   if (empty($node->field_deadline[LANGUAGE_NONE])) {
@@ -701,7 +703,17 @@ function iobyproject_countdown() {
     $days_left = -1;
   }
 
-  return array('#markup' => theme('iobyproject-countdown', array('deadline' => $deadline_date, 'days_left' => $days_left)));
+  // return just the text string for the new homepage
+  if ($raw) {
+    if ($days_left >= 0) {
+      return $days_left . ' days to go';
+    } else {
+      return '';
+    }
+  // otherwise return the markup as usual
+  } else {
+    return array('#markup' => theme('iobyproject-countdown', array('deadline' => $deadline_date, 'days_left' => $days_left)));
+  }
 }
 
 function iobyproject_theme($existing, $type, $theme, $path) {

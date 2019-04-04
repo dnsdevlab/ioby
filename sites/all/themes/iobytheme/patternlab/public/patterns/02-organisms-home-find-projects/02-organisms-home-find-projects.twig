@@ -1,0 +1,19 @@
+<section class="find-projects">
+  <div class="find-projects__inside">
+    <header class="find-projects__header">
+      <h2 class="find-projects__title">Find more great projects to support</h2>
+    </header>
+    <ul class="find-projects__body">
+      {% for post2 in post.list %}
+        <li class="find-projects__item">
+          <div class="project-type">
+            <a href=".">
+              <div class="project-type__icon">{{ post2.icon|raw }}</div>
+              <h3 class="project-type__title">{{ post2.title }}</h3>
+            </a>
+          </div><!--/.project-type-->
+        </li>
+      {% endfor %}
+    </ul>
+  </div><!--/.find-projects-->
+</section><!-- /.find-projects -->

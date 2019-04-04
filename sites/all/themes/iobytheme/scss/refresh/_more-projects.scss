@@ -1,0 +1,39 @@
+
+.more-projects {
+  padding: 0 40px;
+
+  @media (max-width: 400px) {
+    padding: 0 20px;
+  }
+
+  &,* {
+    box-sizing: border-box;
+  }
+
+  &__inside {
+    position: relative;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding-bottom: 120px;
+    text-align: center;
+  }
+
+  a {
+    font-family: $barlow;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #FFFFFF;
+    letter-spacing: 2px;
+    background: $theOrange;
+    padding: 16px 30px 17px;
+    display: inline-block;
+    text-shadow: none;
+
+    &:hover {
+      background: $theBlue;
+      color: #fff;
+      text-shadow: none;
+    }
+  }
+}

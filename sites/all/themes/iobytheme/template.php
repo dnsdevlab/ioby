@@ -325,17 +325,18 @@ function iobytheme_preprocess_node(&$vars) {
 
 function iobytheme_preprocess_page(&$vars) {
 
-  if ( (isset($_GET['ajax']) && $_GET['ajax'] == 1) || arg(0) == 'volunteerform' || arg(0) == 'popup') {
+  if ((isset($_GET['ajax']) && $_GET['ajax'] == 1) || arg(0) == 'volunteerform' || arg(0) == 'popup') {
     $vars['theme_hook_suggestions'][] = 'page__ajax';
   }
 
   // Additional CSS and Javascript for the front page rotator
-  if (drupal_is_front_page ()) {
-    $options = array(
+  if (drupal_is_front_page()) {
+    $options = [
       'every_page' => FALSE,
       'preprocess' => FALSE,
-      'group' => CSS_DEFAULT, //Add the default galleryview CSS before iobytheme-specific CSS files
-      );
+      'group' => CSS_DEFAULT,
+      //Add the default galleryview CSS before iobytheme-specific CSS files
+    ];
     //drupal_add_css(path_to_theme() . '/js/galleryview/css/jquery.galleryview.css', $options);
     drupal_add_css(path_to_theme() . '/patternlab/public/css/plugins.min.css', $options);
     $vars['styles'] = drupal_get_css();
@@ -348,15 +349,18 @@ function iobytheme_preprocess_page(&$vars) {
     $vars['script'] = drupal_get_js();
   }
 
-  drupal_add_js(path_to_theme() . '/patternlab/public/js/plugins.min.js', $options);
+//  drupal_add_js(path_to_theme() . '/patternlab/public/js/plugins.min.js', $options);
 
   // Footer Brand Image stuff, adds ~6 logos to footer based on 'Footer Brand Logo' content type
   // Looks like nodequeue neglected some of their internal API methods so part of it is dup'd here.
   $footer_brand_subqueue_id = 3;
-  $vars['footer_logos'] = array();
+  $vars['footer_logos'] = [];
   foreach (nodequeue_load_nodes($footer_brand_subqueue_id, FALSE, 0, 6) as $node) {
     $vars['footer_logos'][] = node_view($node, 'teaser');
   }
+
+  $main_menu = drupal_render(menu_tree_output(menu_tree_all_data('main-menu')));
+  $vars['main_menu'] = preg_replace('/(leaf|collapsed)/','',$main_menu);
 
   if (!empty($vars['node']) && $vars['node']->nid == '34783') {
     if (user_is_logged_in()) {
@@ -365,17 +369,45 @@ function iobytheme_preprocess_page(&$vars) {
       if ($user_wrapper->field_first_name->value() || $user_wrapper->field_last_name->value()) {
         $vars['user_first_name'] = $user_wrapper->field_first_name->value();
         $vars['user_last_name'] = $user_wrapper->field_last_name->value();
-      } else {
+      }
+      else {
         $vars['user_first_name'] = $user_wrapper->field_user_fullname->value();
       }
       $vars['user_email'] = $user_wrapper->mail->value();
     }
   }
+
+  if (!empty($vars['node']) && !empty($vars['node']->type)) {
+    $vars['bundle'] = $vars['node']->type;
+  }
+
+  // get cart items
+  global $user;
+  // try and load anonymous cart first
+  $order = commerce_cart_order_load();
+  if(!$order) {
+    $order = commerce_cart_order_load($user->uid);
+  }
+  if (!empty($order)) {
+    // Count the number of product line items on the order.
+    $wrapper = entity_metadata_wrapper('commerce_order', $order);
+    $quantity = commerce_line_items_quantity($wrapper->commerce_line_items, commerce_product_line_item_types());
+    $vars['cart_items'] = $quantity;
+  }
+
+  if ($testimonial = iobytheme_get_block('views', 'single_testimonial-block')) {
+    $vars['testimonial'] = $testimonial;
+  }
+  
+  $vars['footer_menu'] = iobytheme_create_menu('user-menu');
+  $vars['privacy_menu'] = iobytheme_create_menu('menu-privacy-menu');
 }
 
 function iobytheme_preprocess_html(&$vars) {
   $logo_colors = array("blue","orange","active","plum","grey");
   $vars['classes_array'][] = 'logo-'. $logo_colors[ array_rand($logo_colors) ];
+
+  drupal_add_css('https://fonts.googleapis.com/css?family=Barlow:400,600,700|Lato:400,400i,700,700i', array('type' => 'external'));
 
   drupal_add_css(drupal_get_path('theme','iobytheme').'/patternlab/public/css/app.min.css');
 
@@ -384,12 +416,12 @@ function iobytheme_preprocess_html(&$vars) {
     $vars['theme_hook_suggestions'][] = 'html__idea_css';
   }
 
-  // IOBY-36, Addes Mailchimp CSS file
+  // IOBY-36, Adds Mailchimp CSS file
   if (array_key_exists('mailchimp_css', $contexts)){
     drupal_add_css(drupal_get_path('theme', 'iobytheme') . '/css/mailchimp.css');
   }
 
-  // IOBY-71, Addes FormAssembly assets files
+  // IOBY-71, Adds FormAssembly assets files
   if (array_key_exists('form_assembly', $contexts)){
     $vars['theme_hook_suggestions'][] = 'html__form_assembly';
   }
@@ -419,6 +451,12 @@ function iobytheme_preprocess_html(&$vars) {
   ),
  );
   drupal_add_html_head($viewport, 'viewport');
+
+  if ($node = menu_get_object()) {
+    if ($node->type == 'homepage') {
+      $vars['classes_array'][] = 'refresh-home';
+    }
+  }
 }
 
 function iobytheme_preprocess(&$vars) {
@@ -427,40 +465,103 @@ function iobytheme_preprocess(&$vars) {
 }
 
 /**
- * Preprocess the home page node.
+ * Implements template_preprocess_block().
  */
-function iobytheme_preprocess_home_page_bundle(&$vars, $node, $bundle, $view_mode) {
+
+function iobytheme_theme(&$existing, $type, $theme, $path) {
+  $hooks['user_login_block'] = array(
+    'template' => 'templates/user-login-block',
+    'render element' => 'form',
+  );
+  return $hooks;
+}
+
+function iobytheme_preprocess_user_login_block(&$vars) {
+  $vars['name'] = render($vars['form']['name']);
+  $vars['pass'] = render($vars['form']['pass']);
+  $vars['submit'] = render($vars['form']['actions']['submit']);
+  $vars['rendered'] = drupal_render_children($vars['form']);
+}
+
+/**
+ * Preprocess the homepage node.
+ */
+function iobytheme_preprocess_homepage_bundle(&$vars, $node, $bundle, $view_mode) {
+
   // Brand hero.
-  if ($hero_image = field_get_items('node', $node, 'field_hero_image')) {
-    // @todo: Use real image style.
-    $vars['hero_image'] = iobytheme_get_image_style($hero_image[0], 'gallery_feature');
+  if (!empty($node->field_hero_image) && !empty($node->field_hero_image[LANGUAGE_NONE]['0'])) {
+    $vars['hero_image_large'] = image_style_url('1400x787', $node->field_hero_image[LANGUAGE_NONE]['0']['uri']);
+    $vars['hero_image_medium'] = image_style_url('700x394', $node->field_hero_image[LANGUAGE_NONE]['0']['uri']);
+    $vars['hero_image_small'] = image_style_url('440x216', $node->field_hero_image[LANGUAGE_NONE]['0']['uri']);
   }
 
-  if ($field_static_text = field_get_items('node', $node, 'field_static_text')) {
-    $vars['static_text'] = $field_static_text[0]['safe_value'];
-  }
-
-  if ($animated_text = field_get_items('node', $node, 'field_animated_text')) {
-    foreach ($animated_text as $text) {
-      $vars['animated_text'][] = $text['safe_value'];
+  // Text fields
+  $text_fields = [
+    'hero_static_text',
+    'impact_title_line_1',
+    'impact_title_line_2',
+    'email_title_line_1',
+    'email_title_line_2',
+    'email_form_supertitle',
+    'email_social_supertitle',
+    'project_title',
+    'project_cta_text',
+    'cities_title',
+  ];
+  foreach ($text_fields as $key => $name) {
+    $field_name = 'field_' . $name;
+    if ($field = field_get_items('node', $node, $field_name)) {
+      $vars[$name] = $field[0]['safe_value'];
     }
   }
 
+  if ($animated_text = field_get_items('node', $node, 'field_hero_animated_text')) {
+    foreach ($animated_text as $text) {
+      $vars['animated_text'][] = $text['safe_value'];
+    }
+    $vars['animated_text_data'] = implode(',', $vars['animated_text']);
+  }
+
+
   // Load the Impact beans.
   if ($impact_blocks = field_get_items('node', $node, 'field_impact_blocks')) {
-    foreach ($impact_blocks as $impact_block) {
+    foreach ($impact_blocks as $key => $impact_block) {
       if ($delta = $impact_block['entity']->identifier()) {
+        $bean = bean_load($delta);
         $vars['impact_blocks'][] = iobytheme_get_block('bean', $delta);
+        if (!empty($bean->field_bean_image) && !empty($bean->field_bean_image[LANGUAGE_NONE]['0'])) {
+          $vars['impact'][$key]['image'] = image_style_url('380x380', $bean->field_bean_image[LANGUAGE_NONE]['0']['uri']);
+        }
       }
     }
   }
 
+  if ($impact_link = field_get_items('node', $node, 'field_impact_link')) {
+    $vars['impact_link_url'] = $impact_link[0]['display_url'];
+    $vars['impact_link_title'] = $impact_link[0]['title'];
+  }
+
+
+  // Load the Project Feature beans.
+  if ($project_features = field_get_items('node', $node, 'field_project_feature_blocks')) {
+    foreach ($project_features as $project_feature) {
+      if ($delta = $project_feature['entity']->identifier()) {
+        $vars['project_features'][] = iobytheme_get_block('bean', $delta);
+      }
+    }
+  }
+
+  if ($project_link = field_get_items('node', $node, 'field_project_cta_link')) {
+    $vars['project_link_url'] = $project_link[0]['display_url'];
+    $vars['project_link_title'] = $project_link[0]['title'];
+  }
+
   // Browse Cities
-  if ($field_browse_cities_title = field_get_items('node', $node, 'field_browse_cities_title')) {
+  if ($field_browse_cities_title = field_get_items('node', $node, 'field_cities_title')) {
     $vars['browse_cities_title'] = $field_browse_cities_title[0]['safe_value'];
   }
 
-  if ($field_city_link = field_get_items('node', $node, 'field_city_link')) {
+  if ($field_city_link = field_get_items('node', $node, 'field_cities_link')) {
     foreach ($field_city_link as $city_link) {
       $vars['city_links'][] = array(
         'url' => $city_link['display_url'],
@@ -469,6 +570,26 @@ function iobytheme_preprocess_home_page_bundle(&$vars, $node, $bundle, $view_mod
     }
   }
 
+  // Load the Ioby Updates beans.
+  if ($ioby_updates = field_get_items('node', $node, 'field_ioby_updates_blocks')) {
+    foreach ($ioby_updates as $ioby_update) {
+      if ($delta = $ioby_update['entity']->identifier()) {
+        $vars['ioby_updates'][] = iobytheme_get_block('bean', $delta);
+      }
+    }
+  }
+
+  if ($promo_blocks = field_get_items('node', $node, 'field_promos')) {
+    foreach ($promo_blocks as $key => $impact_block) {
+      if ($delta = $impact_block['entity']->identifier()) {
+        $bean = bean_load($delta);
+        $vars['promo_blocks'][] = iobytheme_get_block('bean', $delta);
+        if (!empty($bean->field_bean_image) && !empty($bean->field_bean_image[LANGUAGE_NONE]['0'])) {
+          $vars['promo'][$key]['image'] = image_style_url('gallery_feature', $bean->field_bean_image[LANGUAGE_NONE]['0']['uri']);
+        }
+      }
+    }
+  }
 
 }
 
@@ -477,7 +598,7 @@ function iobytheme_preprocess_home_page_bundle(&$vars, $node, $bundle, $view_mod
  *
  * @author Paul Venuti
  */
-function iobytheme_preprocess_impact_bundle(&$vars, $bundle, $view_mode) {
+function iobytheme_preprocess_impact_bean_bundle(&$vars, $bundle, $view_mode) {
   $bean = $vars['bean'];
 
   // Subtitle.
@@ -491,11 +612,94 @@ function iobytheme_preprocess_impact_bundle(&$vars, $bundle, $view_mode) {
   if (!empty($field_summary)) {
     $vars['summary'] = $field_summary[0]['safe_value'];
   }
+}
 
-  // Image.
-  if ($image = field_get_items('bean', $bean, 'field_image')) {
-    // @todo: Use real image style.
-    $vars['image'] = iobytheme_get_image_style($image[0], 'gallery_feature');
+
+function iobytheme_preprocess_project_feature_bundle(&$vars, $bundle, $view_mode) {
+  $bean = $vars['bean'];
+
+  if ($project = field_get_items('bean', $bean, 'field_project')) {
+    $project_node = $project[0]['entity'];
+  }
+
+  $vars['url'] = url('node/' . $project_node->nid, array('absolute' => TRUE));;
+
+  if ($image = field_get_items('bean', $bean, 'field_featured_project_image')) {
+    $vars['image'] = iobytheme_get_image_style($image[0], '631x420');
+  } elseif ($image = field_get_items('node', $project_node, 'field_project_photo')) {
+    $vars['image'] = iobytheme_get_image_style($image[0], '631x420');
+  }
+
+  if ($project_title = field_get_items('bean', $bean, 'field_featured_project_title')) {
+    $vars['project_title'] = $project_title[0]['safe_value'];
+  } elseif ($project_title = $project_node->title) {
+    $vars['project_title'] = $project_title;
+  }
+
+
+  $vars['countdown'] = iobyproject_countdown($project_node, TRUE);
+  $raised = iobyproject_amount_raised($project_node->nid);
+  if (!empty($raised)) {
+    $vars['percent'] = $raised['pct_done'];
+    $vars['width'] = abs(100 - $raised['pct_done']);
+    $vars['amount'] = number_format($raised['amount_needed'], 0, '.', ',');
+  }
+
+
+  if ($city = field_get_items('bean', $bean, 'field_featured_project_city')) {
+    $vars['city'] = $city[0]['safe_value'];
+  }
+  if ($state = field_get_items('bean', $bean, 'field_featured_project_state')) {
+    $vars['state'] = $state[0]['value'];
+  }
+  // fallback to project city/state if not provided.
+  if (empty($vars['city']) || empty($vars['state'])) {
+    if ($address = field_get_items('node', $project_node, 'field_project_address')) {
+      $vars['city'] = $address[0]['city'];
+      $vars['state'] = $address[0]['province'];
+    }
+  }
+
+  // fallback to project tagling if not provided
+  if ($summary = field_get_items('bean', $bean, 'field_featured_project_summary')) {
+    $vars['summary'] = $summary[0]['safe_value'];
+  } elseif ($tagline = field_get_items('node', $project_node, 'field_project_inbrief')) {
+    $vars['summary'] = strip_tags($tagline[0]['safe_value']);
+  }
+
+}
+
+function iobytheme_preprocess_promo_bundle(&$vars, $bundle, $view_mode) {
+  $bean = $vars['bean'];
+
+  if ($field_promo_text = field_get_items('bean', $bean, 'field_promo_text')) {
+    $vars['promo_text'] = $field_promo_text[0]['safe_value'];
+  }
+}
+
+function iobytheme_preprocess_ioby_update_bundle(&$vars, $bundle, $view_mode) {
+  $bean = $vars['bean'];
+
+  $field_summary = field_get_items('bean', $bean, 'field_summary');
+  if (!empty($field_summary)) {
+    $vars['summary'] = $field_summary[0]['safe_value'];
+  }
+
+  if ($image = field_get_items('bean', $bean, 'field_bean_image')) {
+    $vars['image'] = iobytheme_get_image_style($image[0], '530_wide');
+  }
+
+  if ($link = field_get_items('bean', $bean, 'field_updates_link')) {
+    $vars['link_url'] = $link[0]['display_url'];
+    $vars['link_title'] = $link[0]['title'];
+  }
+  if ($link_style = field_get_items('bean', $bean, 'field_updates_link_style')) {
+    $vars['link_style'] = $link_style[0]['value'];
+  }
+
+  if ($date = field_get_items('bean', $bean, 'field_updates_date')) {
+    $unix = strtotime($date[0]['value']);
+    $vars['date'] = date('F j, Y', $unix);
   }
 }
 
@@ -815,4 +1019,38 @@ function iobytheme_get_width_height_from_style($style_name) {
     'width' => '',
     'height' => '',
   );
+}
+
+function iobytheme_create_menu($menu_name) {
+  if ($menu_name == 'user-menu') {
+    $footer_links = menu_load_links($menu_name);
+    $footer_menu = '<div class="page-footer__nav"><div class="page-footer__nav-col1"><a href="/idea">Start a Project</a></div><div class="page-footer__nav-col2">';
+    $link_count = 0;
+    foreach ($footer_links as $link) {
+      if ($link['hidden'] == FALSE) {
+        $footer_menu .= l($link['link_title'], $link['link_path']);
+        $link_count++;
+        if ($link_count == 2) {
+          $footer_menu .= '</div><div class="page-footer__nav-col3">';
+        }
+        if ($link_count == 4) {
+          $footer_menu .= '</div><div class="page-footer__nav-col4">';
+        }
+      }
+    }
+    $footer_menu .= '</div></div>';
+    return $footer_menu;
+  }
+  elseif ($menu_name == 'menu-privacy-menu') {
+    $privacy_links = menu_load_links($menu_name);
+    $privacy_menu = '<nav class="page-footer__privacy-nav"><ul>';
+    foreach ($privacy_links as $link) {
+      if ($link['hidden'] == FALSE) {
+        $privacy_menu .= '<li>' . l($link['link_title'], $link['link_path']) . '</li>';
+      }
+    }
+    $privacy_menu .= '</ul></nav>';
+    return $privacy_menu;
+  }
+  return false;
 }

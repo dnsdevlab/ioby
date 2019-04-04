@@ -1,0 +1,27 @@
+
+.updates {
+  margin-top: 20px;
+
+  &,* {
+    box-sizing: border-box;
+  }
+
+  &__body {
+    max-width: 1042px;
+    margin: 0 auto 0 !important;
+    list-style: none;
+    padding: 0;
+  }
+
+  &__item {
+    margin-bottom: 70px;
+
+    @media (max-width: 650px) {
+      margin-bottom: 32px;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

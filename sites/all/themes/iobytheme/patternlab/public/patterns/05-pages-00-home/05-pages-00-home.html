@@ -209,12 +209,6 @@
         <span class="offcanvas__close-text">Close</span>
         <span class="offcanvas__close-icon"></span>
       </button>
-      <nav class="offcanvas__project-nav">
-        <ul>
-          <li><a href=".">Find a Project</a></li>
-          <li><a href=".">Create a Project</a></li>
-        </ul>
-      </nav>
       <nav class="offcanvas__primary-nav">
         <ul>
           <li class="expanded">
@@ -274,7 +268,8 @@
       <figure>
         <picture>
           <source srcset="../../images/site/hero_large.jpg" media="(min-width: 700px)" />
-          <img srcset="../../images/site/hero_small.jpg" alt="image description" title="Crop width and height" />
+          <source srcset="../../images/site/hero_small.jpg" media="(min-width: 440px)" />
+          <img srcset="../../images/site/hero_smallest.jpg" alt="image description" title="Crop width and height" />
         </picture>
       </figure>
     </div><!--/.hero__image-->
@@ -543,7 +538,7 @@
           </ul>
   </div><!--/.cities__inside-->
 </section><!--/.cities-->
-  <section class="find-projects">
+      <section class="find-projects">
   <div class="find-projects__inside">
     <header class="find-projects__header">
       <h2 class="find-projects__title">Find more great projects to support</h2>
@@ -630,11 +625,14 @@
           </div><!--/.project-type-->
         </li>
           </ul>
-    <footer class="find-projects__footer">
-      <a href="." class="find-projects__footer-button">or, browse all projects</a>
-    </footer>
   </div><!--/.find-projects-->
 </section><!-- /.find-projects -->
+    <div class="more-projects">
+  <div class="more-projects__inside">
+    <a href=".">or, browse all projects</a>
+  </div><!--/.more-projects-->
+</div><!--/.more-projects-->
+
   <div class="home-wrapper-outline-bg">
       <section class="updates">
   <div class="updates__inside">
@@ -651,10 +649,10 @@
       <div class="update__date">December 12, 2017</div>
       <h3 class="update__title">Healthy neighborhoods challenge</h3>
       <div class="update__description"><p>Have an idea to make your community a healthier place to live? Need some cash to make it happen? The Healthy Neighborhoods Challenge supports residents taking an active role in creating a culture of health in their neighborhoods.</p></div>
-      <div class="update__button">
-        <span>Join the Challenge</span>
-      </div>
-    </div><!--/.update__text-->
+              <div class="update__button">
+          <span>Join the Challenge</span>
+        </div>
+          </div><!--/.update__text-->
   </a>
 </article><!--/.update-->
         </li>
@@ -745,9 +743,7 @@
             <p>I used to dread fundraising. It's great knowing that all the supports and personal attention will be there to make the process painless and effective. We've had a great, memorable and transformative experience.”</p>
         </blockquote>
         <figcaption class="page-footer__caption">
-            <span><strong>Joe Matunis</strong></span>
-            <span>El Puente Cycling Club, Project Leader,</span>
-            <span>Brooklyn, NY</span>
+            <span>Joe Matunis, El Puente Cycling Club, Project Leader, Brooklyn, NY</span>
         </figcaption>
       </figure>
 
@@ -779,11 +775,10 @@
               <a href=".">Blog</a>
             </div>
             <div class="page-footer__nav-col3">
-              <a href=".">Support</a>
+              <a href=".">Help</a>
               <a href=".">Donate to ioby</a>
             </div>
             <div class="page-footer__nav-col4">
-              <a href=".">Tax Information</a>
               <a href=".">Press Room</a>
               <a href=".">Contact</a>
               <a href=".">Jobs</a>
@@ -888,6 +883,7 @@
             <ul>
               <li><a href=".">Privacy Policy</a></li>
               <li><a href=".">Terms &amp; Conditions</a></li>
+              <li><a href=".">Tax Information</a></li>
             </ul>
           </nav>
         </div>
@@ -900,7 +896,7 @@
 
   <!--DO NOT REMOVE-->
   <script type="text/json" id="sg-pattern-data-footer" class="sg-pattern-data">
-  {"cssEnabled":false,"lineage":[{"lineagePattern":"wrappers-home","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-hero","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-impact-list","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-connect","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-featured-projects","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-cities","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-find-projects","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-updates","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-promo-list","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"}],"lineageR":[],"patternBreadcrumb":{"patternType":"pages"},"patternDesc":"","patternExtension":"twig","patternName":"home","patternPartial":"pages-home","patternState":"","extraOutput":[]}
+  {"cssEnabled":false,"lineage":[{"lineagePattern":"wrappers-home","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-hero","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-impact-list","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-connect","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-featured-projects","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-cities","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-find-projects","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-more-projects","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-updates","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"},{"lineagePattern":"organisms-promo-list","lineagePath":"..\/..\/patterns\/05-pages-00-home\/05-pages-00-home.html"}],"lineageR":[],"patternBreadcrumb":{"patternType":"pages"},"patternDesc":"","patternExtension":"twig","patternName":"home","patternPartial":"pages-home","patternState":"","extraOutput":[]}
 </script>
 
 <script>

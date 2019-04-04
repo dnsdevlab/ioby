@@ -1363,8 +1363,17 @@ class SalesforceSyncService
     $contact_account_map = array();
 
     foreach ($opportunities as $opportunity) {
+		
+		if(!isset($opportunity))
+		{
+			continue;
+		}
+		
       if ($opportunity->getContactSfId() != NULL && $opportunity->getAccountSfId() == NULL && $opportunity->getOpportunityType() != Opportunity::TYPE_COUPON && $opportunity->getOpportunityType() != Opportunity::TYPE_MATCH) {
-        $contact_account_map[$opportunity->getContactSfId()] = NULL;
+
+		  
+		  		$contact_account_map[$opportunity->getContactSfId()] = NULL;
+		  
       }
     }
 
@@ -1373,13 +1382,22 @@ class SalesforceSyncService
         $accounts = $this->client->retrieve('AccountId', 'Contact', array_keys($contact_account_map));
         if (!empty($accounts)) {
           foreach ($accounts as $account) {
-            $contact_account_map[$account->Id] = $account->AccountId;
-          }
+			  
+		  		$contact_account_map[$account->Id] = $account->AccountId;
+		  }
         }
 
         foreach ($opportunities as &$opportunity) {
+			
+			if(!isset($opportunity))
+			{
+				continue;
+			}			
+			
           if ($opportunity->getAccountSfId() == NULL && $opportunity->getContactSfId() != NULL && $contact_account_map[$opportunity->getContactSfId()] != NULL) {
-            $opportunity->setAccountSfId($contact_account_map[$opportunity->getContactSfId()]);
+		
+			  $opportunity->setAccountSfId($contact_account_map[$opportunity->getContactSfId()]);
+			  
           }
         }
       }

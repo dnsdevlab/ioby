@@ -513,11 +513,30 @@ class SforceBaseClient {
 		$this->setHeaders("update");
 		return $this->sforce->update($arg)->result;
 	}
-
-	protected function _upsert($arg) {
-		$this->setHeaders("upsert");
-		return $this->sforce->upsert($arg)->result;
+	
+	function clean($string) {		
+      return preg_replace("/[^a-zA-Z0-9_:\-~!@#$%^&*().\/<>=+'\",|;\s]/", "", $string);
+    }
+	function striploop($obj){
+    	foreach($obj as $key => $item) {
+           
+            if(is_object($item) || is_array($item))
+            $this->striploop($item);
+            if(is_string($item))
+            $obj->$key=$this->clean($item);
+          }
+      
+      return $obj;
 	}
+	protected function _upsert($arg) {
+		
+		$arg=$this->striploop($arg);
+		$this->setHeaders("upsert");
+        return $this->sforce->upsert($arg)->result;
+	}
+	
+	
+
 
   public function sendSingleEmail($request) {
 	if (is_array($request)) {
@@ -1270,3 +1289,4 @@ class SObject {
 		return isset($param->type);
 	}
 }
+
